@@ -32,6 +32,7 @@ function removeA (arr) {
 }
 
 module.exports.run = async (bot, msg, args) => {
+  args[0].replace(',', '')
   if (!args[0]) {
     if (!eco.get(`${msg.author.id}.effects`).includes('uber')) {
       const embed = new discord.MessageEmbed()
@@ -49,7 +50,7 @@ module.exports.run = async (bot, msg, args) => {
     }
     const embed = new discord.MessageEmbed()
       .setTitle(':apple: ÜberFruit Storage')
-      .setDescription(`You have ${addCommas(eco.get(`${msg.author.id}.uber`))} coins stored in Über.`)
+      .setDescription(`You have **$${addCommas(eco.get(`${msg.author.id}.uber`))}** coins stored in Über.`)
       .setColor('#77e86b')
     return msg.channel.send(embed)
   }

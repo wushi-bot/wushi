@@ -21,6 +21,10 @@ module.exports.addMoney = function (a, id) {
   }
 }
 
+module.exports.getPrefix = function() {
+  return '.'
+}
+
 const cmdFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
 for (const file of cmdFiles) {
   const command = require(`./commands/${file}`)
@@ -36,7 +40,7 @@ for (const file of cmdFiles) {
 }
 
 bot.on('message', async message => {
-  const prefix = '.'
+  const prefix = this.getPrefix()
   if (!message.content.startsWith(prefix)) return
   const command = message.content.split(' ')[0].slice(prefix.length)
   const args = message.content.split(' ').slice(1)
@@ -46,7 +50,7 @@ bot.on('message', async message => {
   } else {
     cmd = bot.commands.get(bot.aliases.get(command))
   }
-  if (cmd != null) {  
+  if (cmd != null) {
     if (!cooldowns.has(command.name)) {
       cooldowns.set(command.name, new discord.Collection())
     }
@@ -72,6 +76,9 @@ bot.on('message', async message => {
 
     try {
       console.log(chalk.yellow('>') + ` ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
+      if (!message.guild.me.hasPermission('EMBED_LINKS')) {
+        return message.reply('I lack the ability to create embeds, thus most commands will not work, please contact a **Server Administrator** about this.')
+      }
       cmd.run(bot, message, args)
     } catch (e) {
       console.log(e)

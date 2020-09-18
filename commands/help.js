@@ -1,6 +1,7 @@
 const discord = require('discord.js')
 const fs = require('fs')
 const key = require('../emoji_key.json')
+const main = require('../bot')
 
 exports.run = (bot, message, args) => {
   const color = '#ffa3e5'
@@ -30,7 +31,7 @@ exports.run = (bot, message, args) => {
         if (x[c.help.category].length > 0) {
           return
         } else if (x[c.help.category].length === 0) {
-          embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, ', '))
+          embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${main.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${main.getPrefix()}`)}\``)
         }
         x[c.help.category].push(1)
       })
