@@ -2,7 +2,9 @@ const discord = require('discord.js')
 const db = require('quick.db')
 const config = new db.table('config')
 
-
+module.exports.run = async (bot, msg, args) => {
+  
+}
 
 module.exports.help = {
   name: 'config',

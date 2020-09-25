@@ -31,7 +31,7 @@ module.exports.run = async (bot, msg, args) => {
 
 module.exports.help = {
   name: 'xkcd',
-  description: 'Generates a random XKCD comic or a provided one.',
+  description: 'Generates the latest XKCD comic or a provided one.',
   aliases: ['xckd'],
   category: 'Util',
   usage: 'xkcd [comic id]',
