@@ -10,7 +10,6 @@ exports.run = (bot, msg, args) => {
     const e = new discord.MessageEmbed()
     const settings = res.data.payload.discord
     const bio = res.data.payload.user
-    console.log(bio)
     e.setTitle(`${settings.username}'s Profile`)
     e.addField(':name_badge: Username', `${settings.username} (\`${settings.id}\`)`, true)
     if (bio.details.premium_Type == 1) {
