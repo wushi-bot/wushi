@@ -44,7 +44,7 @@ for (const file of cmdFiles) {
 }
 
 bot.on('message', async message => {
-  if (message.content === `<@!${bot.user.id}>`) {
+  if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
     return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${this.getPrefix(message.guild.id)}\` in this server, do \`${this.getPrefix(message.guild.id)}help\` (or \`${this.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
   } 
   const prefix = this.getPrefix(message.guild.id)

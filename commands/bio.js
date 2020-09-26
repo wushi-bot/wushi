@@ -14,22 +14,19 @@ exports.run = (bot, msg, args) => {
     e.addField(':name_badge: Username', `${settings.username} (\`${settings.id}\`)`, true)
     if (bio.details.premium_Type == 1) {
         e.addField(':gem: Premium', `Premium!`, true)
-    } else {
-        e.addField(':gem: Premium', `That person isn't premium!`, true)
     }
     if (bio.details.verified) {
         e.addField(':white_check_mark: Verified', `Verified!`, true)
-    } else {
-        e.addField(':white_check_mark: Verified', `That person isn't verified!`, true)
-    }    
-    e.addField(':map: Location', `${bio.details.location}`, true)
+    }
+    if (bio.details.location) {
+        e.addField(':map: Location', `${bio.details.location}`, true)  
+    } 
     if (bio.details.description) {
         e.addField(':scroll: Description', `${bio.details.description}`, true)
-    } else {
-        e.addField(':scroll: Description', `This user prefers to stay quiet.`, true)
     }
-
-    e.addField(':bust_in_silhouette: Occupation', `${bio.details.occupation}`, true)
+    if (bio.details.occupation) {
+        e.addField(':bust_in_silhouette: Occupation', `${bio.details.occupation}`, true)
+    }
     e.addField(':up: Upvotes', `\`${bio.details.likes}\` :thumbsup:`)
     if (bio.details.gender == 0) {
         e.addField(':male_sign: Gender', `Male`, true)
@@ -47,5 +44,8 @@ exports.run = (bot, msg, args) => {
 
 exports.help = {
   name: 'bio',
+  description: 'Gets information about a user\'s (or slug\'s) discord.bio data.',
+  usage: 'bio [slug or ID]',
+  category: 'Util', 
   aliases: ['d-bio', 'discord.bio', 'dsc-bio']
 }

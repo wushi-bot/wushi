@@ -7,13 +7,17 @@ module.exports.run = async (bot, msg, args) => {
   if (!user) {
     user = msg.author
   }
+  if (!eco.get(`${user.id}.items`)) {
+    const embed = new discord.MessageEmbed()
+      .setTitle(':x: You have nothing in your inventory.')
+    return msg.channel.send(embed)
+  }
   var rods = eco.get(`${user.id}.items`).filter(x => x === 'Fishing Rod').length
   var picks = eco.get(`${user.id}.items`).filter(x => x === 'Pickaxe').length
   var farms = eco.get(`${user.id}.items`).filter(x => x === 'Farm').length
   var cherries = eco.get(`${user.id}.items`).filter(x => x === 'Provato').length
   var ubers = eco.get(`${user.id}.items`).filter(x => x === 'UberFruit').length
   var gummis = eco.get(`${user.id}.items`).filter(x => x === 'Gummi').length
-  console.log(rods)
   const embed = new discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(':handbag: Your Inventory')
