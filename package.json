@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/xMinota/school-bot#readme",
   "dependencies": {
+    "axios": "^0.20.0",
     "babel": "^6.23.0",
     "chalk": "^4.1.0",
     "discord.js": "^12.3.1",

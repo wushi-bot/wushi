@@ -9,7 +9,7 @@ bot.aliases = new discord.Collection()
 const cooldowns = new discord.Collection()
 require('dotenv').config()
 
-var economy = new db.table('economy')
+const cfg = new db.table('config')
 
 module.exports.addMoney = function (a, id) {
   if (economy.get(`${id}.effects`).includes('doubling')) {
@@ -21,8 +21,12 @@ module.exports.addMoney = function (a, id) {
   }
 }
 
-module.exports.getPrefix = function() {
-  return '.'
+module.exports.getPrefix = function(id) {
+  if (!cfg.get(`${id}.prefix`)) {
+    return '.'
+  } else {
+    return cfg.get(`${id}.prefix`)
+  }
 }
 
 const cmdFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
@@ -40,7 +44,10 @@ for (const file of cmdFiles) {
 }
 
 bot.on('message', async message => {
-  const prefix = this.getPrefix()
+  if (message.content === `<@!${bot.user.id}>`) {
+    return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${this.getPrefix(message.guild.id)}\` in this server, do \`${this.getPrefix(message.guild.id)}help\` (or \`${this.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
+  } 
+  const prefix = this.getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
   const command = message.content.split(' ')[0].slice(prefix.length)
   const args = message.content.split(' ').slice(1)
@@ -88,7 +95,7 @@ bot.on('message', async message => {
 
 bot.on('ready', () => {
   console.log(chalk.green('>') + ` Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
-  bot.user.setActivity('a dog song | .help', { type: 'LISTENING' })
+  bot.user.setActivity('🍣 | .help', { type: 'LISTENING' })
 })
 
 bot.login(process.env.TOKEN)

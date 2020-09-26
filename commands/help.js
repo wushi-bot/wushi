@@ -22,8 +22,8 @@ exports.run = (bot, message, args) => {
       })
       const x = []
       const embed = new discord.MessageEmbed()
-        .setTitle(':dog2: dogsong\'s commands')
-        .setDescription('Here\'s a list of all my commands.')
+        .setTitle(':sushi: wushi\'s commands')
+        .setDescription('Here\'s a list of all my commands. | made by **minota#4523**')
       bot.commands.map(c => {
         if (!x[c.help.category]) {
           x[c.help.category] = []
