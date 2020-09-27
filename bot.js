@@ -10,6 +10,7 @@ const cooldowns = new discord.Collection()
 require('dotenv').config()
 
 const cfg = new db.table('config')
+const economy = new db.table('economy')
 
 module.exports.addMoney = function (a, id) {
   if (economy.get(`${id}.effects`).includes('doubling')) {
@@ -21,7 +22,7 @@ module.exports.addMoney = function (a, id) {
   }
 }
 
-module.exports.getPrefix = function(id) {
+module.exports.getPrefix = function (id) {
   if (!cfg.get(`${id}.prefix`)) {
     return '.'
   } else {
@@ -46,7 +47,7 @@ for (const file of cmdFiles) {
 bot.on('message', async message => {
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
     return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${this.getPrefix(message.guild.id)}\` in this server, do \`${this.getPrefix(message.guild.id)}help\` (or \`${this.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
-  } 
+  }
   const prefix = this.getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
   const command = message.content.split(' ')[0].slice(prefix.length)
@@ -95,7 +96,7 @@ bot.on('message', async message => {
 
 bot.on('ready', () => {
   console.log(chalk.green('>') + ` Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
-  bot.user.setActivity('🍣 | .help', { type: 'LISTENING' })
+  bot.user.setActivity('with 🍣 | .help', { type: 'PLAYING' })
 })
 
 bot.login(process.env.TOKEN)

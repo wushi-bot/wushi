@@ -1,5 +1,6 @@
 const db = require('quick.db')
 const discord = require('discord.js')
+const main = require('../bot')
 const eco = new db.table('economy')
 
 module.exports.run = async (bot, msg, args) => {
@@ -16,7 +17,7 @@ module.exports.run = async (bot, msg, args) => {
       .setTitle(':checkered_flag: You have started a bank account!')
       .setColor('#ffa3e5')
       .setDescription('You have received:\n\n+ **50 coins** :money_with_wings:\n+ **1 Fishing Rod** :fishing_pole_and_fish: ')
-      .setFooter('Do .help to get see more commands to do! | You can also fish to get coins via .fish')
+      .setFooter(`Do ${main.getPrefix(msg.guild.id)}help to get see more commands to do! | You can also fish to get coins via ${main.getPrefix(msg.guild.id)}fish`)
     return msg.channel.send(embed)
   }
 }
