@@ -107,7 +107,7 @@ module.exports.help = {
   name: 'fish',
   description: 'Fish for some cash!',
   aliases: ['reel'],
-  category: 'Income',
+  category: 'Economy',
   usage: 'fish',
   cooldown: 1
 }

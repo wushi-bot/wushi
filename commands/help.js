@@ -2,6 +2,8 @@ const discord = require('discord.js')
 const fs = require('fs')
 const key = require('../emoji_key.json')
 const main = require('../bot')
+const db = require('quick.db')
+const config = new db.table('config')
 
 exports.run = (bot, message, args) => {
   const color = '#ffa3e5'
@@ -23,7 +25,7 @@ exports.run = (bot, message, args) => {
       const x = []
       const embed = new discord.MessageEmbed()
         .setTitle(':sushi: wushi\'s commands')
-        .setDescription('Here\'s a list of all my commands. | made by **minota#4523**')
+        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${main.getPrefix()}config\`.  | made by **minota#4523**`)
       bot.commands.map(c => {
         if (!x[c.help.category]) {
           x[c.help.category] = []
@@ -31,7 +33,9 @@ exports.run = (bot, message, args) => {
         if (x[c.help.category].length > 0) {
           return
         } else if (x[c.help.category].length === 0) {
-          embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${main.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${main.getPrefix()}`)}\``)
+          if (!config.get(`${message.guild.id}.disabled`).includes(c.help.category)) {
+            embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${main.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${main.getPrefix()}`)}\``)
+          }
         }
         x[c.help.category].push(1)
       })

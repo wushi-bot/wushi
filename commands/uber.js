@@ -127,7 +127,7 @@ module.exports.run = async (bot, msg, args) => {
 module.exports.help = {
   name: 'uber',
   description: 'Store up Uber to burst for a multiplied amount of money.',
-  category: 'Income',
+  category: 'Economy',
   aliases: ['über'],
   usage: 'uber <amount/burst>',
   cooldown: 1

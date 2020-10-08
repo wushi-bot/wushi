@@ -100,7 +100,7 @@ module.exports.run = async (bot, msg, args) => {
 module.exports.help = {
   name: 'mine',
   description: 'Mine ores for cash.',
-  category: 'Income',
+  category: 'Economy',
   aliases: ['dig'],
   usage: 'mine',
   cooldown: 1

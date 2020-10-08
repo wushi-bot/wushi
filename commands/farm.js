@@ -81,7 +81,7 @@ module.exports.run = async (bot, msg, args) => {
 module.exports.help = {
   name: 'farm',
   description: 'Farm for coins!',
-  category: 'Income',
+  category: 'Economy',
   aliases: [],
   usage: 'farm',
   cooldown: 1

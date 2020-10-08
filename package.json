@@ -1,17 +1,17 @@
 {
-  "name": "v3",
-  "version": "3.0.0",
-  "description": "v3 of school bot",
+  "name": "wushi",
+  "version": "1.1.0",
+  "description": "wushi bot",
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xMinota/school-bot.git"
+    "url": "git+https://github.com/xMinota/wushi.git"
   },
   "keywords": [
-    "school-bot",
+    "wushi",
     "discord",
     "discord-js",
     "javascript"
@@ -19,24 +19,23 @@
   "author": "Minota",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xMinota/school-bot/issues"
+    "url": "https://github.com/xMinota/wushi/issues"
   },
-  "homepage": "https://github.com/xMinota/school-bot#readme",
+  "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
+    "@aero/centra": "^1.0.6",
     "axios": "^0.20.0",
-    "babel": "^6.23.0",
+    "canvas": "^2.6.1",
+    "canvas-constructor": "^3.2.0",
     "chalk": "^4.1.0",
+    "concurrently": "^5.3.0",
     "date-and-time": "^0.14.1",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
+    "fs-nextra": "^0.3.5",
     "moment": "^2.29.0",
     "quick.db": "^7.1.2",
     "xkcd": "^1.1.3"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/core": "^7.11.6",
-    "babel-preset-env": "^1.7.0"
   }
 }
