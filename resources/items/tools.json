@@ -1,0 +1,20 @@
+{
+  "fishing_rod": {
+    "price": 100,
+    "sell_price": 35,
+    "id": "fishing_rod",
+    "description": "Allows you to do `[PRE]fish` and make money from fishing."
+  },
+  "pickaxe": {
+    "price": 5000,
+    "sell_price": 350,
+    "id": "pickaxe",
+    "description": "Allows you to do `[PRE]mine` and make money from mining."
+  },
+  "farm": {
+    "price": 35000,
+    "sell_price": 7500,
+    "id": "farm",
+    "description": "Allows you to do `[PRE]farm` and make money from your farm."
+  }
+}

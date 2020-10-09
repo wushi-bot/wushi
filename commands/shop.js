@@ -4,7 +4,7 @@ module.exports.run = async (bot, msg, args) => {
   if (!args[0]) {
     const embed = new discord.MessageEmbed()
       .setColor('#77e86b')
-      .setTitle(':convenience_store: Welcome to the School Store')
+      .setTitle(':convenience_store: Welcome to the Store')
       .setDescription('What can I do for you?\n\n:poultry_leg: **Food** → Can be consumable for stat boosts & other effects.\n:tools: **Tools** → The main way to get income with this bot.\n:up: **Upgrades** → Makes the game more easier to play & is permanent and stackable.\n:flower_playing_cards: **Collectables** → Fun little collectables that serve no purpose or meaning.\n\nDo `.shop <category>`, for example, `.shop food` to see the corresponding catalog of items.')
     msg.channel.send(embed)
   }
@@ -37,7 +37,7 @@ module.exports.run = async (bot, msg, args) => {
 
 module.exports.help = {
   name: 'shop',
-  description: 'See the school store.',
+  description: 'See the store.',
   category: 'Economy',
   aliases: ['store'],
   usage: 'shop [page]',
