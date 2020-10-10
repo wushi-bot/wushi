@@ -1,8 +1,8 @@
-const discord = require('discord.js')
-const fs = require('fs')
-const key = require('../emoji_key.json')
-const main = require('../bot')
-const db = require('quick.db')
+import discord from 'discord.js'
+import fs from 'fs'
+import key from '../emoji_key.json'
+import utils from '../utils/utils'
+import db from 'quick.db'
 const config = new db.table('config')
 
 exports.run = (bot, message, args) => {
@@ -25,7 +25,7 @@ exports.run = (bot, message, args) => {
       const x = []
       const embed = new discord.MessageEmbed()
         .setTitle(':sushi: wushi\'s commands')
-        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${main.getPrefix()}config\`.  | made by **minota#4523**`)
+        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix()}config\`.  | made by **minota#4523**`)
       bot.commands.map(c => {
         if (!x[c.help.category]) {
           x[c.help.category] = []
@@ -34,7 +34,7 @@ exports.run = (bot, message, args) => {
           return
         } else if (x[c.help.category].length === 0) {
           if (!config.get(`${message.guild.id}.disabled`).includes(c.help.category)) {
-            embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${main.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${main.getPrefix()}`)}\``)
+            embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${utils.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${utils.getPrefix()}`)}\``)
           }
         }
         x[c.help.category].push(1)

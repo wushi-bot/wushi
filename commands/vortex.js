@@ -1,5 +1,6 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const eco = new db.table('economy')
 
 function addCommas (nStr) {
@@ -44,7 +45,7 @@ module.exports.run = async (bot, msg, args) => {
   var earnings = getRandomInt(750000, 1000000)
   var uses = getRandomInt(5, 10)
   eco.add(`${msg.author.id}.vortex_durability`, uses)
-  eco.add(`${msg.author.id}.balance`, earnings)
+  earnings = utils.addMoney(earnings, msg.author.id)
   eco.add(`${msg.author.id}.vortex_profit`, earnings)
   const embed = new discord.MessageEmbed()
     .setColor('#77e86b')

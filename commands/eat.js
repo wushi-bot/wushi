@@ -1,5 +1,5 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
 const eco = new db.table('economy')
 
 function removeA (arr) {

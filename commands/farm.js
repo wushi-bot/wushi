@@ -1,7 +1,7 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const eco = new db.table('economy')
-const main = require('../bot')
 
 function addCommas (nStr) {
   nStr += ''
@@ -49,7 +49,7 @@ module.exports.run = async (bot, msg, args) => {
     if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
       eco.add(`${msg.author.id}.farm_uses`, uses)
     }
-    out = main.addMoney(earnings, msg.author.id)
+    out = utils.addMoney(earnings, msg.author.id)
     eco.add(`${msg.author.id}.farming_profit`, earnings)
     const embed = new discord.MessageEmbed()
       .setColor('#0099ff')
@@ -67,7 +67,7 @@ module.exports.run = async (bot, msg, args) => {
       return eco.set(`${msg.author.id}.farm_uses`, 0)
     }
   } else {
-    var earnings = getRandomInt(10, 200)
+    const earnings = getRandomInt(10, 200)
     eco.subtract(`${msg.author.id}.balance`, earnings)
     eco.subtract(`${msg.author.id}.farming_profit`, earnings)
     const embed = new discord.MessageEmbed()

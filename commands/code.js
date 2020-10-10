@@ -1,5 +1,5 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
 const eco = new db.table('economy')
 
 function addCommas (nStr) {
@@ -53,7 +53,7 @@ module.exports.run = async (bot, msg, args) => {
     .setFooter(`Durability: ${100 - eco.get(`${msg.author.id}.laptop_durability`)}/100 - If your laptop reaches 0, it'll break.`)
   msg.channel.send(embed)
   if (eco.get(`${msg.author.id}.laptop_durability`) > 100 || eco.get(`${msg.author.id}.laptop_durability`) === 100) {
-    let i = removeA(eco.get(`${msg.author.id}.items`), 'Laptop')
+    const i = removeA(eco.get(`${msg.author.id}.items`), 'Laptop')
     eco.set(`${msg.author.id}.items`, i)
     const embed = new discord.MessageEmbed()
       .setTitle(':computer: Uh oh, your laptop broke.')

@@ -1,5 +1,6 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const eco = new db.table('economy')
 
 function addCommas (nStr) {
@@ -64,8 +65,8 @@ module.exports.run = async (bot, msg, args) => {
       return
     }
     if (!eco.get(`${mentionedUser.id}.inventory`)) eco.set(`${mentionedUser.id}.inventory`, [])
-    db.subtract(`${msg.author.id}.balance`, args[1])
-    db.add(`${mentionedUser.id}.balance`, args[1])
+    eco.subtract(`${msg.author.id}.balance`, args[1])
+    eco.add(`${mentionedUser.id}.balance`, args[1])
     const embed = new discord.MessageEmbed()
       .setColor('#0099ff')
       .setTitle('Transfer Successful')
@@ -78,6 +79,7 @@ module.exports.help = {
   name: 'pay',
   description: 'Pays the tagged user with the amount you can give.',
   category: 'Economy',
+  usage: 'pay <@user>',
   aliases: ['payuser', 'userpay'],
   cooldown: 0
 }

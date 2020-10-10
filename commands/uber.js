@@ -1,7 +1,7 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const eco = new db.table('economy')
-const main = require('../bot')
 
 function getRandomInt (min, max) {
   min = Math.ceil(min)
@@ -38,14 +38,14 @@ module.exports.run = async (bot, msg, args) => {
     if (!eco.get(`${msg.author.id}.effects`).includes('uber')) {
       const embed = new discord.MessageEmbed()
         .setTitle(':apple: You don\'t have Über.')
-        .setDescription(`Consume an ÜberFruit using \`${main.getPrefix(msg.guild.id)}eat uber\` to start storing coins.`)
+        .setDescription(`Consume an ÜberFruit using \`${utils.getPrefix(msg.guild.id)}eat uber\` to start storing coins.`)
         .setColor('#77e86b')
       return msg.channel.send(embed)
     }
     if (!eco.get(`${msg.author.id}.uber`) || eco.get(`${msg.author.id}.uber`) === 0) {
       const embed = new discord.MessageEmbed()
         .setTitle(':apple: You don\'t anything stored in Über.')
-        .setDescription(`Store coins using \`${main.getPrefix(msg.guild.id)}uber <amount>\`.`)
+        .setDescription(`Store coins using \`${utils.getPrefix(msg.guild.id)}uber <amount>\`.`)
         .setColor('#77e86b')
       return msg.channel.send(embed)
     }
@@ -60,14 +60,14 @@ module.exports.run = async (bot, msg, args) => {
       if (!eco.get(`${msg.author.id}.effects`).includes('uber')) {
         const embed = new discord.MessageEmbed()
           .setTitle(':apple: You don\'t have Über.')
-          .setDescription(`Consume an ÜberFruit using \`${main.getPrefix(msg.guild.id)}eat uber\` to start storing coins.`)
+          .setDescription(`Consume an ÜberFruit using \`${utils.getPrefix(msg.guild.id)}eat uber\` to start storing coins.`)
           .setColor('#77e86b')
         return msg.channel.send(embed)
       }
       if (!eco.get(`${msg.author.id}.uber`) || eco.get(`${msg.author.id}.uber`) === 0) {
         const embed = new discord.MessageEmbed()
           .setTitle(':apple: You don\'t anything stored in Über.')
-          .setDescription(`Store coins using \`${main.getPrefix(msg.guild.id)}uber <amount>\`.`)
+          .setDescription(`Store coins using \`${utils.getPrefix(msg.guild.id)}uber <amount>\`.`)
           .setColor('#77e86b')
         return msg.channel.send(embed)
       }
@@ -118,7 +118,7 @@ module.exports.run = async (bot, msg, args) => {
     eco.subtract(`${msg.author.id}.balance`, args[0])
     const embed = new discord.MessageEmbed()
       .setTitle(`:apple: Added $${addCommas(args[0])} to ÜberFruit.`)
-      .setDescription(`Burst the fruit using \`${main.getPrefix(msg.guild.id)}uber burst\`.`)
+      .setDescription(`Burst the fruit using \`${utils.getPrefix(msg.guild.id)}uber burst\`.`)
       .setColor('#77e86b')
     return msg.channel.send(embed)
   }

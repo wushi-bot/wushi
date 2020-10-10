@@ -1,15 +1,15 @@
-const chalk = require('chalk')
-const discord = require('discord.js')
-const main = require('../bot')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
+import chalk from 'chalk'
 const cfg = new db.table('config')
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
-    return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${this.getPrefix(message.guild.id)}\` in this server, do \`${this.getPrefix(message.guild.id)}help\` (or \`${this.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
+    return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${utils.getPrefix(message.guild.id)}\` in this server, do \`${utils.getPrefix(message.guild.id)}help\` (or \`${utils.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
   }
-  const prefix = main.getPrefix(message.guild.id)
+  const prefix = utils.getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
   const command = message.content.split(' ')[0].slice(prefix.length)
   const args = message.content.split(' ').slice(1)

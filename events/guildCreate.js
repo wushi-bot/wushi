@@ -5,7 +5,6 @@ const db = require('quick.db')
 const cfg = new db.table('config')
 
 exports.run = (bot, guild) => {
-
   console.log(chalk.gray('------------------'))
   console.log(chalk.blue('>') + ` Joined ${guild.name}, ID ${guild.id}.`)
   if (!cfg.get(`${guild.id}.setup`)) {

@@ -28,10 +28,10 @@
     "canvas": "^2.6.1",
     "canvas-constructor": "^3.2.0",
     "chalk": "^4.1.0",
-    "concurrently": "^5.3.0",
     "date-and-time": "^0.14.1",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
     "fs-nextra": "^0.3.5",
     "moment": "^2.29.0",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.11.5"
+    "@babel/preset-env": "^7.11.5",
+    "concurrently": "^5.3.0"
   }
 }

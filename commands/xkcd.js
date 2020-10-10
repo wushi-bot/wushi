@@ -1,5 +1,5 @@
-const discord = require('discord.js')
-const xkcd = require('xkcd')
+import discord from 'discord.js'
+import xkcd from 'xkcd'
 
 function getRandomInt (min, max) {
   min = Math.ceil(min)

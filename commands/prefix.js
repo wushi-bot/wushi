@@ -1,7 +1,7 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const config = new db.table('config')
-const main = require('../bot')
 
 module.exports.run = async (bot, msg, args) => {
   if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_SERVER')) {

@@ -1,4 +1,5 @@
-const discord = require('discord.js')
+import discord from 'discord.js'
+import utils from '../utils/utils'
 
 module.exports.run = async (bot, msg, args) => {
   if (!args[0]) {

@@ -1,7 +1,7 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const config = new db.table('config')
-const main = require('../bot')
 
 function toTitleCase (str) {
   return str.replace(
@@ -28,7 +28,7 @@ module.exports.run = async (bot, msg, args) => {
   if (!modules.includes(module)) return msg.channel.send(':x: That module isn\'t a module.')
   if (config.get(`${msg.guild.id}.disabled`).includes(module)) {
     const o = config.get(`${msg.guild.id}.disabled`)
-    const newList = main.removeA(o, module)
+    const newList = utils.removeA(o, module)
     config.set(`${msg.guild.id}.disabled`, newList)
     return msg.channel.send(`:white_check_mark: \`${module}\` has been successfully **enabled**.`)
   } else {

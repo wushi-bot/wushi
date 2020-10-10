@@ -1,7 +1,7 @@
-const db = require('quick.db')
-const discord = require('discord.js')
+import discord from 'discord.js'
+import db from 'quick.db'
+import utils from '../utils/utils'
 const eco = new db.table('economy')
-const main = require('../bot')
 
 var lootTables = ['cod', 'tuna', 'trout', 'bass', 'mackerel', 'bluefish']
 
@@ -80,7 +80,7 @@ module.exports.run = async (bot, msg, args) => {
     return
   }
   const stuff = generateRandomDrop()
-  var earnings = main.addMoney(stuff[1], msg.author.id)
+  var earnings = utils.addMoney(stuff[1], msg.author.id)
   eco.add(`${msg.author.id}.fishing_profit`, stuff[1])
   if (!eco.get(`${msg.author.id}.fishing_rod_durability`)) eco.set(`${msg.author.id}.fishing_rod_durability`, 0)
   if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
