@@ -47,7 +47,7 @@ exports.run = (bot, message) => {
       if (!message.guild.me.hasPermission('EMBED_LINKS')) {
         return message.reply('I lack the ability to create embeds, thus most commands will not work, please contact a **Server Administrator** about this.')
       }
-      if (cfg.get(`${message.guild.id}.disabled`).includes(cmd.help.category)) {
+      if (cfg.get(`${message.guild.id}.disabled`).includes(cmd.conf.category)) {
         return console.log(chalk.yellow('>') + ` ${message.author.username}#${message.author.discriminator} attempted to execute ${prefix}${command}, but that command was disabled.`)
       }
       cmd.run(bot, message, args)

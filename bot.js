@@ -30,15 +30,15 @@ class Wushi extends Client {
   loadCommands () {
     const cmdFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
     for (const file of cmdFiles) {
-      const command = require(`./commands/${file}`)
-      if (command.hasOwnProperty('help')) {
-        this.commands.set(command.help.name, command)
-        command.help.aliases.forEach(alias => {
-          this.aliases.set(alias, command.help.name)
+      try {
+        const command = new (require(`./commands/${file}`))(this)
+        this.commands.set(command.conf.name, command)
+        command.conf.aliases.forEach(alias => {
+          this.aliases.set(alias, command.conf.name)
         })
-        console.log(chalk.green('>') + ` Registered command ${file} (name: ${command.help.name} | aliases: ${command.help.aliases})`)
-      } else {
-        console.log(chalk.gray('>') + ' Skipped command as it does not have a working name.')
+        console.log(chalk.green('>') + ` Registered command ${file} (name: ${command.conf.name} | aliases: ${command.conf.aliases})`) 
+      } catch (e) {
+        console.log(chalk.gray('>') + ` Skipped command because it encountered an error: ${e}`)
       }
     }
   }

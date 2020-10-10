@@ -16,5 +16,11 @@
     "sell_price": 7500,
     "id": "farm",
     "description": "Allows you to do `[PRE]farm` and make money from your farm."
+  },
+  "vortex": {
+    "price": 50000000,
+    "sell_price": 100000,
+    "id": "vortex",
+    "description": "Allows you to do `[PRE]vortex` and make money from thin air."
   }
 }

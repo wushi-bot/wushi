@@ -1,79 +1,68 @@
+import Command from '../models/Command'
 import discord from 'discord.js'
 import fs from 'fs'
-import key from '../emoji_key.json'
+import key from '../resources/emoji_key.json'
 import utils from '../utils/utils'
 import db from 'quick.db'
-const config = new db.table('config')
+const config = new db.table('economy')
 
-exports.run = (bot, message, args) => {
-  const color = '#ffa3e5'
-  if (!args[0]) {
-    let props
-    let categorys
-    fs.readdir('./commands', (err, files) => {
-      if (err) console.error(err)
-      categorys = []
-      files.forEach(f => {
-        props = require(`./${f}`)
-        if (!categorys[props.help.category]) {
-          categorys[props.help.category] = []
-          categorys[props.help.category].push(props.help.name)
-        } else {
-          categorys[props.help.category].push(props.help.name)
-        }
-      })
-      const x = []
+class Help extends Command {
+  constructor (client) {
+    super(client, {
+      name: 'help',
+      description: 'Grabs a list of one or many commands.',
+      aliases: ['commands', 'cmd', 'cmds', 'assistanceplzdoktor'],
+      category: 'Meta',
+      usage: 'help [command]',
+      cooldown: 0
+    })
+  }
+
+  async run (bot, msg, args) {
+    const color = '#ffa3e5'
+    if (!args[0]) {
       const embed = new discord.MessageEmbed()
+        .setColor(color)
         .setTitle(':sushi: wushi\'s commands')
         .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix()}config\`.  | made by **minota#4523**`)
-      bot.commands.map(c => {
-        if (!x[c.help.category]) {
-          x[c.help.category] = []
+      const commandsList = this.client.commands
+      const categories = []
+      const commandsInCategory = []
+      commandsList.forEach(command => {
+        const category = command.conf.category
+        if (!categories.includes(category)) {
+          categories.push(category)
         }
-        if (x[c.help.category].length > 0) {
-          return
-        } else if (x[c.help.category].length === 0) {
-          if (!config.get(`${message.guild.id}.disabled`).includes(c.help.category)) {
-            embed.addField(`${key[c.help.category]} ${c.help.category} Commands`, `\`${utils.getPrefix()}${categorys[c.help.category].toString().replace('[', ' ').replace(']', ' ').replace(/,/gi, `\`, \`${utils.getPrefix()}`)}\``)
-          }
+      })
+      commandsList.forEach(command => {
+        if (commandsInCategory[command.conf.category] === undefined) {
+          commandsInCategory[command.conf.category] = []
         }
-        x[c.help.category].push(1)
+        commandsInCategory[command.conf.category].push(command.conf.name)
       })
-      files.forEach(f => {
-        props = require(`./${f}`)
-        x[props.help.category] = []
-        categorys[props.help.category] = []
+      categories.forEach(category => {
+        embed.addField(`${key[category]} ${category}`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
-      embed.setTimestamp()
-      embed.setColor(0xadd8e6)
-      embed.setFooter(`Requested by ${message.author.username}`, message.author.avatarURL)
-      message.channel.send({ embed })
-    })
-  } else {
-    const embed = new discord.MessageEmbed()
-    let command = args[0]
-    if (bot.commands.has(command)) {
-      command = bot.commands.get(command)
-      let aliases = command.help.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
-      if (!aliases) aliases = 'None'
-      else aliases = command.help.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
-      embed.setAuthor(command.help.name.toUpperCase())
-        .setColor(color)
-        .setFooter(`Requested by ${message.author.username}`, message.author.avatarURL(), true)
-        .addField('Description', command.help.description, true)
-        .addField('Usage', `\`${command.help.usage}\``, true)
-        .addField('Category', command.help.category, true)
-        .addField('Aliases', aliases, true)
-      message.channel.send({ embed })
+      msg.channel.send(embed)
+    } else {
+      const embed = new discord.MessageEmbed()
+      let command = args[0]
+      if (this.client.commands.has(command)) {
+        command = this.client.commands.get(command)
+        let aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
+        if (!aliases) aliases = 'None'
+        else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
+        embed.setDescription(`\`${utils.getPrefix(msg.guild.id)}${command.conf.name}\``)
+          .setColor(color)
+          .setFooter(`Requested by ${msg.author.username}`, msg.author.avatarURL(), true)
+          .addField('Description', command.conf.description, true)
+          .addField('Usage', `\`${command.conf.usage}\``, true)
+          .addField('Category', command.conf.category, true)
+          .addField('Aliases', aliases, true)
+        msg.channel.send({ embed })
+      }
     }
   }
 }
 
-module.exports.help = {
-  name: 'help',
-  description: 'Grabs a list of one or many commands.',
-  aliases: ['commands', 'cmd', 'cmds', 'assistanceplzdoktor'],
-  category: 'Meta',
-  usage: 'help [command]',
-  cooldown: 0
-}
+module.exports = Help

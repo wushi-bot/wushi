@@ -12,6 +12,33 @@ module.exports.addMoney = function (a, id) {
   }
 }
 
+module.exports.addCommas = function (nStr) {
+  nStr += ''
+  var x = nStr.split('.')
+  var x1 = x[0]
+  var x2 = x.length > 1 ? '.' + x[1] : ''
+  var rgx = /(\d+)(\d{3})/
+  while (rgx.test(x1)) {
+    x1 = x1.replace(rgx, '$1' + ',' + '$2')
+  }
+  return x1 + x2
+}
+
+module.exports.getRandomInt = function (min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min)) + min
+}
+
+module.exports.toTitleCase = function (str) {
+  return str.replace(
+    /\w\S*/g,
+    function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    }
+  )
+}
+
 module.exports.removeA = function (arr) {
   const a = arguments
   let L = a.length
