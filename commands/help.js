@@ -31,7 +31,7 @@ class Help extends Command {
       commandsList.forEach(command => {
         const category = command.conf.category
         if (!categories.includes(category)) {
-          categories.push(category)
+          if (!config.get(`${msg.guild.id}.disabled`).includes(category)) categories.push(category)
         }
       })
       commandsList.forEach(command => {
