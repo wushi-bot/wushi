@@ -2,10 +2,27 @@ import discord from 'discord.js'
 import db from 'quick.db'
 import utils from '../utils/utils'
 import chalk from 'chalk'
+import moment from 'moment'
 const cfg = new db.table('config')
+const leveling = new db.table('leveling')
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
+  if (!cfg.get(`${message.guild.id}.disabled`).includes('Leveling')) {
+    utils.checkLevel(message.author.id, message.guild.id)
+    if (!message.content.startsWith(utils.getPrefix(message.guild.id))) {
+      const exp = utils.getRandomInt(1, 5)
+      leveling.add(`${message.author.id}.${message.guild.id}.exp`, exp)
+      if (leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) <= leveling.get(`${message.author.id}.${message.guild.id}.exp`)) {
+        leveling.add(`${message.author.id}.${message.guild.id}.level`, 1)
+        leveling.add(`${message.author.id}.${message.guild.id}.expNeeded`, leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) + (leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) * 0.1))
+        if (!cfg.get(`${message.guild.id}.levelUpType`)) { // Fallback to default thingy
+          message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.author.id}.${message.guild.id}.level`)}**!`)
+        }
+      }
+    }
+  }
+
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
     return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${utils.getPrefix(message.guild.id)}\` in this server, do \`${utils.getPrefix(message.guild.id)}help\` (or \`${utils.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
   }

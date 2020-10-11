@@ -1,7 +1,7 @@
 import Command from '../models/Command'
 import db from 'quick.db'
 import utils from '../utils/utils'
-const config = new db.table('economy')
+const config = new db.table('config')
 
 const modules = ['Leveling', 'Meta', 'Server Shop', 'Economy', 'Util', 'Config']
 

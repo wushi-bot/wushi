@@ -1,6 +1,7 @@
 const db = require('quick.db')
 const economy = new db.table('economy')
 const cfg = new db.table('config')
+const leveling = new db.table('leveling')
 
 module.exports.addMoney = function (a, id) {
   if (economy.get(`${id}.effects`).includes('doubling')) {
@@ -22,6 +23,18 @@ module.exports.addCommas = function (nStr) {
     x1 = x1.replace(rgx, '$1' + ',' + '$2')
   }
   return x1 + x2
+}
+
+module.exports.checkLevel = function (id, serverId) {
+  if (!leveling.get(`${id}.${serverId}.expNeeded`)) {
+    leveling.set(`${id}.${serverId}.expNeeded`, 100)
+  }
+  if (!leveling.get(`${id}.${serverId}.level`)) {
+    leveling.set(`${id}.${serverId}.level`, 0)
+  }
+  if (!leveling.get(`${id}.${serverId}.exp`)) {
+    leveling.set(`${id}.${serverId}.exp`, 0)
+  }
 }
 
 module.exports.getRandomInt = function (min, max) {

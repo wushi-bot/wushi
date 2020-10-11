@@ -7,7 +7,7 @@ class Prefix extends Command {
     super(client, {
       name: 'prefix',
       description: 'Change the bot\'s prefix.',
-      aliases: ['pre'],
+      aliases: ['pre', 'p'],
       category: 'Config',
       usage: 'prefix [new prefix]',
       cooldown: 1

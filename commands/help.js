@@ -1,17 +1,16 @@
 import Command from '../models/Command'
 import discord from 'discord.js'
-import fs from 'fs'
 import key from '../resources/emoji_key.json'
 import utils from '../utils/utils'
 import db from 'quick.db'
-const config = new db.table('economy')
+const config = new db.table('config')
 
 class Help extends Command {
   constructor (client) {
     super(client, {
       name: 'help',
       description: 'Grabs a list of one or many commands.',
-      aliases: ['commands', 'cmd', 'cmds', 'assistanceplzdoktor'],
+      aliases: ['commands', 'cmd', 'cmds', 'assistanceplzdoktor', 'h'],
       category: 'Meta',
       usage: 'help [command]',
       cooldown: 0
@@ -19,7 +18,7 @@ class Help extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = '#ffa3e5'
+    const color = 0xadd8e6
     if (!args[0]) {
       const embed = new discord.MessageEmbed()
         .setColor(color)
