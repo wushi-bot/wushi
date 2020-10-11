@@ -7,4 +7,4 @@ RUN npm install
 
 COPY . .
 
-CMD node bot
+RUN npm run start
