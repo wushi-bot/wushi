@@ -1,8 +1,9 @@
 {
-  "name": "wushi",
+  "name": "@xminota/wushi",
   "version": "1.1.0",
   "description": "wushi bot",
   "main": "bot.js",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "scripts": {
     "start": "npx nodemon --exec babel-node bot.js"
   },
