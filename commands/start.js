@@ -30,7 +30,7 @@ class Start extends Command {
         .setTitle(':checkered_flag: You have started a bank account!')
         .setColor('#ffa3e5')
         .setDescription('You have received:\n\n+ **50 coins** :money_with_wings:\n+ **1 Fishing Rod** :fishing_pole_and_fish: ')
-        .setFooter(`Do ${utils.getPrefix(msg.guild.id)}help to get see more commands to do! | You can also fish to get coins via ${main.getPrefix(msg.guild.id)}fish`)
+        .setFooter(`Do ${utils.getPrefix(msg.guild.id)}help to get see more commands to do! | You can also fish to get coins via ${utils.getPrefix(msg.guild.id)}fish`)
       return msg.channel.send(embed)
     }
   }
