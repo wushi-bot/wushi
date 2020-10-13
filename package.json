@@ -3,9 +3,13 @@
   "version": "1.1.0",
   "description": "wushi bot",
   "main": "bot.js",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "start": "npx nodemon --exec babel-node bot.js"
+    "start-bot": "npx nodemon --exec babel-node bot.js",
+    "start-web": "npx nodemon --exec babel-node web.js",
+    "build": "concurrently \"npm:start-web\" \"npm:start-bot\""
   },
   "repository": {
     "type": "git",
@@ -29,13 +33,18 @@
     "canvas": "^2.6.1",
     "canvas-constructor": "^3.2.0",
     "chalk": "^4.1.0",
+    "connect-flash": "^0.1.1",
     "date-and-time": "^0.14.1",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "fs": "0.0.1-security",
     "fs-nextra": "^0.3.5",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
     "moment": "^2.29.1",
+    "pug": "^3.0.0",
     "quick.db": "^7.1.2",
     "xkcd": "^1.1.3"
   },
