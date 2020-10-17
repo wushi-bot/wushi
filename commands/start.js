@@ -24,7 +24,7 @@ class Start extends Command {
         .setDescription('You already have an account!')
       return msg.channel.send(embed)
     } else {
-      eco.set(`${msg.author.id}`, { balance: 50, items: ['Fishing Rod'] })
+      eco.set(`${msg.author.id}`, { balance: 50, items: ['Fishing Rod'], effects: [] })
       eco.set(`${msg.author.id}.started`, true)
       const embed = new discord.MessageEmbed()
         .setTitle(':checkered_flag: You have started a bank account!')

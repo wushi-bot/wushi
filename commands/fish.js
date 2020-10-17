@@ -55,17 +55,16 @@ class Fish extends Command {
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) {
       const embed = new discord.MessageEmbed()
-        .setTitle('Error!')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
-        .setDescription('You have no account setup! Set one up using `.start`.')
-        .setFooter(`Requested by ${msg.author.username}.`, msg.author.avatarURL())
+        .setDescription(':x: You have no account setup! Set one up using `.start`.')
       return msg.channel.send(embed)
     }
     if (!eco.get(`${msg.author.id}.items`).includes('Fishing Rod')) {
       const embed = new discord.MessageEmbed()
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
-        .setTitle(':x: You don\'t have a fishing rod!')
-        .setDescription('You need a fishing rod to fish, obviously.')
+        .setDescription(`You need a fishing rod to fish, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy fishingrod\``)
       msg.channel.send(embed)
       return
     }
@@ -73,13 +72,15 @@ class Fish extends Command {
     var earnings = utils.addMoney(stuff[1], msg.author.id)
     eco.add(`${msg.author.id}.fishing_profit`, stuff[1])
     if (!eco.get(`${msg.author.id}.fishing_rod_durability`)) eco.set(`${msg.author.id}.fishing_rod_durability`, 0)
-    if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
-      eco.add(`${msg.author.id}.fishing_rod_durability`, 1)
+    if (eco.get(`${msg.author.id}.effects`)) {
+      if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+        eco.add(`${msg.author.id}.fishing_rod_durability`, 1)
+      }
     }
     const embed = new discord.MessageEmbed()
-      .setTitle(`:fishing_pole_and_fish: You just fished up a ${stuff[0]}`)
+      .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#77e86b')
-      .setDescription(`You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
+      .setDescription(`:fishing_pole_and_fish: You just fished up a **${stuff[0]}**! | You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
       .setFooter(`Durability: ${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100 - If your fishing rod reaches 0, it breaks.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.fishing_rod_durability`) === 100 || eco.get(`${msg.author.id}.fishing_rod_durability`) > 100) {

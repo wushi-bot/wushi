@@ -4,6 +4,10 @@ const cfg = new db.table('config')
 const leveling = new db.table('leveling')
 
 module.exports.addMoney = function (a, id) {
+  if (!economy.get(`${id}.effects`)) {
+    economy.add(`${id}.balance`, a)
+    return a
+  }
   if (economy.get(`${id}.effects`).includes('doubling')) {
     economy.add(`${id}.balance`, a * 2)
     return a * 2

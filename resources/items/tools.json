@@ -1,0 +1,50 @@
+[
+  {
+    "price": 100,
+    "sell_price": 35,
+    "id": "fishing_rod",
+    "description": "Allows you to do `[PRE]fish` and make money from fishing.",
+    "display": "Fishing Rod",
+    "emoji": ":fishing_pole_and_fish:"
+  },
+  {
+    "price": 5000,
+    "sell_price": 350,
+    "id": "pickaxe",
+    "description": "Allows you to do `[PRE]mine` and make money from mining.",
+    "display": "Pickaxe",
+    "emoji": ":pick:"
+  },
+  {
+    "price": 35000,
+    "sell_price": 7500,
+    "id": "farm",
+    "description": "Allows you to do `[PRE]farm` and make money from your farm.",
+    "display": "Farm",
+    "emoji": ":seedling:"
+  },
+  {
+    "price": 100000,
+    "sell_price": 7500,
+    "id": "factory",
+    "description": "Allows you to do `[PRE]work` and make money from working in a factory.",
+    "display": "Factory",
+    "emoji": ":factory:"
+  },
+  {
+    "price": 1000000,
+    "sell_price": 100000,
+    "id": "laptop",
+    "description": "Allows you to do `[PRE]code` and make money from Bitcoin mining.",
+    "display": "Laptop",
+    "emoji": ":computer:"
+  },
+  {
+    "price": 50000000,
+    "sell_price": 100000,
+    "id": "comet",
+    "description": "Allows you to do `[PRE]generate` and make money from another dimension.",
+    "display": "Comet",
+    "emoji": ":comet:"
+  }
+]

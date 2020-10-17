@@ -70,9 +70,9 @@ class MineCommand extends Command {
       eco.add(`${msg.author.id}.pickaxe_durability`, 1)
     }
     const embed = new discord.MessageEmbed()
-      .setTitle(`:pick: You just mined up ${stuff[0]}`)
-      .setColor('#77e86b')
-      .setDescription(`You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
+      .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+      .setColor('#0099ff')
+      .setDescription(`:pick: You just mined up ${stuff[0]} | You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
       .setFooter(`Durability: ${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75 - If your pickaxe reaches 0, it breaks.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.pickaxe_durability`) === 75 || eco.get(`${msg.author.id}.pickaxe_durability`) > 75) {
