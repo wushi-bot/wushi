@@ -9,7 +9,7 @@ class Generate extends Command {
     super(client, {
       name: 'generate',
       description: 'Generate coins out of thin air.',
-      category: 'Economy',
+      category: 'Income',
       aliases: ['gen', 'cometgen'],
       cooldown: 1
     })
@@ -26,7 +26,13 @@ class Generate extends Command {
     }
     var earnings = utils.getRandomInt(750000, 20000000)
     var uses = utils.getRandomInt(5, 51)
-    eco.add(`${msg.author.id}.comet_durability`, uses)
+    if (eco.get(`${msg.author.id}.effects`)) {
+      if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+        eco.add(`${msg.author.id}.comet_durability`, uses)
+      }
+    } else {
+      eco.add(`${msg.author.id}.comet_durability`, uses)
+    }
     earnings = utils.addMoney(earnings, msg.author.id)
     eco.add(`${msg.author.id}.comet_profit`, earnings)
     const embed = new discord.MessageEmbed()

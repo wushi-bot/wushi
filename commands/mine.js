@@ -46,7 +46,7 @@ class MineCommand extends Command {
     super(client, {
       name: 'mine',
       description: 'Mine ores for cash.',
-      category: 'Economy',
+      category: 'Income',
       aliases: ['dig'],
       usage: 'mine',
       cooldown: 1
@@ -66,7 +66,11 @@ class MineCommand extends Command {
     var earnings = utils.addMoney(stuff[1], msg.author.id)
     eco.add(`${msg.author.id}.mining_profit`, stuff[1])
     if (!eco.get(`${msg.author.id}.pickaxe_durability`)) eco.set(`${msg.author.id}.pickaxe_durability`, 0)
-    if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+    if (eco.get(`${msg.author.id}.effects`)) {
+      if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+        eco.add(`${msg.author.id}.pickaxe_durability`, 1)
+      }
+    } else {
       eco.add(`${msg.author.id}.pickaxe_durability`, 1)
     }
     const embed = new discord.MessageEmbed()

@@ -17,6 +17,16 @@ module.exports.addMoney = function (a, id) {
   }
 }
 
+module.exports.getItem = function (arr, value) {
+  let returnedItem
+  arr.forEach(item => {
+    if (item.id === value) {
+      returnedItem = item
+    }
+  })
+  return returnedItem
+}
+
 module.exports.addCommas = function (nStr) {
   nStr += ''
   var x = nStr.split('.')

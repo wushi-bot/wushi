@@ -9,7 +9,7 @@ class Farm extends Command {
     super(client, {
       name: 'farm',
       description: 'Farm for coins!',
-      category: 'Economy',
+      category: 'Income',
       aliases: [],
       usage: 'farm',
       cooldown: 1
@@ -38,14 +38,15 @@ class Farm extends Command {
       const embed = new discord.MessageEmbed()
         .setColor('#0099ff')
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-        .setDescription(`:seedling: It was a good day, earned **+${utils.addCommas(out)}** Coins :moneybag:! | Used up \`${uses}\` uses of the farm! Your farm usage is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. (Balance: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** Coins :moneybag:)`)
+        .setDescription(`:seedling: It was a good day, earned **+${utils.addCommas(out)}** Coins :moneybag:! | Used up **${uses} uses** of the farm! Your farm durability is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. (Balance: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** Coins :moneybag:)`)
         .setFooter(`Durability: ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`)
       msg.channel.send(embed)
       if (eco.get(`${msg.author.id}.farm_uses`) > 150 || eco.get(`${msg.author.id}.farm_uses`) === 150) {
         const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Farm')
         eco.set(`${msg.author.id}.items`, i)
         const embed = new discord.MessageEmbed()
-          .setTitle(':seedling: You\'ve used up all of your farm!')
+          .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+          .setDescription(':seedling: You\'ve **used up** all of your farm!')
           .setColor('#ff2d08')
         msg.channel.send(embed)
         return eco.set(`${msg.author.id}.farm_uses`, 0)
@@ -57,7 +58,8 @@ class Farm extends Command {
       const embed = new discord.MessageEmbed()
         .setColor('#ff2d08')
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-        .setDescription(`:man_farmer: It was a bad day, you lost ${earnings} Coins! | Since this was a bad day, you don't use up the farm. However, your farm usage is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. Balance: ${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))} Coins :moneybag:`)
+        .setDescription(`:seedling: It was a bad day, you lost **${earnings} Coins**! | Since this was a bad day, you don't use up the farm. However, your farm usage is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. Balance: ${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))} Coins :moneybag:`)
+        .setFooter(`Durability: ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`)
       return msg.channel.send(embed)
     }
   }

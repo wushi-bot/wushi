@@ -46,7 +46,7 @@ class Fish extends Command {
       name: 'fish',
       description: 'Fish for some cash!',
       aliases: ['reel'],
-      category: 'Economy',
+      category: 'Income',
       usage: 'fish',
       cooldown: 1
     })
@@ -76,10 +76,12 @@ class Fish extends Command {
       if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
         eco.add(`${msg.author.id}.fishing_rod_durability`, 1)
       }
+    } else {
+      eco.add(`${msg.author.id}.fishing_rod_durability`, 1)
     }
     const embed = new discord.MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-      .setColor('#77e86b')
+      .setColor('#0099ff')
       .setDescription(`:fishing_pole_and_fish: You just fished up a **${stuff[0]}**! | You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
       .setFooter(`Durability: ${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100 - If your fishing rod reaches 0, it breaks.`)
     msg.channel.send(embed)

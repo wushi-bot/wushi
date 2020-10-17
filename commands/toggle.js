@@ -18,7 +18,7 @@ class Toggle extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_SERVER')) return msg.channel.send(':x: You are missing the permission `Administrator` or `Manage Server`.')
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_GUILD')) return msg.channel.send(':x: You are missing the permission `Administrator` or `Manage Server`.')
     if (!args[0]) return msg.channel.send(':x: I require a valid module to toggle.')
     let input
     if (args[1]) {

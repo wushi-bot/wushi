@@ -16,16 +16,6 @@ for (const item in foods) {
 
 const eco = new db.table('economy')
 
-function getItem (arr, value) {
-  let returnedItem
-  arr.forEach(item => {
-    if (item.id === value) {
-      returnedItem = item
-    }
-  })
-  return returnedItem
-}
-
 class Buy extends Command {
   constructor (client) {
     super(client, {
@@ -40,7 +30,7 @@ class Buy extends Command {
 
   async run (bot, msg, args) {
 
-    const item = getItem(allItems, args[0])
+    const item = utils.getItem(allItems, args[0])
     if (!item) {
       const embed = new discord.MessageEmbed()
         .setColor('#f20f0f')

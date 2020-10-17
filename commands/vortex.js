@@ -9,7 +9,7 @@ class Vortex extends Command {
     super(client, {
       name: 'vortex',
       description: 'Create coins from another planet.',
-      category: 'Economy',
+      category: 'Income',
       aliases: ['vortexportal', 'portal'],
       cooldown: 1
     })
@@ -26,11 +26,17 @@ class Vortex extends Command {
     }
     var earnings = utils.getRandomInt(750000, 1000000)
     var uses = utils.getRandomInt(5, 10)
-    eco.add(`${msg.author.id}.vortex_durability`, uses)
+    if (eco.get(`${msg.author.id}.effects`)) {
+      if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+        eco.add(`${msg.author.id}.vortex_durability`, uses)
+      }
+    } else {
+      eco.add(`${msg.author.id}.vortex_durability`, uses)
+    }
     earnings = utils.addMoney(earnings, msg.author.id)
     eco.add(`${msg.author.id}.vortex_profit`, earnings)
     const embed = new discord.MessageEmbed()
-      .setColor('#77e86b')
+      .setColor('#0099ff')
       .setTitle(':cyclone: The vortex has created an incredible surplus.')
       .setDescription(`You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
       .setFooter(`Durability: ${500 - eco.get(`${msg.author.id}.vortex_durability`)}/500 - If vortex reaches 0, it'll break.`)

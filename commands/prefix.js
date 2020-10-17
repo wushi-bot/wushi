@@ -15,7 +15,7 @@ class Prefix extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_SERVER')) {
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_GUILD')) {
       return msg.channel.send('You are missing the permission `Administrator` or `Manage Server`.')
     }
     if (!args[0]) {

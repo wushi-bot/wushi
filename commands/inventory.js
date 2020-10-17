@@ -1,6 +1,22 @@
 import discord from 'discord.js'
+import utils from '../utils/utils'
 import db from 'quick.db'
 import Command from '../models/Command'
+import tools from '../resources/items/tools.json'
+import foods from '../resources/items/foods.json'
+
+const allItems = []
+for (const item in tools) {
+  allItems.push(tools[item])
+}
+for (const item in foods) {
+  allItems.push(foods[item])
+}
+
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1)
+}
+
 const eco = new db.table('economy')
 
 class Inventory extends Command {
@@ -16,43 +32,35 @@ class Inventory extends Command {
   }
 
   async run (bot, msg, args) {
-    let user = msg.mentions.users.first()
-    if (!user) {
-      user = msg.author
-    }
-    if (!eco.get(`${user.id}.items`)) {
+    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    if (!eco.get(`${user.user.id}.items`)) {
       const embed = new discord.MessageEmbed()
         .setTitle(':x: You have nothing in your inventory.')
       return msg.channel.send(embed)
     }
-    var rods = eco.get(`${user.id}.items`).filter(x => x === 'Fishing Rod').length
-    var picks = eco.get(`${user.id}.items`).filter(x => x === 'Pickaxe').length
-    var farms = eco.get(`${user.id}.items`).filter(x => x === 'Farm').length
-    var cherries = eco.get(`${user.id}.items`).filter(x => x === 'Provato').length
-    var ubers = eco.get(`${user.id}.items`).filter(x => x === 'UberFruit').length
-    var gummis = eco.get(`${user.id}.items`).filter(x => x === 'Gummi').length
+    const inventory = eco.get(`${user.user.id}.items`)
+    const l = []
+
+    inventory.forEach(item => {
+      const i = utils.getItem(allItems, item.toLowerCase())
+      l.push(`${i.emoji} ${i.display}`)
+    })
+    const effects = eco.get(`${user.user.id}.effects`)
+    let l2 = []
+    let displayEffects
+    if (effects === undefined || effects.length === 0) {
+      displayEffects = 'None'
+    } else {
+      effects.forEach(effect => {
+        l2.push(effect.capitalize())
+      })
+      displayEffects = l2.join(', ')
+    }
     const embed = new discord.MessageEmbed()
+      .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setTitle(':handbag: Your Inventory')
-      .setDescription('This is the items you have.')
-    if (rods) {
-      embed.addField(':fishing_pole_and_fish: Fishing Rods', rods, true)
-    }
-    if (picks) {
-      embed.addField(':pick: Pickaxes', picks, true)
-    }
-    if (farms) {
-      embed.addField(':seedling: Farms', farms, true)
-    }
-    if (cherries) {
-      embed.addField(':busts_in_silhouette: Provato Cherries', cherries, true)
-    }
-    if (gummis) {
-      embed.addField(':lock: Kodo Gummies', gummis, true)
-    }
-    if (ubers) {
-      embed.addField(':apple: UberFruits', ubers, true)
-    }
+      .setDescription(`:handbag: **${user.user.username}'s** Inventory | This is the items ${user.user.username} has.\n\n**Items:** ${l.join(', ')}\n**Effects:** ${displayEffects}`)
+
     return msg.channel.send(embed)
   }
 }
