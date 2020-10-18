@@ -7,7 +7,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "start-bot": "npx nodemom --exec babel-node bot.js",
+    "start-bot": "npx nodemon --exec babel-node bot.js",
     "start-web": "npx nodemon --exec babel-node web.js",
     "build": "concurrently \"npm:start-web\" \"npm:start-bot\""
   },

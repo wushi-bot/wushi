@@ -42,7 +42,7 @@ class Generate extends Command {
       .setFooter(`Durability: ${1000 - eco.get(`${msg.author.id}.comet_durability`)}/1000 - If your comet generator reaches 0, it'll break.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.comet_durability`) > 1000 || eco.get(`${msg.author.id}.comet_durability`) === 1000) {
-      const i = utils.removeA(db.get(`${msg.author.id}.items`), 'comet')
+      const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'comet')
       eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
         .setTitle(':comet: Your comet generator has broken.')

@@ -54,7 +54,7 @@ class MineCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.items`).includes('Pickaxe')) {
+    if (!eco.get(`${msg.author.id}.items`).includes('pickaxe')) {
       const embed = new discord.MessageEmbed()
         .setColor('#ff2803')
         .setTitle(':x: You don\'t have a pickaxe!')

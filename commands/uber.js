@@ -41,7 +41,7 @@ class Uber extends Command {
         .setColor('#77e86b')
       return msg.channel.send(embed)
     }
-    if (args[0].isNaN) {
+    if (isNaN(args[0])) {
       if (args[0].toString() === 'burst') {
         if (!eco.get(`${msg.author.id}.effects`).includes('uber')) {
           const embed = new discord.MessageEmbed()

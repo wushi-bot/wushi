@@ -60,11 +60,11 @@ class Fish extends Command {
         .setDescription(':x: You have no account setup! Set one up using `.start`.')
       return msg.channel.send(embed)
     }
-    if (!eco.get(`${msg.author.id}.items`).includes('Fishing Rod')) {
+    if (!eco.get(`${msg.author.id}.items`).includes('Fishing_Rod')) {
       const embed = new discord.MessageEmbed()
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
-        .setDescription(`You need a fishing rod to fish, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy fishingrod\``)
+        .setDescription(`You need a fishing rod to fish, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy fishing_rod\``)
       msg.channel.send(embed)
       return
     }
