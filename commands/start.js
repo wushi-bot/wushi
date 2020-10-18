@@ -24,7 +24,7 @@ class Start extends Command {
         .setDescription('**Error:** You already have an account!')
       return msg.channel.send(embed)
     } else {
-      eco.set(`${msg.author.id}`, { balance: 50, items: ['Fishing Rod'], effects: [] })
+      eco.set(`${msg.author.id}`, { balance: 50, items: ['fishing_rod'], effects: [] })
       eco.set(`${msg.author.id}.started`, true)
       const embed = new discord.MessageEmbed()
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())

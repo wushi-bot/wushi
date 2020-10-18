@@ -60,7 +60,7 @@ class Fish extends Command {
         .setDescription(':x: You have no account setup! Set one up using `.start`.')
       return msg.channel.send(embed)
     }
-    if (!eco.get(`${msg.author.id}.items`).includes('Fishing_Rod')) {
+    if (!eco.get(`${msg.author.id}.items`).includes('fishing_rod')) {
       const embed = new discord.MessageEmbed()
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
