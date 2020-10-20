@@ -23,7 +23,7 @@ class Help extends Command {
       const embed = new discord.MessageEmbed()
         .setColor(color)
         .setTitle(':sushi: wushi\'s commands')
-        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix()}config\`.  | made by **minota#4523**`)
+        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix()}config\`.  You may also get some help from the [documentation](https://docs.wushibot.xyz/) [WIP] | made by **minota#4523**`)
       const commandsList = this.client.commands
       const categories = []
       const commandsInCategory = []
