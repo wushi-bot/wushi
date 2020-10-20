@@ -2,8 +2,10 @@ import discord from 'discord.js'
 import utils from '../utils/utils'
 import db from 'quick.db'
 import Command from '../models/Command'
+
 import tools from '../resources/items/tools.json'
 import foods from '../resources/items/foods.json'
+import upgrades from '../resources/items/upgrades.json'
 
 const allItems = []
 for (const item in tools) {
@@ -11,6 +13,9 @@ for (const item in tools) {
 }
 for (const item in foods) {
   allItems.push(foods[item])
+}
+for (const item in upgrades) {
+  allItems.push(upgrades[item])
 }
 
 String.prototype.capitalize = function() {
@@ -46,7 +51,7 @@ class Inventory extends Command {
       l.push(`${i.emoji} ${i.display}`)
     })
     const effects = eco.get(`${user.user.id}.effects`)
-    let l2 = []
+    const l2 = []
     let displayEffects
     if (effects === undefined || effects.length === 0) {
       displayEffects = 'None'

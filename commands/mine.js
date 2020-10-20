@@ -63,6 +63,18 @@ class MineCommand extends Command {
       return
     }
     const stuff = generateRandomDrop()
+    if (eco.get(`${msg.author.id}.items`).includes('refined_pickaxe')) {
+      var multiplies = 0
+      eco.get(`${msg.author.id}.items`).forEach(item => {
+        if (item === 'refined_pickaxe') {
+          if (multiplies > 6) {
+            var temp = stuff[1]
+            stuff[1] = Math.floor(temp + (temp * 0.25))
+            multiplies++
+          }
+        }
+      })
+    }
     var earnings = utils.addMoney(stuff[1], msg.author.id)
     eco.add(`${msg.author.id}.mining_profit`, stuff[1])
     if (!eco.get(`${msg.author.id}.pickaxe_durability`)) eco.set(`${msg.author.id}.pickaxe_durability`, 0)
@@ -80,7 +92,10 @@ class MineCommand extends Command {
       .setFooter(`Durability: ${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75 - If your pickaxe reaches 0, it breaks.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.pickaxe_durability`) === 75 || eco.get(`${msg.author.id}.pickaxe_durability`) > 75) {
-      const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Pickaxe')
+      let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'pickaxe')
+      if (eco.get(`${msg.author.id}.items`).includes('refined_pickaxe')) {
+        i = utils.removeA(eco.get(`${msg.author.id}.items`), 'refined_pickaxe')
+      }
       eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
         .setTitle(':pick: Uh oh, your **pickaxe** broke!')

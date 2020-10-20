@@ -69,6 +69,18 @@ class Fish extends Command {
       return
     }
     const stuff = generateRandomDrop()
+    if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
+      var multiplies = 0
+      eco.get(`${msg.author.id}.items`).forEach(item => {
+        if (item === 'fishing_bait') {
+          if (multiplies > 6) {
+            var temp = stuff[1]
+            stuff[1] = Math.floor(temp + (temp * 0.25))
+            multiplies++
+          }
+        }
+      })
+    }
     var earnings = utils.addMoney(stuff[1], msg.author.id)
     eco.add(`${msg.author.id}.fishing_profit`, stuff[1])
     if (!eco.get(`${msg.author.id}.fishing_rod_durability`)) eco.set(`${msg.author.id}.fishing_rod_durability`, 0)
@@ -86,7 +98,10 @@ class Fish extends Command {
       .setFooter(`Durability: ${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100 - If your fishing rod reaches 0, it breaks.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.fishing_rod_durability`) === 100 || eco.get(`${msg.author.id}.fishing_rod_durability`) > 100) {
-      const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Fishing Rod')
+      let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_rod')
+      if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
+        i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
+      }
       eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
         .setTitle(':fishing_pole_and_fish: Uh oh, your **fishing rod** broke!')

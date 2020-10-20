@@ -57,29 +57,37 @@ class Uber extends Command {
             .setColor('#77e86b')
           return msg.channel.send(embed)
         }
-        var chance = utils.getRandomInt(1, 6)
+        var dudChance = utils.getRandomInt(1, 3)
+        var chance = utils.getRandomInt(1, 7)
         let multiplier
-        switch (chance) {
-          case 1:
-            multiplier = 2.25
-            break
-          case 2:
-            multiplier = 2.50
-            break
-          case 3:
-            multiplier = 2
-            break
-          case 4:
-            multiplier = 2.75
-            break
-          case 5:
-            multiplier = 3
-            break
-          case 6:
-            multiplier = 3.25
-            break
-          default:
-            break
+        if (dudChance === 1 || dudChance === 2) {
+          switch (chance) {
+            case 1:
+              multiplier = 2.25
+              break
+            case 2:
+              multiplier = 1
+              break
+            case 3:
+              multiplier = 2
+              break
+            case 4:
+              multiplier = 1.75
+              break
+            case 5:
+              multiplier = 2.25
+              break
+            case 6:
+              multiplier = 1.5
+              break
+            case 7:
+              multiplier = 1.25
+              break
+            default:
+              break
+          }
+        } else {
+          multiplier = 0
         }
         var earnings = (eco.get(`${msg.author.id}.uber`) * multiplier)
         eco.add(`${msg.author.id}.balance`, earnings)

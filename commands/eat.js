@@ -24,7 +24,7 @@ class Eat extends Command {
           .setColor('#77e86b')
         return msg.channel.send(embed)
       }
-      if (!eco.get(`${msg.author.id}.items`).includes('Provato')) {
+      if (!eco.get(`${msg.author.id}.items`).includes('provato')) {
         const embed = new discord.MessageEmbed()
           .setTitle(':busts_in_silhouette: You don\'t have a Provato Cherry.')
           .setDescription('You need to buy one on the store using `.buy provato`.')
@@ -32,7 +32,7 @@ class Eat extends Command {
         return msg.channel.send(embed)
       } else {
         eco.push(`${msg.author.id}.effects`, 'doubling')
-        const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Provato')
+        const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'provato')
         eco.set(`${msg.author.id}.items`, i)
         const embed = new discord.MessageEmbed()
           .setTitle(':busts_in_silhouette: You now have the Doubling effect.')
@@ -62,7 +62,7 @@ class Eat extends Command {
           .setColor('#77e86b')
         return msg.channel.send(embed)
       }
-      if (!eco.get(`${msg.author.id}.items`).includes('UberFruit')) {
+      if (!eco.get(`${msg.author.id}.items`).includes('uber')) {
         const embed = new discord.MessageEmbed()
           .setTitle(':apple: You don\'t have a ÜberFruit.')
           .setDescription('You need to buy one on the store using `.buy uber`.')
@@ -70,7 +70,7 @@ class Eat extends Command {
         return msg.channel.send(embed)
       } else {
         eco.push(`${msg.author.id}.effects`, 'uber')
-        const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'UberFruit')
+        const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'uber')
         eco.set(`${msg.author.id}.items`, i)
         const embed = new discord.MessageEmbed()
           .setTitle(':apple: You now have the Über effect.')
@@ -88,7 +88,7 @@ class Eat extends Command {
           .setColor('#77e86b')
         return msg.channel.send(embed)
       }
-      if (!eco.get(`${msg.author.id}.items`).includes('Gummi')) {
+      if (!eco.get(`${msg.author.id}.items`).includes('fummi')) {
         const embed = new discord.MessageEmbed()
           .setTitle(':lock: You don\'t have a Kodo Gummi.')
           .setDescription('You need to buy one on the store using `.buy gummi`.')

@@ -17,7 +17,7 @@ class Farm extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.items`).includes('Farm')) {
+    if (!eco.get(`${msg.author.id}.items`).includes('farm')) {
       const embed = new discord.MessageEmbed()
         .setColor('#ff2d08')
         .setTitle(':x: You don\'t have a farm!')

@@ -28,8 +28,7 @@ class WorkCommand extends Command {
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
         .setDescription(`You need a factory to work, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy factory\``)
-      msg.channel.send(embed)
-      return
+      return msg.channel.send(embed)
     }
     var earnings = utils.getRandomInt(55000, 175000)
     var uses = utils.getRandomInt(10, 21)
@@ -43,10 +42,10 @@ class WorkCommand extends Command {
     earnings = utils.addMoney(earnings, msg.author.id)
     eco.add(`${msg.author.id}.factory_profit`, earnings)
     const embed = new discord.MessageEmbed()
+      .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setTitle(`:factory: Whew! You earned ${utils.addCommas(earnings)}, from working in the factory.`)
-      .setDescription(`You got: **+${utils.addCommas(earnings)}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
-      .setFooter(`Durability: ${750 - eco.get(`${msg.author.id}.factory_durability`)}/750 - If your comet generator reaches 0, it'll break.`)
+      .setDescription(`:factory: Whew! You earned ${utils.addCommas(earnings)}, from working in the factory. | You got: **+${utils.addCommas(earnings)}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
+      .setFooter(`Durability: ${750 - eco.get(`${msg.author.id}.factory_durability`)}/750 - If your factory reaches 0, it'll break.`)
     msg.channel.send(embed)
     if (eco.get(`${msg.author.id}.factory_durability`) > 1000 || eco.get(`${msg.author.id}.factory_durability`) === 1000) {
       const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'factory')

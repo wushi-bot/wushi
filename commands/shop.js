@@ -2,6 +2,7 @@ import discord from 'discord.js'
 import Command from '../models/Command'
 import tools from '../resources/items/tools.json'
 import foods from '../resources/items/foods.json'
+import upgrades from '../resources/items/upgrades.json'
 import utils from '../utils/utils'
 
 class Shop extends Command {
@@ -40,6 +41,15 @@ class Shop extends Command {
         .setDescription(':poultry_leg: **Food** | The food catalog.')
       foods.forEach(food => {
         embed.addField(`${food.emoji} ${food.display}`, `ID: \`${food.id}\` | Price: **$${utils.addCommas(food.price)}** | ${food['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      })
+      msg.channel.send(embed)
+    } else if (args[0] === 'upgrades' || args[0] === 'Upgrades') {
+      const embed = new discord.MessageEmbed()
+        .setColor('#77e86b')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setDescription(':up: **Upgrades** | The upgrades catalog.')
+      upgrades.forEach(upgrade => {
+        embed.addField(`${upgrade.emoji} ${upgrade.display}`, `ID: \`${upgrade.id}\` | Price: **$${utils.addCommas(upgrade.price)}** | ${upgrade['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       })
       msg.channel.send(embed)
     }

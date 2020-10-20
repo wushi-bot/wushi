@@ -5,6 +5,7 @@ import Command from '../models/Command'
 
 import tools from '../resources/items/tools.json'
 import foods from '../resources/items/foods.json'
+import upgrades from '../resources/items/upgrades.json'
 
 const allItems = []
 for (const item in tools) {
@@ -12,6 +13,9 @@ for (const item in tools) {
 }
 for (const item in foods) {
   allItems.push(foods[item])
+}
+for (const item in upgrades) {
+  allItems.push(upgrades[item])
 }
 
 const eco = new db.table('economy')
@@ -29,7 +33,6 @@ class Buy extends Command {
   }
 
   async run (bot, msg, args) {
-
     const item = utils.getItem(allItems, args[0])
     if (!item) {
       const embed = new discord.MessageEmbed()
@@ -57,7 +60,7 @@ class Buy extends Command {
     eco.push(`${msg.author.id}.items`, item.id)
     const embed = new discord.MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-      .setDescription(`${item.emoji} Purchased ${item.display}! | Balance: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      .setDescription(`${item.emoji} Purchased **${item.display}**! | Balance: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       .setColor('#77e86b')
     msg.channel.send(embed)
   }
