@@ -4,7 +4,7 @@
 [![Discord](https://discordapp.com/api/guilds/755208617203990599/widget.png?style=shield)](https://discord.gg/7MtXvNB)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-[!Example](https://media.discordapp.net/attachments/744637502413078622/769626003093454868/SoR9NS3dDQAAAAAASUVORK5CYII.png)
+![Example](https://media.discordapp.net/attachments/744637502413078622/769626003093454868/SoR9NS3dDQAAAAAASUVORK5CYII.png)
 
 </div>
 
