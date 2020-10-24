@@ -1,0 +1,10 @@
+[
+  {
+    "price": 10000,
+    "sell_price": 0,
+    "id": "gem",
+    "description": "Obtain server-side gems to buy server-shop items",
+    "display": "Server Gems",
+    "emoji": ":gem:"
+  }
+]

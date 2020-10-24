@@ -19,26 +19,20 @@ class RankCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    let user
-    const mentionedUser = msg.mentions.users.first()
-    if (!mentionedUser) {
-      user = msg.author
-    } else {
-      user = mentionedUser
-    }
-    if (user.bot) return msg.channel.send('You cannot see the rank of bots, because they cannot gain EXP.')
-    const avatarURL = user.avatarURL({ format: 'png' })
+    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    if (user.user.bot) return msg.channel.send('You cannot see the rank of bots, because they cannot gain EXP.')
+    const avatarURL = user.user.avatarURL({ format: 'png' })
     const avatar = await req(avatarURL).raw()
-    const bg = await req('https://media.discordapp.net/attachments/744637502413078622/764876206877048852/unknown.png?width=633&height=618').raw()
-    let level = leveling.get(`${user.id}.${msg.guild.id}.level`)
+    const bg = await req('https://media.discordapp.net/attachments/744637502413078622/769618814597333012/discord-background.jpg?width=1100&height=619').raw()
+    let level = leveling.get(`${user.user.id}.${msg.guild.id}.level`)
     if (!level) {
       level = 0
     }
-    let nextLevel = leveling.get(`${user.id}.${msg.guild.id}.expNeeded`)
+    let nextLevel = leveling.get(`${user.user.id}.${msg.guild.id}.expNeeded`)
     if (!nextLevel) {
       nextLevel = 100
     }
-    let points = leveling.get(`${user.id}.${msg.guild.id}.exp`)
+    let points = leveling.get(`${user.user.id}.${msg.guild.id}.exp`)
     if (!points) {
       points = 0
     }
@@ -53,16 +47,16 @@ class RankCommand extends Command {
       .setTextAlign('center')
       .setColor('#ffff')
       .setTextFont('48pt Default Bold')
-      .addText(user.username, 225, 228)
+      .addText(user.user.username, 300, 228)
       .setTextFont('35pt Default')
-      .addText('#' + user.discriminator, 410, 228)
+      .addText('#' + user.user.discriminator, 300, 270)
       .setTextAlign('left')
       .setTextFont('25pt Default Bold')
-      .addText(`Level ${level}`, 85, 304)
-      .addText(`${points} / ${nextLevel}`, 390, 304)
-      .addBeveledRect(85, 320, nextLevel, 24, 28)
+      .addText(`Level ${level}`, 85, 316)
+      .addText(`${points} / ${nextLevel}`, 390, 316)
+      .addBeveledRect(85, 336, nextLevel, 24, 32)
       .setColor('#ff3f38')
-      .addBeveledRect(96, 324, progBar, 16, 20)
+      .addBeveledRect(96, 340, progBar, 16, 20)
       .restore()
     return msg.channel.send({ files: [{ attachment: canvas.toBuffer(), name: 'profile.png' }] })
   }
