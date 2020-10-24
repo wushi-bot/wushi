@@ -32,7 +32,7 @@ coming soontm
 
 ### Contributors 🪁
 
-People that have contributed to this repository are featured here.
+People that have contributed to this repository are featured here. [`Emoji key`](https://allcontributors.org/docs/en/emoji-key)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <table>
