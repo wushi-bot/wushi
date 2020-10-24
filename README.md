@@ -12,7 +12,7 @@
 
 The invite to the bot is listed here: [Click here](https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot), the permissions have been made in a way so that it only uses the permissions needs, without any administrative access. 
 
-## Inspiration ❤️
+### Inspiration ❤️
 
 May it be indirect inspiration, or using *some kind* of code, it will be listed here.
 
@@ -21,7 +21,7 @@ May it be indirect inspiration, or using *some kind* of code, it will be listed 
 - Unbelievable's [UnbelievaBoat](https://unb.pizza)
 - GamingGeek's [Fire](https://fire.gaminggeek.dev) ([Repository](https://github.com/FireDiscordBot/bot))
 
-## Donations 💸
+#### Donations 💸
 
 coming soontm
 
@@ -34,7 +34,7 @@ coming soontm
 
 People that have contributed to this repository are featured here.
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
-<!-- ALL-CONTRIBUTORS-BADGE:END --> 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
