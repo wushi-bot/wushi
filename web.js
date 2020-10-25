@@ -51,7 +51,7 @@ try {
   })
 } catch (e) {
   const httpServer = http.createServer(app)
-  httpServer.listen(8000, () => {
-    console.log(chalk.green('>') + ' Server started listening on port 8000!')
+  httpServer.listen(8888, () => {
+    console.log(chalk.green('>') + ' Server started listening on port 8888!')
   })
 }

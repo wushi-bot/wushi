@@ -21,7 +21,7 @@ May it be indirect inspiration, or using *some kind* of code, it will be listed 
 - Unbelievable's [UnbelievaBoat](https://unb.pizza)
 - GamingGeek's [Fire](https://fire.gaminggeek.dev) ([Repository](https://github.com/FireDiscordBot/bot))
 
-#### Donations 💸
+### Donations 💸
 
 coming soontm
 

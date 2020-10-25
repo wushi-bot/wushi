@@ -36,7 +36,7 @@ class RankCommand extends Command {
     if (!points) {
       points = 0
     }
-    const progBar = Math.max((points / nextLevel) * 296, 10)
+    const progBar = Math.floor(Math.max((points / nextLevel) * 450, 10))
     const canvas = new Canvas(600, 400)
     canvas
       .addTextFont('./resources/fonts/JosefinSans-Regular.ttf', 'Default')
@@ -54,7 +54,8 @@ class RankCommand extends Command {
       .setTextFont('25pt Default Bold')
       .addText(`Level ${level}`, 85, 316)
       .addText(`${points} / ${nextLevel}`, 390, 316)
-      .addBeveledRect(85, 336, nextLevel, 24, 32)
+      .addBeveledRect(85, 336, 450, 24, 32)
+      .restore()
       .setColor('#ff3f38')
       .addBeveledRect(96, 340, progBar, 16, 20)
       .restore()

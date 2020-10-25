@@ -1,15 +1,3 @@
-/*     const duration = moment.duration(this.client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
-    message.channel.send(`= STATISTICS =
-  • Mem Usage  :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
-  • Uptime     :: ${duration}
-  • Users      :: ${this.client.users.cache.size.toLocaleString()}
-  • Servers    :: ${this.client.guilds.cache.size.toLocaleString()}
-  • Channels   :: ${this.client.channels.cache.size.toLocaleString()}
-  • Discord.js :: v${version}
-  • Node       :: ${process.version}`, {code: "asciidoc"});
-  }
-*/
-
 import Command from '../models/Command'
 import { version, MessageEmbed } from 'discord.js'
 import moment from 'moment'

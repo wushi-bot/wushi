@@ -10,7 +10,7 @@ class RecommendedBots extends Command {
       name: 'recommended',
       description: 'Recommends 3 great bots made by great devs.',
       category: 'Meta',
-      aliases: ['recommnded-bots'],
+      aliases: ['recommended-bots'],
       usage: 'recommended',
       cooldown: 1
     })

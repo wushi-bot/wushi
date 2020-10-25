@@ -28,6 +28,12 @@ class Config extends Command {
     } else {
       embed.addField(':newspaper: Disabled Modules', `These modules will not show up on \`${utils.getPrefix(msg.guild.id)}help\` & will not function. (Enable them using \`${utils.getPrefix(msg.guild.id)}toggle <module>\`) \`\`\`${config.get(`${msg.guild.id}.disabled`).join(', ')}\`\`\``)
     }
+
+    if (config.get(`${msg.guild.id}.levelUpGems`)) {
+      embed.addField(':gem: Gems on Level Up', `You will receive gems whence you level up. (Disable it using \`${utils.getPrefix(msg.guild.id)}disable-gems\`) \`\`\`Enabled\`\`\``)
+    } else {
+      embed.addField(':gem: Gems on Level Up', `You will not receive gems whence you level up. (Enable it using \`${utils.getPrefix(msg.guild.id)}disable-gems\`) \`\`\`Disabled\`\`\``)
+    }
     msg.channel.send(embed)
   }
 }
