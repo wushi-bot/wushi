@@ -73,11 +73,11 @@ class Fish extends Command {
       var multiplies = 0
       eco.get(`${msg.author.id}.items`).forEach(item => {
         if (item === 'fishing_bait') {
-          if (multiplies > 6) {
+          if (multiplies < 6) {
             var temp = stuff[1]
             stuff[1] = Math.floor(temp + (temp * 0.25))
-            multiplies++
           }
+          multiplies++
         }
       })
     }

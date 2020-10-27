@@ -19,7 +19,7 @@ class RankCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    const user = utils.getMember(msg, args[0]) || msg.member
     if (user.user.bot) return msg.channel.send('You cannot see the rank of bots, because they cannot gain EXP.')
     const avatarURL = user.user.avatarURL({ format: 'png' })
     const avatar = await req(avatarURL).raw()

@@ -40,6 +40,14 @@
     "emoji": ":computer:"
   },
   {
+    "price": 1000000,
+    "sell_price": 10000,
+    "id": "vortex",
+    "description": "Allows you to do `[PRE]vortex` and make money from another planet.",
+    "display": "Vortex",
+    "emoji": ":cyclone:"
+  },
+  {
     "price": 50000000,
     "sell_price": 100000,
     "id": "comet",

@@ -9,7 +9,9 @@
   "scripts": {
     "start-bot": "npx nodemon --exec babel-node bot.js",
     "start-web": "npx nodemon --exec babel-node web.js",
-    "build": "concurrently \"npm:start-web\" \"npm:start-bot\""
+    "build": "concurrently \"npm:start-web\" \"npm:start-bot\"",
+    "css-build": "node-sass --omit-source-map-url web/public/scss/style.scss web/public/css/style.css",
+    "css-watch": "npm run css-build -- --watch"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
   "dependencies": {
     "@aero/centra": "^1.0.6",
     "axios": "^0.20.0",
+    "bulma": "^0.9.1",
     "canvas": "^2.6.1",
     "canvas-constructor": "^3.2.0",
     "chalk": "^4.1.0",

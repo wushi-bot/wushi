@@ -1,8 +1,10 @@
 import discord from 'discord.js'
 import db from 'quick.db'
-import utils from '../utils/utils'
+import utils, { getMember } from '../utils/utils'
 import Command from '../models/Command'
 const eco = new db.table('economy')
+const serverEco = new db.table('serverEco')
+const cfg = new db.table('config')
 
 class Balance extends Command {
   constructor (client) {
@@ -17,24 +19,22 @@ class Balance extends Command {
   }
 
   async run (bot, msg, args) {
-    let user = msg.mentions.users.first()
-    if (!user) {
-      user = msg.author
-    }
-    if (!eco.get(`${user.id}.started`)) {
+    const user = utils.getMember(msg, args[0]) || msg.member
+    if (!eco.get(`${user.user.id}.started`)) {
       const embed = new discord.MessageEmbed()
-        .setTitle('Error!')
+        .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())
         .setColor('#f20f0f')
         .setDescription('You (or the user you inputted) has no account setup! Set one up using `.start`.')
         .setFooter(`Requested by ${msg.author.username}.`, msg.author.avatarURL())
       return msg.channel.send(embed)
     }
-    const embed = new discord.MessageEmbed()
-      .setTitle(`${user.username}'s Balance`)
-      .setColor('#77e86b')
-      .setDescription(`**${user.username}**'s Balance: **${utils.addCommas(Math.floor(eco.get(`${user.id}.balance`)))}** :moneybag: Coins`)
-      .setFooter(`Requested by ${msg.author.username}.`, msg.author.avatarURL())
-    msg.channel.send(embed)
+    let gems = serverEco.get(`${msg.guild.id}.${user.user.id}.gems`)
+    gems = gems || 0
+    if (!cfg.get(`${msg.guild.id}.disabled`).includes('Server Shop')) {
+      msg.channel.send(`**${user.user.username}** currently has **${utils.addCommas(eco.get(`${user.user.id}.balance`))} coins** & **${utils.addCommas(gems)} gems**.`)
+    } else {
+      msg.channel.send(`**${user.user.username}** currently has **${utils.addCommas(eco.get(`${user.user.id}.balance`))} coins**`)
+    }
   }
 }
 

@@ -1,0 +1,33 @@
+doctype html
+html
+  include includes/head.pug
+  body
+    nav.navbar.has-shadow.is-spaced(role="navigation", aria-label="main navigation")
+      div.container.is-fluid.is-navbar
+        a.navbar-brand(href="/", style="margin-right: 8px")
+            figure(class="image is-48x48")
+                img(class="image is-48x48", src="/assets/sushi.png")  
+        a.navbar-burger(role="button", data-target="navbar", aria-label="menu", aria-expanded="false")
+            span(aria-hidden="true")
+            span(aria-hidden="true")
+            span(aria-hidden="true")    
+        div.navbar-menu.is-active(id="navbar")
+          div.navbar-start
+              a.navbar-item(href="/invite") <i class="fas fa-user-plus"></i>&nbsp;Invite
+              a.navbar-item(href="https://docs.wushibot.xyz") <i class="fas fa-book"></i>&nbsp;Documentation
+          div.navbar-end
+              a.navbar-item(href="https://discord.gg/C7Ke4Ss") <i class="fab fa-discord"></i>&nbsp;Support Server
+    
+    div(align="center")
+      section.hero.is-medium.is-primary.is-bold
+        .hero-body
+          .container
+            figure(class="image is-128x128 animated infinite pulse")
+                img(class="image is-128x128", src="/assets/sushi.png") 
+            br
+            h1.title wushi
+            h2.subtitle A sushi-themed social bot with a unique economy system.
+  footer.footer
+    div(align="center")
+      div.container
+        p <strong>Minota</strong> © 2020         

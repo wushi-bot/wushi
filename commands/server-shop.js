@@ -26,7 +26,7 @@ class ServerShop extends Command {
       .setDescription(':sparkles: **Server Shop** | The server shop catalog.')
       .setFooter(`Use ${utils.getPrefix(msg.guild.id)}server-buy <item id> to buy items in the server-shop.`)
     shop.forEach(item => {
-      embed.addField(`${item.emoji} ${item.display}`, `ID: \`${item.id}\` | Price: **$${utils.addCommas(item.price)}** | ${item['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      embed.addField(`${item.emoji} ${item.display}`, `ID: \`${item.id}\` | Price: **$${utils.addCommas(item.price)}** | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
     })
     msg.channel.send(embed)
   }

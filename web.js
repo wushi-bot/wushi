@@ -15,7 +15,7 @@ const app = express()
 
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '/web/public')))
-app.set('views', '/web/views')
+app.set('views', path.join(__dirname, '/web/views'))
 app.use(session({
   cookie: { maxAge: 60000 },
   secret: 'keyboard cat',
@@ -31,15 +31,19 @@ app.use((req, res, next) => {
 
 /* Routes */
 app.get('/', (req, res) => {
-  return res.send('Hello!')
+  return res.render('index')
+})
+
+app.get('/invite', (req, res) => {
+  return res.redirect('https://discord.com/oauth2/authorize?client_id=770415051168677949&permissions=1275456512&scope=bot')
 })
 
 /* Startup server */
 
 try {
-  const privateKey = fs.readFileSync('/', 'utf8')
-  const certificate = fs.readFileSync('/', 'utf8')
-  const ca = fs.readFileSync('/', 'utf8')
+  const privateKey = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/cert.pem', 'utf8');
+  const ca = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/chain.pem', 'utf8');
   const credentials = {
     key: privateKey,
     cert: certificate,
