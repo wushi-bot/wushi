@@ -41,9 +41,9 @@ app.get('/invite', (req, res) => {
 /* Startup server */
 
 try {
-  const privateKey = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/privkey.pem', 'utf8');
-  const certificate = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/cert.pem', 'utf8');
-  const ca = fs.readFileSync('/etc/letsencrypt/live/sketchel.art/chain.pem', 'utf8');
+  const privateKey = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/privkey.pem', 'utf8')
+  const certificate = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/cert.pem', 'utf8')
+  const ca = fs.readFileSync('/etc/letsencrypt/live/wushibot.xyz/chain.pem', 'utf8')
   const credentials = {
     key: privateKey,
     cert: certificate,
