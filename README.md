@@ -6,6 +6,8 @@
 
 ![Example](https://media.discordapp.net/attachments/744637502413078622/769626003093454868/SoR9NS3dDQAAAAAASUVORK5CYII.png)
 
+### [Website](https://wushibot.xyz)
+
 </div>
 
 ### Invite ✨
