@@ -17,6 +17,9 @@ class DisableGems extends Command {
   }
 
   async run (bot, msg, args) {
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_GUILD')) {
+      return msg.channel.send('You are missing the permission `Administrator` or `Manage Server`.')
+    }
     if (cfg.get(`${msg.guild.id}.disabled`).includes('Leveling')) {
       return msg.channel.send(':sparkles: `Leveling` must be enabled for this action.')
     }

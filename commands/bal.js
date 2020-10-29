@@ -19,7 +19,7 @@ class Balance extends Command {
   }
 
   async run (bot, msg, args) {
-    const user = utils.getMember(msg, args[0]) || msg.member
+    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
     if (!eco.get(`${user.user.id}.started`)) {
       const embed = new discord.MessageEmbed()
         .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())

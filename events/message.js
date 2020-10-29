@@ -18,7 +18,7 @@ exports.run = (bot, message) => {
       utils.checkLevel(message.author.id, message.guild.id)
       if (!message.content.startsWith(utils.getPrefix(message.guild.id))) {
         if (!expCooldowns.has(message.author.id)) {
-          const exp = utils.getRandomInt(30, 50)
+          const exp = utils.getRandomInt(10, 20)
           leveling.add(`${message.author.id}.${message.guild.id}.exp`, exp)
           if (leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) <= leveling.get(`${message.author.id}.${message.guild.id}.exp`)) {
             leveling.add(`${message.author.id}.${message.guild.id}.level`, 1)

@@ -17,7 +17,11 @@ class Pay extends Command {
   }
 
   async run (bot, msg, args) {
-    const mentionedUser = utils.getMember(msg, args[0])
+    if (args[0]) {
+      const mentionedUser = utils.getMember(msg, args[0]) || msg.member
+    } else {
+      const mentionedUser = msg.member
+    }
     if (!mentionedUser) {
       const embed = new discord.MessageEmbed()
         .setColor('#ff2d08')
@@ -57,7 +61,7 @@ class Pay extends Command {
         msg.channel.send(embed)
         return
       }
-      if (mentionedUser.bot) {
+      if (mentionedUser.user.bot) {
         const embed = new discord.MessageEmbed()
           .setColor('#ff2d08')
           .setTitle(':x: That\'s a bot.')
@@ -65,13 +69,13 @@ class Pay extends Command {
         msg.channel.send(embed)
         return
       }
-      if (!eco.get(`${mentionedUser.id}.inventory`)) eco.set(`${mentionedUser.id}.inventory`, [])
+      if (!eco.get(`${mentionedUser.user.id}.inventory`)) eco.set(`${mentionedUser.user.id}.inventory`, [])
       eco.subtract(`${msg.author.id}.balance`, args[1])
-      eco.add(`${mentionedUser.id}.balance`, args[1])
+      eco.add(`${mentionedUser.user.id}.balance`, args[1])
       const embed = new discord.MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Transfer Successful')
-        .setDescription(`**-${args[1]}** ${msg.author.username} (Balance: ${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}) → **+${args[1]}** ${mentionedUser.username} (Balance: ${utils.addCommas(Math.floor(db.get(`${mentionedUser.id}.balance`)))})`)
+        .setDescription(`**-${args[1]}** ${msg.author.username} (Balance: ${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}) → **+${args[1]}** ${mentionedUser.user.username} (Balance: ${utils.addCommas(Math.floor(eco.get(`${mentionedUser.user.id}.balance`)))})`)
       msg.channel.send(embed)
     }
   }

@@ -17,6 +17,9 @@ class ResetCFGCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.member.hasPermission('MANAGE_GUILD')) {
+      return msg.channel.send('You are missing the permission `Administrator` or `Manage Server`.')
+    }
     cfg.set(`${msg.guild.id}.setup`, true)
     cfg.set(`${msg.guild.id}.disabled`, ['Leveling', 'Server Shop'])
     msg.channel.send('The configuration for this server has been reset, the bot should function properly now.')
