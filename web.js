@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/invite', (req, res) => {
-  return res.redirect('https://discord.com/oauth2/authorize?client_id=770415051168677949&permissions=1275456512&scope=bot')
+  return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
 })
 
 /* Startup server */

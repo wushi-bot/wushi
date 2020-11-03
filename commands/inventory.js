@@ -64,7 +64,7 @@ class Inventory extends Command {
     const embed = new discord.MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setDescription(`:handbag: **${user.user.username}'s** Inventory | This is the items ${user.user.username} has.\n\n**Items:** ${l.join(', ')}\n**Effects:** ${displayEffects}`)
+      .setDescription(`:handbag: **${user.user.username}'s** Inventory | These are the items **${user.user.tag}** has.\n\n**Items:** ${l.join(', ')}\n**Effects:** ${displayEffects}`)
 
     return msg.channel.send(embed)
   }

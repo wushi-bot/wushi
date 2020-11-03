@@ -16,43 +16,11 @@
     "emoji": ":pick:"
   },
   {
-    "price": 35000,
+    "price": 50000,
     "sell_price": 7500,
     "id": "farm",
     "description": "Allows you to do `[PRE]farm` and make money from your farm.",
     "display": "Farm",
     "emoji": ":seedling:"
-  },
-  {
-    "price": 100000,
-    "sell_price": 7500,
-    "id": "factory",
-    "description": "Allows you to do `[PRE]work` and make money from working in a factory.",
-    "display": "Factory",
-    "emoji": ":factory:"
-  },
-  {
-    "price": 1000000,
-    "sell_price": 100000,
-    "id": "laptop",
-    "description": "Allows you to do `[PRE]code` and make money from Bitcoin mining.",
-    "display": "Laptop",
-    "emoji": ":computer:"
-  },
-  {
-    "price": 1000000,
-    "sell_price": 10000,
-    "id": "vortex",
-    "description": "Allows you to do `[PRE]vortex` and make money from another planet.",
-    "display": "Vortex",
-    "emoji": ":cyclone:"
-  },
-  {
-    "price": 50000000,
-    "sell_price": 100000,
-    "id": "comet",
-    "description": "Allows you to do `[PRE]generate` and make money from another dimension.",
-    "display": "Comet",
-    "emoji": ":comet:"
   }
 ]

@@ -4,6 +4,11 @@ const cfg = new db.table('config')
 const leveling = new db.table('leveling')
 
 module.exports.addMoney = function (a, id) {
+  const mb = a / 0.10
+  const chance = this.getRandomInt(1, 3)
+  if (chance === 1) {
+    economy.add(`${id}.maxBank`, mb)
+  }
   if (!economy.get(`${id}.effects`)) {
     economy.add(`${id}.balance`, a)
     return a

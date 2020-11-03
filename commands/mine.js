@@ -49,7 +49,7 @@ class MineCommand extends Command {
       category: 'Income',
       aliases: ['dig'],
       usage: 'mine',
-      cooldown: 1
+      cooldown: 120
     })
   }
 
@@ -88,9 +88,17 @@ class MineCommand extends Command {
     const embed = new discord.MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setDescription(`:pick: You just mined up ${stuff[0]} | You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
-      .setFooter(`Durability: ${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75 - If your pickaxe reaches 0, it breaks.`)
-    msg.channel.send(embed)
+      .setDescription(':pick: You\'ve started **mining**...')
+    msg.channel.send(embed).then(m => {
+      embed
+        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
+        .addField('Durability', `${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75`, true)
+        .setDescription(`:pick: You've **mined** up some **${stuff[0]}**, You've earned :coin: **+${utils.addCommas(earnings)}**!`)
+        .setTimestamp()
+      setTimeout(() => {
+        m.edit(embed)
+      }, 1500)
+    })
     if (eco.get(`${msg.author.id}.pickaxe_durability`) === 75 || eco.get(`${msg.author.id}.pickaxe_durability`) > 75) {
       let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'pickaxe')
       if (eco.get(`${msg.author.id}.items`).includes('refined_pickaxe')) {
@@ -98,6 +106,7 @@ class MineCommand extends Command {
       }
       eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setTitle(':pick: Uh oh, your **pickaxe** broke!')
         .setColor('#ff2803')
       msg.channel.send(embed)

@@ -1,0 +1,10 @@
+[
+  {
+    "price": 15000,
+    "sell_price": 0,
+    "id": "padlock",
+    "description": "Fully stops a robbery, but it consumes the collectable.",
+    "display": "Padlock",
+    "emoji": ":lock:"
+  }
+]

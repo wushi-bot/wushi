@@ -48,7 +48,7 @@ class Fish extends Command {
       aliases: ['reel'],
       category: 'Income',
       usage: 'fish',
-      cooldown: 1
+      cooldown: 60
     })
   }
 
@@ -94,9 +94,17 @@ class Fish extends Command {
     const embed = new discord.MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setDescription(`:fishing_pole_and_fish: You just fished up a **${stuff[0]}**! | You got: **+${earnings}** :moneybag: Coins, you are now at **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** :moneybag: Coins`)
-      .setFooter(`Durability: ${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100 - If your fishing rod reaches 0, it breaks.`)
-    msg.channel.send(embed)
+      .setDescription(':fishing_pole_and_fish: You\'ve started **fishing**...')
+    msg.channel.send(embed).then(m => {
+      embed
+        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
+        .addField('Durability', `${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100`, true)
+        .setDescription(`:fishing_pole_and_fish: You've **fished** up a **${stuff[0]}**, You've earned :coin: **+${earnings}**!`)
+        .setTimestamp()
+      setTimeout(() => {
+        m.edit(embed)
+      }, 1500)
+    })
     if (eco.get(`${msg.author.id}.fishing_rod_durability`) === 100 || eco.get(`${msg.author.id}.fishing_rod_durability`) > 100) {
       let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_rod')
       if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
@@ -104,6 +112,7 @@ class Fish extends Command {
       }
       eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setTitle(':fishing_pole_and_fish: Uh oh, your **fishing rod** broke!')
         .setColor('#ff2803')
       msg.channel.send(embed)

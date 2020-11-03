@@ -36,13 +36,13 @@ class TopCommand extends Command {
     list.forEach(i => {
       const user = this.client.users.cache.get(i.id)
       if (x === 1) {
-        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Balance: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Balance: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
       } else {
-        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Balance: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
       }
       x++
     })

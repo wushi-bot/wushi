@@ -44,7 +44,18 @@ exports.run = (bot, message) => {
   }
 
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
-    return message.channel.send(`Howdy, I'm <@!${bot.user.id}>!\n\nMy prefix is \`${utils.getPrefix(message.guild.id)}\` in this server, do \`${utils.getPrefix(message.guild.id)}help\` (or \`${utils.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
+    if (message.guild.me.hasPermission('EMBED_LINKS')) {
+      const embed = new discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setAuthor(message.author.tag, message.author.avatarURL())
+        .setThumbnail(bot.user.avatarURL())
+        .setDescription(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${utils.getPrefix(message.guild.id)}\` in this server, do \`${utils.getPrefix(message.guild.id)}help\` (or \`${utils.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
+        .addField(':floppy_disk: Website', 'https://wushibot.xyz', true)
+        .addField(':scroll: Documentation', 'https://docs.wushibot.xyz', true)
+      return message.channel.send(embed)
+    } else {
+      return message.channel.send(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${utils.getPrefix(message.guild.id)}\` in this server, do \`${utils.getPrefix(message.guild.id)}help\` (or \`${utils.getPrefix(message.guild.id)}commands\`) to see a list of my commands!`)
+    }
   }
   const prefix = utils.getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
@@ -63,7 +74,7 @@ exports.run = (bot, message) => {
 
     const now = Date.now()
     const timestamps = bot.cooldowns.get(command)
-    const cooldownAmount = (cmd.cooldown || 3) * 1000
+    const cooldownAmount = (cmd.conf.cooldown || 3) * 1000
     if (timestamps.has(message.author.id)) {
       const expirationTime = timestamps.get(message.author.id) + cooldownAmount
 
@@ -71,8 +82,8 @@ exports.run = (bot, message) => {
         const timeLeft = (expirationTime - now) / 1000
         const embed = new discord.MessageEmbed()
           .setColor('#e31937')
-          .setTitle(`:stopwatch: Calm down! You're on cooldown for ${timeLeft.toFixed(1)} more second(s)!`)
-          .setFooter(`You may reuse ${prefix}${command} in ${timeLeft.toFixed(1)} more second(s)!`)
+          .setAuthor(message.author.tag, message.author.avatarURL())
+          .setDescription(`:watch: You're still on cooldown for \`${timeLeft.toFixed(1)}\` more second(s)!`)
         console.log(chalk.yellow('>') + ` ${message.author.username}#${message.author.discriminator} executed ${prefix}${command} but was on cooldown for ${timeLeft.toFixed(1)} more seconds.`)
         return message.channel.send(embed)
       }

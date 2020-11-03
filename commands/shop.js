@@ -3,6 +3,7 @@ import Command from '../models/Command'
 import tools from '../resources/items/tools.json'
 import foods from '../resources/items/foods.json'
 import upgrades from '../resources/items/upgrades.json'
+import collectables from '../resources/items/collectables.json'
 import utils from '../utils/utils'
 
 class Shop extends Command {
@@ -31,7 +32,7 @@ class Shop extends Command {
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setDescription(':tools: **Tools** | The tools catalog.')
       tools.forEach(tool => {
-        embed.addField(`${tool.emoji} ${tool.display}`, `ID: \`${tool.id}\` | Price: **$${utils.addCommas(tool.price)}** | ${tool['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        embed.addField(`${tool.emoji} ${tool.display}`, `ID: \`${tool.id}\` | Price: **$${utils.addCommas(tool.price)}** | ${tool.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       })
       msg.channel.send(embed)
     } else if (args[0] === 'food' || args[0] === 'Food') {
@@ -40,7 +41,7 @@ class Shop extends Command {
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setDescription(':poultry_leg: **Food** | The food catalog.')
       foods.forEach(food => {
-        embed.addField(`${food.emoji} ${food.display}`, `ID: \`${food.id}\` | Price: **$${utils.addCommas(food.price)}** | ${food['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        embed.addField(`${food.emoji} ${food.display}`, `ID: \`${food.id}\` | Price: **$${utils.addCommas(food.price)}** | ${food.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       })
       msg.channel.send(embed)
     } else if (args[0] === 'upgrades' || args[0] === 'Upgrades') {
@@ -49,7 +50,16 @@ class Shop extends Command {
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setDescription(':up: **Upgrades** | The upgrades catalog.')
       upgrades.forEach(upgrade => {
-        embed.addField(`${upgrade.emoji} ${upgrade.display}`, `ID: \`${upgrade.id}\` | Price: **$${utils.addCommas(upgrade.price)}** | ${upgrade['description'].replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        embed.addField(`${upgrade.emoji} ${upgrade.display}`, `ID: \`${upgrade.id}\` | Price: **$${utils.addCommas(upgrade.price)}** | ${upgrade.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      })
+      msg.channel.send(embed)
+    } else if (args[0] === 'collectables' || args[0] === 'Collectables') {
+      const embed = new discord.MessageEmbed()
+        .setColor('#77e86b')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setDescription(':flower_playing_cards: **Collectables** | The collectables catalog.')
+      collectables.forEach(collectable => {
+        embed.addField(`${collectable.emoji} ${collectable.display}`, `ID: \`${collectable.id}\` | Price: **$${utils.addCommas(collectable.price)}** | ${collectable.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       })
       msg.channel.send(embed)
     }

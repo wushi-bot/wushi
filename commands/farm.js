@@ -4,6 +4,58 @@ import utils from '../utils/utils'
 import Command from '../models/Command'
 const eco = new db.table('economy')
 
+var lootTables = ['tomato', 'carrot', 'apple', 'strawberry', 'melon', 'potato', 'corn', 'grapes', 'cherries', 'mangos']
+
+function generateRandomDrop () {
+  var lootTable = lootTables[Math.floor(Math.random() * lootTables.length)]
+  let display, loot
+  switch (lootTable) {
+    case 'tomato':
+      display = ':tomato: Tomatoes'
+      loot = 200
+      break
+    case 'carrot':
+      display = ':carrot: Carrots'
+      loot = 275
+      break
+    case 'apple':
+      display = ':apple: Apples'
+      loot = 295
+      break
+    case 'strawberry':
+      display = ':strawberry: Strawberries'
+      loot = 300
+      break
+    case 'melon':
+      display = ':melon: Melons'
+      loot = 225
+      break
+    case 'potato':
+      display = ':potato: Potatoes'
+      loot = 250
+      break
+    case 'corn':
+      display = ':corn: Corn'
+      loot = 315
+      break
+    case 'grapes':
+      display = ':grapes: Grapes'
+      loot = 335
+      break
+    case 'cherries':
+      display = ':cherries: Cherries'
+      loot = 300
+      break
+    case 'mangos':
+      display = ':mango: Mangos'
+      loot = 305
+      break
+    default:
+      return
+  }
+  return [display, loot]
+}
+
 class Farm extends Command {
   constructor (client) {
     super(client, {
@@ -12,7 +64,7 @@ class Farm extends Command {
       category: 'Income',
       aliases: [],
       usage: 'farm',
-      cooldown: 1
+      cooldown: 120
     })
   }
 
@@ -25,42 +77,48 @@ class Farm extends Command {
       msg.channel.send(embed)
       return
     }
-    var badDay = utils.getRandomInt(1, 4)
-    if (badDay === 1 || badDay === 2) {
-      var earnings = utils.getRandomInt(1000, 12000)
-      var uses = utils.getRandomInt(1, 8)
-      var out = earnings
-      if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
-        eco.add(`${msg.author.id}.farm_uses`, uses)
-      }
-      out = utils.addMoney(earnings, msg.author.id)
-      eco.add(`${msg.author.id}.farming_profit`, earnings)
+    const stuff = generateRandomDrop()
+    if (!eco.get(`${msg.author.id}.effects`).includes('hardening')) {
+      eco.add(`${msg.author.id}.farm_uses`, 1)
+    }
+    if (eco.get(`${msg.author.id}.items`).includes('farm_land')) {
+      var multiplies = 0
+      eco.get(`${msg.author.id}.items`).forEach(item => {
+        if (item === 'farm_land') {
+          if (multiplies < 6) {
+            var temp = stuff[1]
+            stuff[1] = Math.floor(temp + (temp * 0.25))
+          }
+          multiplies++
+        }
+      })
+    }
+    const earnings = stuff[1]
+    const out = utils.addMoney(earnings, msg.author.id)
+    eco.add(`${msg.author.id}.farming_profit`, earnings)
+    const embed = new discord.MessageEmbed()
+      .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+      .setColor('#0099ff')
+      .setDescription(':seedling: You\'ve started **farming**...')
+    msg.channel.send(embed).then(m => {
+      embed
+        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
+        .addField('Durability', `${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`, true)
+        .setDescription(`:seedling: You've **harvested** up some **${stuff[0]}**, You've earned :coin: **+${utils.addCommas(out)}**!`)
+        .setTimestamp()
+      setTimeout(() => {
+        m.edit(embed)
+      }, 1500)
+    })
+    if (eco.get(`${msg.author.id}.farm_uses`) > 150 || eco.get(`${msg.author.id}.farm_uses`) === 150) {
+      const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Farm')
+      eco.set(`${msg.author.id}.items`, i)
       const embed = new discord.MessageEmbed()
-        .setColor('#0099ff')
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-        .setDescription(`:seedling: It was a good day, earned **+${utils.addCommas(out)}** Coins :moneybag:! | Used up **${uses} uses** of the farm! Your farm durability is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. (Balance: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** Coins :moneybag:)`)
-        .setFooter(`Durability: ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`)
-      msg.channel.send(embed)
-      if (eco.get(`${msg.author.id}.farm_uses`) > 150 || eco.get(`${msg.author.id}.farm_uses`) === 150) {
-        const i = utils.removeA(eco.get(`${msg.author.id}.items`), 'Farm')
-        eco.set(`${msg.author.id}.items`, i)
-        const embed = new discord.MessageEmbed()
-          .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-          .setDescription(':seedling: You\'ve **used up** all of your farm!')
-          .setColor('#ff2d08')
-        msg.channel.send(embed)
-        return eco.set(`${msg.author.id}.farm_uses`, 0)
-      }
-    } else {
-      const earnings = utils.getRandomInt(10, 200)
-      eco.subtract(`${msg.author.id}.balance`, earnings)
-      eco.subtract(`${msg.author.id}.farming_profit`, earnings)
-      const embed = new discord.MessageEmbed()
+        .setDescription(':seedling: You\'ve **used up** all of your farm!')
         .setColor('#ff2d08')
-        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
-        .setDescription(`:seedling: It was a bad day, you lost **${earnings} Coins**! | Since this was a bad day, you don't use up the farm. However, your farm usage is now at ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150. Balance: ${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))} Coins :moneybag:`)
-        .setFooter(`Durability: ${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`)
-      return msg.channel.send(embed)
+      msg.channel.send(embed)
+      return eco.set(`${msg.author.id}.farm_uses`, 0)
     }
   }
 }

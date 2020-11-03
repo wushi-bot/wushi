@@ -20,6 +20,7 @@ class Wushi extends Client {
     this.commands = new Collection()
     this.aliases = new Collection()
     this.cooldowns = new Collection()
+    this.version = '1.2.0'
   }
 
   login (token) {

@@ -1,6 +1,5 @@
-const discord = require('discord.js')
-const chalk = require('chalk')
-const db = require('quick.db')
+import chalk from 'chalk'
+import db from 'quick.db'
 
 const cfg = new db.table('config')
 

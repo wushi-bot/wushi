@@ -57,7 +57,7 @@ class RankCommand extends Command {
       .addBeveledRect(85, 336, 450, 24, 32)
       .restore()
       .setColor('#ff3f38')
-      .addBeveledRect(96, 340, progBar, 16, 20)
+      .addBeveledRect(91, 340, progBar, 16, 20)
       .restore()
     return msg.channel.send({ files: [{ attachment: canvas.toBuffer(), name: 'profile.png' }] })
   }

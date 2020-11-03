@@ -11,7 +11,7 @@ class DisableGems extends Command {
       description: 'Disable gems from leveling up.',
       category: 'Server Shop',
       aliases: ['disable-gem'],
-      usage: 'disable-gem',
+      usage: 'disable-gems',
       cooldown: 1
     })
   }

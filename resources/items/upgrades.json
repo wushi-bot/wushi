@@ -14,5 +14,13 @@
     "description": "Upgrades your pickaxe by **15%**",
     "display": "Refined Pickaxe",
     "emoji": ":gem:"
-  }
+  },
+  {
+    "price": 15000,
+    "sell_price": 1250,
+    "id": "farm_land",
+    "description": "Upgrades your farm by **25%**",
+    "display": "More Farmland",
+    "emoji": ":farmer:"
+  }  
 ]
