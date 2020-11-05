@@ -11,7 +11,7 @@ class LevelsCommand extends Command {
     super(client, {
       name: 'levels',
       description: 'Gets the top 10 highest EXP users in the server.',
-      category: 'Levels',
+      category: 'Leveling',
       aliases: [],
       usage: 'levels',
       cooldown: 5
@@ -35,7 +35,7 @@ class LevelsCommand extends Command {
       .setDescription(':trophy: Top 10 EXP users in your server.')
     let x = 1
     list.forEach(i => {
-      const user = msg.guild.members.cache.get(i.ID)
+      const user = msg.guild.members.fetch(i.ID)
       let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
       userLevel = userLevel || 0
       if (x === 1) {
