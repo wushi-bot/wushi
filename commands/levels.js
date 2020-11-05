@@ -35,7 +35,6 @@ class LevelsCommand extends Command {
       .setDescription(':trophy: Top 10 EXP users in your server.')
     let x = 1
     list.forEach(i => {
-      console.log(i)
       const user = msg.guild.members.cache.get(i.ID)
       let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
       userLevel = userLevel || 0
