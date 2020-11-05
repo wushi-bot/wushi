@@ -35,17 +35,17 @@ class LevelsCommand extends Command {
       .setDescription(':trophy: Top 10 EXP users in your server.')
     let x = 1
     list.forEach(i => {
-      const user = msg.guild.members.fetch(i.ID)
+      const user = this.client.users.cache.get(i.id)
       let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
       userLevel = userLevel || 0
       if (x === 1) {
-        embed.addField(`:first_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else {
-        embed.addField(`#${x} ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       }
       x++
     })
