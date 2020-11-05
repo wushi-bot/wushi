@@ -22,7 +22,7 @@ class TopCommand extends Command {
     eco.all().forEach(entry => {
       const user = this.client.users.cache.get(entry.ID)
       if (msg.guild.member(user)) {
-        list.push({ id: entry.ID, bal: entry.data.balance })
+        list.push({ id: entry.ID, bal: entry.data.balance, bank: entry.data.bank })
       }
     })
     list.sort(function (a, b) { return (b.bal + b.bank) - (a.bal + a.bank) })
