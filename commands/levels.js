@@ -11,7 +11,7 @@ class LevelsCommand extends Command {
     super(client, {
       name: 'levels',
       description: 'Gets the top 10 highest EXP users in the server.',
-      category: 'Levels',
+      category: 'Leveling',
       aliases: [],
       usage: 'levels',
       cooldown: 5
