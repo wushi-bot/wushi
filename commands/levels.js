@@ -40,13 +40,13 @@ class LevelsCommand extends Command {
       let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
       userLevel = userLevel || 0
       if (x === 1) {
-        embed.addField(`:first_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**`)
+        embed.addField(`:first_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**`)
+        embed.addField(`:second_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**`)
+        embed.addField(`:third_place: ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       } else {
-        embed.addField(`#${x} ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**`)
+        embed.addField(`#${x} ${user.user.username}#${user.user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
       }
       x++
     })

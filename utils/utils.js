@@ -45,14 +45,17 @@ module.exports.addCommas = function (nStr) {
 }
 
 module.exports.checkLevel = function (id, serverId) {
-  if (!leveling.get(`${id}.${serverId}.expNeeded`)) {
-    leveling.set(`${id}.${serverId}.expNeeded`, 100)
+  if (!leveling.get(`${serverId}.${id}.expNeeded`)) {
+    leveling.set(`${serverId}.${id}.expNeeded`, 100)
   }
-  if (!leveling.get(`${id}.${serverId}.level`)) {
-    leveling.set(`${id}.${serverId}.level`, 0)
+  if (!leveling.get(`${serverId}.${id}.level`)) {
+    leveling.set(`${serverId}.${id}.level`, 0)
   }
-  if (!leveling.get(`${id}.${serverId}.exp`)) {
-    leveling.set(`${id}.${serverId}.exp`, 0)
+  if (!leveling.get(`${serverId}.${id}.exp`)) {
+    leveling.set(`${serverId}.${id}.exp`, 0)
+  }
+  if (!leveling.get(`${serverId}.${id}.totalExp`)) {
+    leveling.set(`${serverId}.${id}.totalExp`, 0)
   }
 }
 
