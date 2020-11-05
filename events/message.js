@@ -29,9 +29,9 @@ exports.run = (bot, message) => {
               if (cfg.get(`${message.guild.id}.levelUpGems`)) {
                 var reward = utils.getRandomInt(10, 25)
                 serverEco.add(`${message.guild.id}.${message.author.id}.gems`, reward)
-                message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.author.id}.${message.guild.id}.level`)}**! (**Reward:** ${reward} :gem:)`)
+                message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.guild.id}.${message.author.id}.level`)}**! (**Reward:** ${reward} :gem:)`)
               } else {
-                message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.author.id}.${message.guild.id}.level`)}**!`)
+                message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.guild.id}.${message.author.id}.level`)}**!`)
               }
             }
           }
