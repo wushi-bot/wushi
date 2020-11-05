@@ -23,7 +23,7 @@ class LevelsCommand extends Command {
     levels.all().forEach(entry => {
       if (entry.ID === msg.guild.id) {
         for (var key in entry.data) {
-          list.push({ ID: key, totalexp: entry.data[key].totalExp })
+          list.push({ ID: key, totalExp: entry.data[key].totalExp })
         }
       }
     })
