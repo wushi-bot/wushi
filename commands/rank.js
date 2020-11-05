@@ -24,15 +24,15 @@ class RankCommand extends Command {
     const avatarURL = user.user.avatarURL({ format: 'png' })
     const avatar = await req(avatarURL).raw()
     const bg = await req('https://media.discordapp.net/attachments/744637502413078622/769618814597333012/discord-background.jpg?width=1100&height=619').raw()
-    let level = leveling.get(`${user.user.id}.${msg.guild.id}.level`)
+    let level = leveling.get(`${msg.guild.id}.${user.user.id}.level`)
     if (!level) {
       level = 0
     }
-    let nextLevel = leveling.get(`${user.user.id}.${msg.guild.id}.expNeeded`)
+    let nextLevel = leveling.get(`${msg.guild.id}.${user.user.id}.expNeeded`)
     if (!nextLevel) {
       nextLevel = 100
     }
-    let points = leveling.get(`${user.user.id}.${msg.guild.id}.exp`)
+    let points = leveling.get(`${msg.guild.id}.${user.user.id}.exp`)
     if (!points) {
       points = 0
     }

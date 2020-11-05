@@ -13,13 +13,13 @@ class RobCommand extends Command {
       aliases: ['robbery'],
       category: 'Income',
       usage: 'rob [@user] [percent]',
-      cooldown: 600
+      cooldown: 150
     })
   }
 
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) {
-      const embed = new discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
         .setDescription('**Error:** You do not have a bank account!')

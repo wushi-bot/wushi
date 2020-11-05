@@ -12,7 +12,7 @@ class Balance extends Command {
       name: 'balance',
       description: 'See the balance of yourself or other users.',
       aliases: ['bal'],
-      category: 'Income',
+      category: 'Economy',
       usage: 'bal [user]',
       cooldown: 0
     })

@@ -1,6 +1,6 @@
 {
   "name": "@xminota/wushi",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "wushi bot",
   "main": "bot.js",
   "publishConfig": {

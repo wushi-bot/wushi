@@ -19,11 +19,12 @@ exports.run = (bot, message) => {
       if (!message.content.startsWith(utils.getPrefix(message.guild.id))) {
         if (!expCooldowns.has(message.author.id)) {
           const exp = utils.getRandomInt(10, 20)
-          leveling.add(`${message.author.id}.${message.guild.id}.exp`, exp)
-          if (leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) <= leveling.get(`${message.author.id}.${message.guild.id}.exp`)) {
-            leveling.add(`${message.author.id}.${message.guild.id}.level`, 1)
-            leveling.set(`${message.author.id}.${message.guild.id}.exp`, 0)
-            leveling.set(`${message.author.id}.${message.guild.id}.expNeeded`, Math.floor(leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) + (leveling.get(`${message.author.id}.${message.guild.id}.expNeeded`) * 0.1)))
+          leveling.add(`${message.guild.id}.${message.author.id}.exp`, exp)
+          leveling.add(`${message.guild.id}.${message.author.id}.totalExp`, exp)
+          if (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) <= leveling.get(`${message.guild.id}.${message.author.id}.exp`)) {
+            leveling.add(`${message.guild.id}.${message.author.id}.level`, 1)
+            leveling.subtract(`${message.guild.id}.${message.author.id}.exp`, leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`))
+            leveling.set(`${message.guild.id}.${message.author.id}.expNeeded`, Math.floor(leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) + (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) * 0.1)))
             if (!cfg.get(`${message.guild.id}.levelUpType`)) { // Fallback to default thingy
               if (cfg.get(`${message.guild.id}.levelUpGems`)) {
                 var reward = utils.getRandomInt(10, 25)

@@ -40,7 +40,9 @@ class Inventory extends Command {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
     if (!eco.get(`${user.user.id}.items`)) {
       const embed = new discord.MessageEmbed()
-        .setTitle(':x: You have nothing in your inventory.')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setColor('#0099ff')
+        .setTitle(':x: You (or the provided user) has nothing in your inventory.')
       return msg.channel.send(embed)
     }
     const inventory = eco.get(`${user.user.id}.items`)

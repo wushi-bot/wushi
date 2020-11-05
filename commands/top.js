@@ -25,7 +25,7 @@ class TopCommand extends Command {
         list.push({ id: entry.ID, bal: entry.data.balance })
       }
     })
-    list.sort(function (a, b) { return b.bal - a.bal })
+    list.sort(function (a, b) { return (b.bal + b.bank) - (a.bal + a.bank) })
     list.slice(0, 9)
 
     const embed = new MessageEmbed()
@@ -36,13 +36,13 @@ class TopCommand extends Command {
     list.forEach(i => {
       const user = this.client.users.cache.get(i.id)
       if (x === 1) {
-        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
       } else {
-        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal)}**`)
+        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
       }
       x++
     })

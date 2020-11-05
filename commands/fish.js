@@ -48,7 +48,7 @@ class Fish extends Command {
       aliases: ['reel'],
       category: 'Income',
       usage: 'fish',
-      cooldown: 60
+      cooldown: 30
     })
   }
 

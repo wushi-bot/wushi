@@ -40,7 +40,7 @@ class Help extends Command {
         commandsInCategory[command.conf.category].push(command.conf.name)
       })
       categories.forEach(category => {
-        embed.addField(`${key[category]} ${category}`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``, true)
+        embed.addField(`${key[category]} ${category}`, `[Docs URL](https://docs.wushibot.xyz/commands/${category.toLowerCase().replace(' ', '-')})\n\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``, true)
       })
       msg.channel.send(embed)
     } else {
