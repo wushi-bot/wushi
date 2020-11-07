@@ -6,6 +6,11 @@ import http from 'http'
 import flash from 'connect-flash'
 import session from 'express-session'
 import chalk from 'chalk'
+import db from 'quick.db'
+
+import bot from './bot'
+
+const levels = new db.table('leveling')
 
 /* App Setup */
 
@@ -36,6 +41,24 @@ app.get('/', (req, res) => {
 
 app.get('/invite', (req, res) => {
   return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
+})
+
+app.get('/levels/:id?', (req, res) => {
+  var id = req.params.id
+  const server = bot.guilds.cache.get(id)
+  if (!server) {
+    return res.status(400)
+  }
+  const list = []
+  levels.all().forEach(entry => {
+    if (entry.ID === server.id) {
+      for (var key in entry.data) {
+        let member = server.members.cache.find(member => member.id === key)
+        list.push({ ID: key, avatar: member.user.avatarURL(), username: member.user.username, totalExp: entry.data[key].totalExp, expNeeded: entry.data[key].expNeeded, exp: entry.data[key].exp, level: entry.data[key].level })
+      }
+    }
+  })
+  return res.render('levels', { serverName: server.name, users: list })
 })
 
 /* Startup server */

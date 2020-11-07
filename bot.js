@@ -16,13 +16,14 @@ import { KSoftClient } from '@ksoft/api'
 */
 
 class Wushi extends Client {
-  constructor () {
-    super()
+  constructor (options) {
+    super(options)
     this.commands = new Collection()
     this.aliases = new Collection()
     this.cooldowns = new Collection()
     this.ksoft = new KSoftClient(process.env.KSOFT_TOKEN)
     this.version = '1.2.2'
+    this.getGuilds = super.guilds
   }
 
   login (token) {
@@ -57,9 +58,21 @@ class Wushi extends Client {
       })
     })
   }
+
+  cacheUsers () {
+    const guilds = this.guilds.cache.array()
+    for (let i = 0; i < guilds.length; i++) {
+      this.guilds.cache.get(guilds[i].id).fetchMembers()
+    }
+  }
 }
 
-const me = new Wushi()
+const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS']
+const me = new Wushi({ ws: { intents: intents } })
+
 me.loadCommands()
 me.loadEvents()
+me.cacheUsers()
 me.login(process.env.TOKEN)
+
+module.exports = me

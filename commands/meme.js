@@ -16,7 +16,6 @@ class MemeCommand extends Command {
 
   async run (bot, msg, args) {
     const img = await this.client.ksoft.images.meme()
-    console.log(img)
     const embed = new MessageEmbed()
       .setAuthor(msg.author.tag, msg.author.avatarURL())
       .setDescription(`[${img.post.title}](${img.post.link})`)

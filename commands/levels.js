@@ -32,10 +32,9 @@ class LevelsCommand extends Command {
     const embed = new MessageEmbed()
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
-      .setDescription(':trophy: Top 10 EXP users in your server.')
+      .setDescription(`:trophy: Top 10 EXP users in your server. | Check this out on the [website](https://wushibot.xyz/levels/${msg.guild.id})`)
     let x = 1
     list.forEach(i => {
-      console.log(i)
       const user = this.client.users.cache.get(i.ID)
       let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
       userLevel = userLevel || 0
