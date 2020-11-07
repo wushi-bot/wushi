@@ -2,6 +2,7 @@ import { Client, Collection } from 'discord.js'
 import chalk from 'chalk'
 import fs from 'fs'
 import 'dotenv/config'
+import { KSoftClient } from '@ksoft/api'
 
 /*
  ___       __   ___  ___  ________  ___  ___  ___
@@ -20,7 +21,8 @@ class Wushi extends Client {
     this.commands = new Collection()
     this.aliases = new Collection()
     this.cooldowns = new Collection()
-    this.version = '1.2.1'
+    this.ksoft = new KSoftClient(process.env.KSOFT_TOKEN)
+    this.version = '1.2.2'
   }
 
   login (token) {

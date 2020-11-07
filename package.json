@@ -1,6 +1,6 @@
 {
   "name": "@xminota/wushi",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "wushi bot",
   "main": "bot.js",
   "publishConfig": {
@@ -31,6 +31,7 @@
   "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
     "@aero/centra": "^1.0.6",
+    "@ksoft/api": "^3.1.9",
     "axios": "^0.20.0",
     "bulma": "^0.9.1",
     "canvas": "^2.6.1",
