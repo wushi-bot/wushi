@@ -8,8 +8,6 @@ import session from 'express-session'
 import chalk from 'chalk'
 import db from 'quick.db'
 
-import bot from './bot'
-
 const levels = new db.table('leveling')
 
 /* App Setup */
@@ -43,6 +41,7 @@ app.get('/invite', (req, res) => {
   return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
 })
 
+/*
 app.get('/levels/:id?', (req, res) => {
   var id = req.params.id
   const server = bot.guilds.cache.get(id)
@@ -59,7 +58,7 @@ app.get('/levels/:id?', (req, res) => {
     }
   })
   return res.render('levels', { serverName: server.name, users: list })
-})
+})*/
 
 /* Startup server */
 
