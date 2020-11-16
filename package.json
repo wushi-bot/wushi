@@ -1,6 +1,6 @@
 {
   "name": "@xminota/wushi",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "wushi bot",
   "main": "bot.js",
   "publishConfig": {
@@ -39,6 +39,7 @@
     "chalk": "^4.1.0",
     "connect-flash": "^0.1.1",
     "date-and-time": "^0.14.1",
+    "dblapi.js": "^2.4.1",
     "demoji": "^2.0.0",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
@@ -50,7 +51,6 @@
     "https": "^1.0.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "node-sass": "^5.0.0",
     "nodemon": "^2.0.5",
     "pug": "^3.0.0",
     "quick.db": "^7.1.2",

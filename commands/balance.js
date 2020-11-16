@@ -36,8 +36,8 @@ class Balance extends Command {
     bank = bank || 0
     maxBank = maxBank || 0
     const embed = new MessageEmbed()
-      .setAuthor(user.user.tag, user.user.avatarURL())
-      .setDescription(`This is **${user.user.username}**'s balance & bank balance.`)
+      .setAuthor(msg.author.tag, msg.author.avatarURL())
+      .setDescription(`This is **${msg.author.username}**'s balance & bank balance.`)
       .addField(':purse: Balance', `:coin: **${utils.addCommas(eco.get(`${user.user.id}.balance`))}**`, true)
       .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}** / **${utils.addCommas(maxBank)}**`, true)
       .setColor('#0099ff')

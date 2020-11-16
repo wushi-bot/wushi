@@ -17,7 +17,11 @@ class Pay extends Command {
   }
 
   async run (bot, msg, args) {
-    const mentionedUser = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    if (args[0]) {
+      const mentionedUser = utils.getMember(msg, args[0]) || msg.member
+    } else {
+      const mentionedUser = msg.member
+    }
     if (!mentionedUser) {
       const embed = new discord.MessageEmbed()
         .setColor('#ff2d08')

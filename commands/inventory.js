@@ -6,6 +6,7 @@ import Command from '../models/Command'
 import tools from '../resources/items/tools.json'
 import foods from '../resources/items/foods.json'
 import upgrades from '../resources/items/upgrades.json'
+import collectables from '../resources/items/collectables.json'
 
 const allItems = []
 for (const item in tools) {
@@ -16,6 +17,9 @@ for (const item in foods) {
 }
 for (const item in upgrades) {
   allItems.push(upgrades[item])
+}
+for (const item in collectables) {
+  allItems.push(collectables[item])
 }
 
 String.prototype.capitalize = function() {

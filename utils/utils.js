@@ -1,7 +1,14 @@
-const db = require('quick.db')
+import DBL from 'dblapi.js'
+import db from 'quick.db'
+
+const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 6000, webhookAuth: '123' })
 const economy = new db.table('economy')
 const cfg = new db.table('config')
 const leveling = new db.table('leveling')
+
+module.exports.updateStats = function (guildCount) {
+  return dbl.postStats(guildCount)
+}
 
 module.exports.addMoney = function (a, id) {
   const mb = Math.floor(a * 0.10)

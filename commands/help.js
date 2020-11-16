@@ -23,7 +23,7 @@ class Help extends Command {
       const embed = new discord.MessageEmbed()
         .setColor(color)
         .setTitle(':sushi: wushi\'s commands')
-        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix(msg.guild.id)}config\`.  You may also get some help from the [documentation](https://docs.wushibot.xyz/) | made by **minota#0001**`)
+        .setDescription(`Here's a list of all my commands. Missing something? It may be disabled, see your config using \`${utils.getPrefix(msg.guild.id)}config\`.  You may also get some help from the [documentation](https://docs.wushibot.xyz/) | Join the support server: https://discord.gg/zwmqwjrxR9 | made by **minota#0001**`)
       const commandsList = this.client.commands
       const categories = []
       const commandsInCategory = []
@@ -40,7 +40,7 @@ class Help extends Command {
         commandsInCategory[command.conf.category].push(command.conf.name)
       })
       categories.forEach(category => {
-        embed.addField(`${key[category]} ${category}`, `[Docs URL](https://docs.wushibot.xyz/commands/${category.toLowerCase().replace(' ', '-')})\n\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``, true)
+        embed.addField(`${key[category]} ${category} Commands`, `[Docs URL](https://docs.wushibot.xyz/commands/${category.toLowerCase().replace(' ', '-')})\n\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
       msg.channel.send(embed)
     } else {

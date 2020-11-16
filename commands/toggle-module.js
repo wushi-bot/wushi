@@ -3,16 +3,16 @@ import db from 'quick.db'
 import utils from '../utils/utils'
 const config = new db.table('config')
 
-const modules = ['Leveling', 'Meta', 'Server Shop', 'Economy', 'Util', 'Config']
+const modules = ['Leveling', 'Meta', 'Server Shop', 'Economy', 'Util', 'Config', 'Social', 'Images']
 
-class Toggle extends Command {
+class ToggleModule extends Command {
   constructor (client) {
     super(client, {
-      name: 'toggle',
+      name: 'toggle-module',
       description: 'Enable/disable modules.',
       category: 'Config',
-      aliases: [],
-      usage: 'toggle <module>',
+      aliases: ['toggle-mod', 'tm'],
+      usage: 'toggle-module <module>',
       cooldown: 1
     })
   }
@@ -41,4 +41,4 @@ class Toggle extends Command {
   }
 }
 
-module.exports = Toggle
+module.exports = ToggleModule

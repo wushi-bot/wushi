@@ -10,7 +10,7 @@ exports.run = (bot, guild) => {
     console.log(chalk.blue('>') + ' Could not find proof of this server being setup, doing that now.')
     cfg.set(`${guild.id}.setup`, true)
     cfg.set(`${guild.id}.disabled`, ['Leveling', 'Server Shop'])
-    cfg.set(`${guild.id}.levelUpGems`, true)
+    cfg.set(`${guild.id}.levelUpGems`, false)
     console.log(chalk.green('>') + ' Successfully setup this guild.')
   } else {
     console.log(chalk.blue('>') + ' This server has been configurated before.')

@@ -11,7 +11,7 @@ class Bot extends Client {
     this.aliases = new Collection()
     this.cooldowns = new Collection()
     this.ksoft = new KSoftClient(process.env.KSOFT_TOKEN)
-    this.version = '1.2.2'
+    this.version = '1.2.4'
   }
 
   getMe (client) {
