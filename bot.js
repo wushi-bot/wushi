@@ -1,5 +1,6 @@
 import Bot from './models/Bot'
 import 'dotenv/config'
+import { MessageEmbed } from 'discord.js'
 
 /*
  ___       __   ___  ___  ________  ___  ___  ___
@@ -17,3 +18,13 @@ const self = new Bot({ ws: { intents: intents } })
 self.loadCommands()
 self.loadEvents()
 self.login(process.env.TOKEN)
+
+process.on('unhandledRejection', error => {
+  console.error('Unhandled promise rejection:', error)
+  self.emit('error', error)
+})
+
+process.on('uncaughtException', error => {
+  console.error('Uncaught exception:', error)
+  self.emit('error', error)
+})

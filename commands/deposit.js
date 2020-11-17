@@ -19,7 +19,7 @@ class DepositCommand extends Command {
 
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) {
-      const embed = new discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
         .setColor('#f20f0f')
         .setDescription('**Error:** You do not have a bank account!')
@@ -49,19 +49,14 @@ class DepositCommand extends Command {
             .setColor('#f20f0f')
           return msg.channel.send(embed)
         } else {
-          let amount
-          if (balance > maxBank) {
-            amount = maxBank - balance
-          } else {
-            amount = balance
-          }
+          const amount = balance
           eco.add(`${msg.author.id}.bank`, amount)
           eco.subtract(`${msg.author.id}.balance`, amount)
           const embed = new MessageEmbed()
             .setAuthor(msg.author.tag, msg.author.avatarURL())
             .setDescription('Transaction Complete! The details of the transaction are provided below...')
             .addField('Transaction Info', `+ :coin: **${utils.addCommas(amount)}** → **:bank: Bank**\n- :coin: **${utils.addCommas(amount)}** → **:purse: Purse**`, true)
-            .addField('New Balance', `:bank: **Bank:** ${utils.addCommas(eco.get(`${msg.author.id}.bank`))} (${utils.addCommas(maxBank)}) / :purse: **Purse:** ${utils.addCommas(eco.get(`${msg.author.id}.balance`))}`, true)
+            .addField('New Balance', `:bank: **Bank:** ${utils.addCommas(eco.get(`${msg.author.id}.bank`))} / :purse: **Purse:** ${utils.addCommas(eco.get(`${msg.author.id}.balance`))}`, true)
             .setColor('#0099ff')
           return msg.channel.send(embed)
         }
@@ -106,7 +101,7 @@ class DepositCommand extends Command {
           .setAuthor(msg.author.tag, msg.author.avatarURL())
           .setDescription('Transaction Complete! The details of the transaction are provided below...')
           .addField('Transaction Info', `+ :coin: **${utils.addCommas(amount)}** → **:bank: Bank**\n- :coin: **${utils.addCommas(amount)}** → **:purse: Purse**`, true)
-          .addField('New Balance', `:bank: **Bank:** ${utils.addCommas(eco.get(`${msg.author.id}.bank`))} (${utils.addCommas(maxBank)}) / :purse: **Purse:** ${utils.addCommas(eco.get(`${msg.author.id}.balance`))}`, true)
+          .addField('New Balance', `:bank: **Bank:** ${utils.addCommas(eco.get(`${msg.author.id}.bank`))} / :purse: **Purse:** ${utils.addCommas(eco.get(`${msg.author.id}.balance`))}`, true)
           .setColor('#0099ff')
         return msg.channel.send(embed)
       }
