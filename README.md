@@ -1,7 +1,7 @@
 <div align="center">
 
 ## wushi 🍣
-[![Discord](https://discordapp.com/api/guilds/755208617203990599/widget.png?style=shield)](https://discord.gg/7MtXvNB)
+[![Discord](https://discordapp.com/api/guilds/777620712193392650/widget.png?style=shield)](https://discord.gg/7MtXvNB)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 [![Discord Bots](https://top.gg/api/widget/755526238466080830.svg)](https://top.gg/bot/755526238466080830)

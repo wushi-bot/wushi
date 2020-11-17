@@ -33,9 +33,8 @@ class VoteCommand extends Command {
 
         const embed = new MessageEmbed()
           .setAuthor(msg.author.tag, msg.author.avatarURL())
-          .setDescription('You have voted for the bot recently & you haven\'t received your rewards yet. Claiming your rewards now...')
+          .setDescription('Thank you for voting for **wushi**, your rewards are listed below!')
           .addField('Rewards', `+ :coin: **2,500 coins**\n+ :package: **1 Common Lootbox** (Use \`${utils.getPrefix(msg.guild.id)}unbox common_lootbox\` to open this lootbox.)`, true)
-          .addField('Voting URL', '[Click here](https://top.gg/bot/755526238466080830/vote)', true)
           .setColor('#0099ff')
         msg.channel.send(embed)
         setTimeout(() => {
@@ -48,15 +47,14 @@ class VoteCommand extends Command {
         const embed = new MessageEmbed()
           .setAuthor(msg.author.tag, msg.author.avatarURL())
           .setDescription('You have [voted](https://top.gg/bot/755526238466080830/vote) for the bot recently & claimed your rewards.')
-          .setColor('#0099ff')
+          .setColor('#ff2d08')
         msg.channel.send(embed)
       }
     } else {
       const embed = new MessageEmbed()
         .setAuthor(msg.author.tag, msg.author.avatarURL())
         .setDescription('You have not voted for the bot recently, vote using this URL and get rewards. ([Click here](https://top.gg/bot/755526238466080830/vote))')
-        .addField('Rewards', `+ :coin: **2,500 coins**\n+ :package: **1 Common Lootbox** (Use \`${utils.getPrefix(msg.guild.id)}unbox common_lootbox\` to open this lootbox.)`)
-        .setColor('#0099ff')
+        .setColor('#ff2d08')
       msg.channel.send(embed)
     }
   }

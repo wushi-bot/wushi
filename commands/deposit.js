@@ -73,12 +73,7 @@ class DepositCommand extends Command {
             .setColor('#f20f0f')
           return msg.channel.send(embed)
         } else {
-          let amount
-          if (balance > maxBank) {
-            amount = maxBank - balance
-          } else {
-            amount = balance
-          }
+          const amount = balance
           eco.add(`${msg.author.id}.bank`, Math.floor(amount / 2))
           eco.subtract(`${msg.author.id}.balance`, Math.floor(amount / 2))
           const embed = new MessageEmbed()
@@ -104,12 +99,7 @@ class DepositCommand extends Command {
           .setColor('#f20f0f')
         return msg.channel.send(embed)
       } else {
-        let amount
-        if (args[0] > maxBank) {
-          amount = maxBank - args[0]
-        } else {
-          amount = args[0]
-        }
+        const amount = args[0]
         eco.add(`${msg.author.id}.bank`, amount)
         eco.subtract(`${msg.author.id}.balance`, amount)
         const embed = new MessageEmbed()

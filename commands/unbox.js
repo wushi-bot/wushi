@@ -8,7 +8,6 @@ import foods from '../resources/items/foods.json'
 import upgrades from '../resources/items/upgrades.json'
 import collectables from '../resources/items/collectables.json'
 
-
 const eco = new db.table('economy')
 const validBoxes = ['common_lootbox']
 const commonDrops = ['padlock', 'provato', 'gummi', 'fishing_bait', 'refined_pickaxe']
@@ -32,7 +31,7 @@ class UnboxCommand extends Command {
     super(client, {
       name: 'unbox',
       description: 'Unbox a lootbox.',
-      category: 'Meta',
+      category: 'Economy',
       aliases: ['open', 'ub'],
       usage: 'unbox [item name]',
       cooldown: 1
