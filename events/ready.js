@@ -7,6 +7,6 @@ module.exports.run = (bot) => {
   if (!bot.user.id === '755526238466080830') return
   setInterval(async () => {
     await updateStats(bot.guilds.cache.size)
-    console.log(chalk.orange('>') + ' Updated guild stats on top.gg')
+    console.log(chalk.magenta('>') + ' Updated guild stats on top.gg')
   }, 3600000)
 }
