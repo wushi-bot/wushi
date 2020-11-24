@@ -13,12 +13,8 @@ class WhoIsCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    try {
-      const message = await msg.channel.send('🏓 Ping!')
-      message.edit(`🏓 Pong! (:heart: Roundtrip took: ${message.createdTimestamp - msg.createdTimestamp}ms. 💙: ${Math.round(this.client.ws.ping)}ms.)`)
-    } catch (e) {
-      console.log(e)
-    }
+    const message = await msg.channel.send('🏓 Ping!')
+    message.edit(`🏓 Pong! (:heart: Roundtrip took: ${message.createdTimestamp - msg.createdTimestamp}ms. 💙: ${Math.round(this.client.ws.ping)}ms.)`)
   }
 }
 

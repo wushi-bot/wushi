@@ -23,7 +23,10 @@ class LevelsCommand extends Command {
     levels.all().forEach(entry => {
       if (entry.ID === msg.guild.id) {
         for (var key in entry.data) {
-          list.push({ ID: key, totalExp: entry.data[key].totalExp })
+          const user = this.client.users.cache.get(key)
+          if (msg.guild.member(user)) {
+            list.push({ ID: key, totalExp: entry.data[key].totalExp })
+          }
         }
       }
     })
