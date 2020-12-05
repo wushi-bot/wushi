@@ -39,7 +39,7 @@ People that have contributed to this repository are featured here. [`Emoji key`]
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/smexay"><img src="https://avatars1.githubusercontent.com/u/47870580?s=460&u=4e262eefd825c910b2dcdd0e37900c40fdc1c3e1&v=4" width="100px;" alt=""/><br /><sub><b>smexay</b></sub></a><br /><a href="#ideas-smexay" title="Ideas">🤔</a></td>
+    <td align="center"><a href="https://github.com/synthicy"><img src="https://avatars1.githubusercontent.com/u/47870580?s=460&u=4e262eefd825c910b2dcdd0e37900c40fdc1c3e1&v=4" width="100px;" alt=""/><br /><sub><b>synthicy</b></sub></a><br /><a href="#ideas-synthicy" title="Ideas">🤔</a></td>
   </tr>
 </table>
 <!-- ALL-CONTRIBUTORS-LIST:END -->
