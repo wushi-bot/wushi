@@ -1,6 +1,5 @@
 import Bot from './models/Bot'
 import 'dotenv/config'
-import { MessageEmbed } from 'discord.js'
 
 /*
  ___       __   ___  ___  ________  ___  ___  ___
@@ -14,7 +13,10 @@ import { MessageEmbed } from 'discord.js'
 */
 
 const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS']
-const self = new Bot({ ws: { intents: intents } })
+const self = new Bot({
+  ws: { intents: intents },
+  fetchAllMembers: true
+})
 self.loadCommands()
 self.loadEvents()
 self.login(process.env.TOKEN)
