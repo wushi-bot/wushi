@@ -1,7 +1,6 @@
 import Command from '../../models/Command'
 import { MessageEmbed } from 'discord.js'
 import db from 'quick.db'
-
 const levels = new db.table('leveling')
 
 class LevelsCommand extends Command {

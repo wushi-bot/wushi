@@ -99,7 +99,7 @@ class Fish extends Command {
       embed
         .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
         .addField('Durability', `${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100`, true)
-        .setDescription(`:fishing_pole_and_fish: You've **fished** up a **${stuff[0]}**, You've earned :coin: **+${earnings}**!`)
+        .setDescription(`:fishing_pole_and_fish: You've **fished** up a :fish: **${stuff[0]}**, You've earned :coin: **+${earnings}**!`)
         .setTimestamp()
       setTimeout(() => {
         m.edit(embed)

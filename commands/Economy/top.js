@@ -35,6 +35,7 @@ class TopCommand extends Command {
     let x = 1
     list.forEach(i => {
       const user = this.client.users.cache.get(i.id)
+      console.log(i)
       if (x === 1) {
         embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
       } else if (x === 2) {

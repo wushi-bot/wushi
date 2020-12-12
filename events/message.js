@@ -25,6 +25,15 @@ exports.run = (bot, message) => {
             leveling.set(`${message.guild.id}.${message.author.id}.expNeeded`, Math.floor(leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) + (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) * 0.1)))
             if (!cfg.get(`${message.guild.id}.levelUpMessage`)) { // Fallback to default thingy
               message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.guild.id}.${message.author.id}.level`)}**!`)
+            } else {
+              let lvlMsg = cfg.get(`${message.guild.id}.levelUpMessage`)
+              lvlMsg = lvlMsg.replace('{level}', `${leveling.get(`${message.guild.id}.${message.author.id}.level`)}`)
+              lvlMsg = lvlMsg.replace('{user.name}', `${message.author.username}`)
+              lvlMsg = lvlMsg.replace('{user.mention}', `${message.author.mention}`)
+              lvlMsg = lvlMsg.replace('{user.id}', `${message.author.id}`)
+              lvlMsg = lvlMsg.replace('{user.discrim}', `${message.author.discriminator}`)
+              lvlMsg = lvlMsg.replace('{nextExp}', `${leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`)}`)
+              message.channel.send(lvlMsg)
             }
           }
           expCooldowns.set(message.author.id, new discord.Collection())
@@ -91,12 +100,12 @@ exports.run = (bot, message) => {
       }
       if (cfg.get(`${message.guild.id}.disabled`)) {
         if (cfg.get(`${message.guild.id}.disabled`).includes(cmd.conf.category)) {
-          return console.log(chalk.yellow('>') + ` ${message.author.username}#${message.author.discriminator} attempted to execute ${prefix}${command}, but that command was disabled.`)
+          return console.log(chalk.yellow('>') + ` [Event] ${message.author.username}#${message.author.discriminator} attempted to execute ${prefix}${command}, but that command was disabled.`)
         }
       }
       if (cmd.conf.enabled === false) return
       cmd.run(bot, message, args)
-      console.log(chalk.yellow('>') + ` ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
+      console.log(chalk.yellow('>') + ` [Event] ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
     } catch (e) {
       console.log(e)
     }

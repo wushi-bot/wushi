@@ -28,15 +28,12 @@ class BalanceCommand extends Command {
       return msg.channel.send(embed)
     }
     let bank = eco.get(`${user.user.id}.bank`)
-    let maxBank = eco.get(`${user.user.id}.maxBank`)
-
     bank = bank || 0
-    maxBank = maxBank || 0
     const embed = new MessageEmbed()
       .setAuthor(msg.author.tag, msg.author.avatarURL())
       .setDescription(`This is **${msg.author.username}**'s balance & bank balance.`)
       .addField(':purse: Balance', `:coin: **${utils.addCommas(eco.get(`${user.user.id}.balance`))}**`, true)
-      .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}** / **${utils.addCommas(maxBank)}**`, true)
+      .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}**`, true)
       .setColor('#0099ff')
       .setTimestamp()
       .setFooter('You get more bank balance by gaining coins.')

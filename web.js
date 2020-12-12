@@ -46,6 +46,10 @@ app.get('/support', (req, res) => {
   return res.redirect('https://discord.com/invite/zwmqwjrxR9')
 })
 
+app.get('/variables', (req, res) => {
+  return res.render('variables')
+})
+
 /* Startup server */
 
 try {
@@ -59,11 +63,11 @@ try {
   }
   const httpsServer = https.createServer(credentials, app)
   httpsServer.listen(443, () => {
-    console.log(chalk.green('>') + ' Server started listening on port 443!')
+    console.log(chalk.green('>') + ' [Web] Server started listening on port 443!')
   })
 } catch (e) {
   const httpServer = http.createServer(app)
   httpServer.listen(8888, () => {
-    console.log(chalk.green('>') + ' Server started listening on port 8888!')
+    console.log(chalk.green('>') + ' [Web] Server started listening on port 8888!')
   })
 }

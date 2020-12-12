@@ -36,6 +36,7 @@ module.exports.getItem = function (arr, value) {
       returnedItem = item
     }
   })
+  if (!returnedItem) return undefined
   return returnedItem
 }
 

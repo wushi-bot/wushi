@@ -28,6 +28,11 @@ class Config extends Command {
     } else {
       embed.addField(':newspaper: Disabled Modules', `These modules will not show up on \`${utils.getPrefix(msg.guild.id)}help\` & will not function. (Enable them using \`${utils.getPrefix(msg.guild.id)}toggle <module>\`) \`\`\`${config.get(`${msg.guild.id}.disabled`).join(', ')}\`\`\``)
     }
+    if (config.get(`${msg.guild.id}.levelUpMessage`)) {
+      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://wushibot.xyz/variables). \`\`\`${config.get(`${msg.guild.id}.levelUpMessage`)}\`\`\``)
+    } else {
+      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://wushibot.xyz/variables). \`\`\`Congratulations, **{user.name}**, you've leveled :up: to **Level {level}**!\`\`\``)
+    }
     msg.channel.send(embed)
   }
 }

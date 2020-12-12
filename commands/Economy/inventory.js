@@ -27,8 +27,8 @@ const eco = new db.table('economy')
 class Inventory extends Command {
   constructor (client) {
     super(client, {
-      name: 'inv',
-      aliases: ['inventory'],
+      name: 'inventory',
+      aliases: ['inv'],
       usage: 'inv [user]',
       description: 'Checks a user\'s inventory.',
       category: 'Economy',
@@ -47,10 +47,21 @@ class Inventory extends Command {
     }
     const inventory = eco.get(`${user.user.id}.items`)
     const l = []
-
+    const alreadySeen = []
+    var count = {}
+    eco.get(`${msg.author.id}.items`).forEach(function (i) { count[i] = (count[i] || 0) + 1 })
     inventory.forEach(item => {
       const i = utils.getItem(allItems, item.toLowerCase())
-      l.push(`${i.emoji} ${i.display}`)
+      if (i) {
+        if (count[item] > 1) {
+          if (!alreadySeen.includes(item)) {
+            l.push(`${i.emoji} ${i.display} **x${count[item]}**`)
+            alreadySeen.push(item)
+          }
+        } else {
+          l.push(`${i.emoji} ${i.display}`)
+        }
+      }
     })
     const effects = eco.get(`${user.user.id}.effects`)
     const l2 = []
@@ -67,7 +78,7 @@ class Inventory extends Command {
       .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
       .setColor('#0099ff')
       .setDescription(`:handbag: **${user.user.username}'s** Inventory | These are the items **${user.user.tag}** has.\n\n**Items:** ${l.join(', ')}\n**Effects:** ${displayEffects}`)
-
+      .setFooter('If an item has x2, x3, x4, that means you have 2, 3, 4 or more of the same item.')
     return msg.channel.send(embed)
   }
 }
