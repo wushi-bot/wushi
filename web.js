@@ -3,9 +3,21 @@ import path from 'path'
 import fs from 'fs'
 import https from 'https'
 import http from 'http'
+import url from 'url'
 import flash from 'connect-flash'
 import session from 'express-session'
 import chalk from 'chalk'
+import passport from 'passport'
+import bodyParser from 'body-parser'
+import 'dotenv/config'
+import { Permissions } from 'discord.js'
+import utils from './utils/utils'
+
+import db from 'quick.db'
+const cfg = new db.table('config')
+
+const Strategy = require('passport-discord').Strategy
+const MemoryStore = require('memorystore')(session)
 
 /* App Setup */
 
@@ -13,61 +25,166 @@ const app = express()
 
 // https://discord.com/api/oauth2/authorize?client_id=755526238466080830&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Flogin-discord&response_type=code&scope=identify%20guilds
 
-app.set('view engine', 'pug')
-app.use(express.static(path.join(__dirname, '/web/public')))
-app.set('views', path.join(__dirname, '/web/views'))
-app.use(session({
-  cookie: { maxAge: 60000 },
-  secret: 'keyboard cat',
-  saveUninitialized: false,
-  resave: false
-}))
-app.use(flash())
-app.use((req, res, next) => {
-  res.locals.success_messages = req.flash('success')
-  res.locals.error_messages = req.flash('error')
-  next()
-})
+module.exports = async (client) => {
+  app.set('view engine', 'pug')
+  app.use(express.static(path.join(__dirname, '/web/public')))
+  app.set('views', path.join(__dirname, '/web/views'))
 
-/* Routes */
-app.get('/', (req, res) => {
-  return res.render('index')
-})
+  passport.serializeUser((user, done) => done(null, user))
+  passport.deserializeUser((obj, done) => done(null, obj))
 
-app.get('/invite', (req, res) => {
-  return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
-})
+  passport.use(new Strategy({
+    clientID: '755526238466080830',
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: 'http://localhost:8888/callback',
+    scope: ['identify', 'guilds']
+  },
+  (accessToken, refreshToken, profile, done) => {
+    process.nextTick(() => done(null, profile))
+  }))
 
-app.get('/vote', (req, res) => {
-  return res.redirect('https://top.gg/bot/755526238466080830/vote')
-})
+  app.use(session({
+    store: new MemoryStore({ checkPeriod: 86400000 }),
+    secret: '#@%#&^$^$%@$^$&%#$%@#$%$^%&$%^#$%@#$%#E%#%@$FEErfgr3g#%GT%536c53cc6%5%tv%4y4hrgrggrgrgf4n',
+    resave: false,
+    saveUninitialized: false
+  }))
+  app.use(flash())
+  app.use((req, res, next) => {
+    res.locals.success_messages = req.flash('success')
+    res.locals.error_messages = req.flash('error')
+    next()
+  })
 
-app.get('/support', (req, res) => {
-  return res.redirect('https://discord.com/invite/zwmqwjrxR9')
-})
+  app.use(passport.initialize())
+  app.use(passport.session())
+  app.locals.domain = 'http://localhost:8888/callback'.split('//')[1]
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }))
 
-app.get('/variables', (req, res) => {
-  return res.render('variables')
-})
-
-/* Startup server */
-
-try {
-  const privateKey = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/privkey.pem', 'utf8')
-  const certificate = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/cert.pem', 'utf8')
-  const ca = fs.readFileSync('/etc/letsencrypt/live/wushibot.xyz/chain.pem', 'utf8')
-  const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca
+  const checkAuth = (req, res, next) => {
+    if (req.isAuthenticated()) return next()
+    req.session.backURL = req.url
+    res.redirect('/login')
   }
-  const httpsServer = https.createServer(credentials, app)
-  httpsServer.listen(443, () => {
-    console.log(chalk.green('>') + ' [Web] Server started listening on port 443!')
+
+  // bot: client,
+  // path: req.path,
+  // user: req.isAuthenticated() ? req.user : null
+
+  /* Routes */
+
+  app.get('/login', async (req, res, next) => {
+    // We determine the returning url.
+    if (req.session.backURL) {
+      req.session.backURL = req.session.backURL // eslint-disable-line no-self-assign
+    } else if (req.headers.referer) {
+      const parsed = url.URL(req.headers.referer)
+      if (parsed.hostname === app.locals.domain) {
+        req.session.backURL = parsed.path
+      }
+    } else {
+      req.session.backURL = '/'
+    }
+    // Forward the request to the passport middleware.
+    next()
+  },
+  passport.authenticate('discord'))
+
+  app.get('/logout', function (req, res) {
+    req.session.destroy(() => {
+      req.logout()
+      res.redirect('/')
+    })
   })
-} catch (e) {
-  const httpServer = http.createServer(app)
-  httpServer.listen(8888, () => {
-    console.log(chalk.green('>') + ' [Web] Server started listening on port 8888!')
+
+  app.get('/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
+    // If user had set a returning url, we redirect him there, otherwise we redirect him to index.
+    if (req.session.backURL) {
+      const url = req.session.backURL
+      req.session.backURL = null
+      res.redirect(url)
+    } else {
+      res.redirect('/')
+    }
   })
+
+  app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
+    const guild = client.guilds.cache.get(req.params.guildID)
+    if (!guild) return res.redirect('/dashboard')
+    const member = guild.members.cache.get(req.user.id)
+    if (!member) return res.redirect('/dashboard')
+    if (!member.permissions.has('MANAGE_GUILD')) return res.redirect('/dashboard')
+    let levelUpMessage = cfg.get(`${guild.id}.levelUpMessage`)
+    levelUpMessage = levelUpMessage || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
+    res.render('settings', { prefix: utils.getPrefix(guild.id), id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+  })
+
+  app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
+    const guild = client.guilds.cache.get(req.params.guildID)
+    if (!guild) return res.redirect('/dashboard')
+    const member = guild.members.cache.get(req.user.id)
+    if (!member) return res.redirect('/dashboard')
+    if (!member.permissions.has('MANAGE_GUILD')) return res.redirect('/dashboard')
+    const newPrefix = req.body.prefix
+    const newlevelUpMessage = req.body.levelUpMessage
+    if (!newlevelUpMessage || newlevelUpMessage !== cfg.get(`${req.params.guildID}.levelUpMessage`)) {
+      cfg.set(`${req.params.guildID}.levelUpMessage`, newlevelUpMessage)
+    }
+    if (!newPrefix || newPrefix !== cfg.get(`${req.params.guildID}.prefix`)) {
+      cfg.set(`${req.params.guildID}.prefix`, newPrefix)
+    }
+    let levelUpMessage = cfg.get(`${guild.id}.levelUpMessage`)
+    levelUpMessage = levelUpMessage || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
+    req.flash('success', 'Successfully saved changes.')
+    res.render('settings', { prefix: utils.getPrefix(guild.id), id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+  })
+
+  app.get('/dashboard', checkAuth, async (req, res) => {
+    return res.render('dashboard', { bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+  })
+
+  app.get('/', async (req, res) => {
+    return res.render('index')
+  })
+
+  app.get('/invite', async (req, res) => {
+    return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
+  })
+
+  app.get('/vote', async (req, res) => {
+    return res.redirect('https://top.gg/bot/755526238466080830/vote')
+  })
+
+  app.get('/support', async (req, res) => {
+    return res.redirect('https://discord.com/invite/zwmqwjrxR9')
+  })
+
+  app.get('/variables', async (req, res) => {
+    return res.render('variables')
+  })
+
+  /* Startup server */
+
+  try {
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/privkey.pem', 'utf8')
+    const certificate = fs.readFileSync('/etc/letsencrypt/live//wushibot.xyz/cert.pem', 'utf8')
+    const ca = fs.readFileSync('/etc/letsencrypt/live/wushibot.xyz/chain.pem', 'utf8')
+    const credentials = {
+      key: privateKey,
+      cert: certificate,
+      ca: ca
+    }
+    const httpsServer = https.createServer(credentials, app)
+    httpsServer.listen(443, () => {
+      console.log(chalk.green('>') + ' [Web] Server started listening on port 443!')
+    })
+  } catch (e) {
+    const httpServer = http.createServer(app)
+    httpServer.listen(8888, () => {
+      console.log(chalk.green('>') + ' [Web] Server started listening on port 8888!')
+    })
+  }
 }

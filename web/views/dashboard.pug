@@ -1,7 +1,7 @@
 doctype html
 html
   include includes/head.pug
-  title Variables | wushi
+  title Servers | wushi
   body
     nav.navbar.has-shadow.is-spaced(role="navigation", aria-label="main navigation")
       div.container.is-fluid.is-navbar
@@ -22,54 +22,36 @@ html
               a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub
               a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server
     
+    
     div(align="center")
       section.hero.is-small.is-primary.is-bold
         .hero-body
           .container
             figure(class="image is-128x128 animated pulse")
                 img(class="image is-128x128", src="/assets/sushi.png") 
-            br
-            h1.title Variables
-            h2.subtitle A reference of variables that you can use to customize wushi's messages.
-    
-      br
-      .container
-        .box
-          h1.title Leveling
-          h2.subtitle These variables are usable when customizing leveling messages.
-          table.table
-            thead
-              tr
-                th Name
-                th Description
-                th Example            
-            tbody
-              tr
-                th <code class="code">{level}</code>
-                th <p class="subtitle">Returns the user's level.</p>
-                th <code class="code">10</code>
-              tr
-                th <code class="code">{nextExp}</code>
-                th <p class="subtitle">Returns the user's EXP required to level up to the next level.</p>
-                th <code class="code">150</code>                
-              tr
-                th <code class="code">{user.name}</code>
-                th <p class="subtitle">Returns the user's name.</p>
-                th <code class="code">minota</code>
-              tr
-                th <code class="code">{user.id}</code>
-                th <p class="subtitle">Returns the user's id.</p>
-                th <code class="code">488786712206770196</code>  
-              tr
-                th <code class="code">{user.discrim}</code>
-                th <p class="subtitle">Returns the user's discriminator.</p>
-                th <code class="code">0001</code>    
-              tr
-                th <code class="code">{user.mention}</code>
-                th <p class="subtitle">Returns the user's mention.</p>
-                th <code class="code">&lt;@!488786712206770196&gt;</code>                   
+            h1.title Please select a server
+      
+    - 
+      const guildsList = []
+      user.guilds.forEach(guild => {
+        const permsOnGuild = new perms(guild.permissions)
+        if (permsOnGuild.has("MANAGE_GUILD")) guildsList.push(guild)
+      })
 
-  br                                     
+    br
+    div.container
+      div.box
+        div.columns.is-mobile.is-multiline
+          for guild in guildsList
+            div.column.is-one-third
+              a(href='/dashboard/' + guild.id)
+                div.box(style=".box:hover{background-color:#3af2ec}")
+                  div(align="center")
+                    figure.image.is---128x128
+                      img.is-rounded(style="background-image: url(\"https://i.imgur.com/Kh4msMl.png\")", src="https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png?size=1024")
+                    h2.subtitle #{guild.name}
+
+  br
   footer.footer
     div(align="center")
       div.container
