@@ -1,7 +1,7 @@
 doctype html
 html
   include includes/head.pug
-  title Server Levels | wushi
+  title Variables | wushi
   body
     nav.navbar.has-shadow.is-spaced(role="navigation", aria-label="main navigation")
       div.container.is-fluid.is-navbar
@@ -16,9 +16,11 @@ html
           div.navbar-start
               a.navbar-item(href="/invite") <i class="fas fa-user-plus"></i>&nbsp;Invite
               a.navbar-item(href="https://docs.wushibot.xyz") <i class="fas fa-book"></i>&nbsp;Documentation
+              a.navbar-item(href="/variables") <i class="fas fa-tag"></i>&nbsp;Variables
           div.navbar-end
+            a.navbar-item.button.is-link.has-badge-rounded(href="/dashboard", data-badge="New!", style="margin-right: 8px") <i class="fas fa-satellite-dish"></i>&nbsp;Dashboard
               a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub
-              a.navbar-item.is-primary.button(href="https://discord.gg/C7Ke4Ss") <i class="fab fa-discord"></i>&nbsp;Support Server
+              a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server
     
     div(align="center")
       section.hero.is-small.is-primary.is-bold
@@ -26,24 +28,21 @@ html
           .container
             figure(class="image is-128x128 animated pulse")
                 img(class="image is-128x128", src="/assets/sushi.png") 
+            h1.title #{serverName}'s Leaderboard
       
       br
       .container
-        .box
-          h1.title Levels of all users in <a>#{serverName}</a>
-          h2.subtitle Scroll down below to see more.
-          hr 
           div.container
             - var amt = 1;
             
-              each user in users
-                div.box.container(align="center")
-                  article.media
-                    figure.media-left
-                      p.image.is-64x64 
-                        img(src=user.avatar)
-                    figure.media-content
-                      h1.subtitle(style="margin-top:16px;") &nbsp;<strong>##{amt++}</strong> <a>#{user.username}</a> | <strong>Level:</strong> #{user.level} | <strong>EXP:</strong> #{user.exp} / #{user.expNeeded}
+            each user in users
+              div.box.container(align="center")
+                article.media
+                  figure.media-left
+                    p.image.is-64x64 
+                      img(src=user.avatar)
+                  figure.media-content
+                    h1.subtitle(style="margin-top:16px;") &nbsp;<strong>##{amt++}</strong> <a>#{user.username}</a> | <strong>Level:</strong> #{user.level} | <strong>EXP:</strong> #{user.exp} / #{user.expNeeded}
       br
 
   footer.footer

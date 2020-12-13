@@ -15,6 +15,7 @@ import utils from './utils/utils'
 
 import db from 'quick.db'
 const cfg = new db.table('config')
+const levels = new db.table('leveling')
 
 const Strategy = require('passport-discord').Strategy
 const MemoryStore = require('memorystore')(session)
@@ -22,8 +23,6 @@ const MemoryStore = require('memorystore')(session)
 /* App Setup */
 
 const app = express()
-
-// https://discord.com/api/oauth2/authorize?client_id=755526238466080830&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Flogin-discord&response_type=code&scope=identify%20guilds
 
 module.exports = async (client) => {
   app.set('view engine', 'pug')
@@ -36,7 +35,7 @@ module.exports = async (client) => {
   passport.use(new Strategy({
     clientID: '755526238466080830',
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:8888/callback',
+    callbackURL: process.env.DOMAIN + '/callback',
     scope: ['identify', 'guilds']
   },
   (accessToken, refreshToken, profile, done) => {
@@ -58,7 +57,7 @@ module.exports = async (client) => {
 
   app.use(passport.initialize())
   app.use(passport.session())
-  app.locals.domain = 'http://localhost:8888/callback'.split('//')[1]
+  app.locals.domain = process.env.DOMAIN + '/callback'.split('//')[1]
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({
     extended: true
@@ -113,13 +112,31 @@ module.exports = async (client) => {
 
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
     const guild = client.guilds.cache.get(req.params.guildID)
-    if (!guild) return res.redirect('/dashboard')
+    if (!guild) return res.redirect('https://discord.com/oauth2/authorize?client_id=755526238466080830&permissions=1275456512&scope=bot')
     const member = guild.members.cache.get(req.user.id)
     if (!member) return res.redirect('/dashboard')
     if (!member.permissions.has('MANAGE_GUILD')) return res.redirect('/dashboard')
     let levelUpMessage = cfg.get(`${guild.id}.levelUpMessage`)
     levelUpMessage = levelUpMessage || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
     res.render('settings', { prefix: utils.getPrefix(guild.id), id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+  })
+
+  app.get('/levels/:id?', (req, res) => {
+    var id = req.params.id
+    const server = client.guilds.cache.get(id)
+    if (!server) {
+      return res.status(400).redirect('/')
+    }
+    const list = []
+    levels.all().forEach(entry => {
+      if (entry.ID === server.id) {
+        for (var key in entry.data) {
+          const member = server.members.cache.find(member => member.id === key)
+          list.push({ ID: key, avatar: member.user.avatarURL(), username: member.user.username, totalExp: entry.data[key].totalExp, expNeeded: entry.data[key].expNeeded, exp: entry.data[key].exp, level: entry.data[key].level })
+        }
+      }
+    })
+    return res.render('levels', { serverId: server.id, serverName: server.name, users: list })
   })
 
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {

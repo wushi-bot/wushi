@@ -7,9 +7,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "start-bot": "npx nodemon --exec babel-node bot.js",
-    "start-web": "npx nodemon --exec babel-node web.js",
-    "build": "concurrently \"npm:start-web\" \"npm:start-bot\"",
+    "build": "npx nodemon --exec babel-node bot.js",
     "css-build": "node-sass --omit-source-map-url web/public/scss/style.scss web/public/css/style.css",
     "css-watch": "npm run css-build -- --watch"
   },

@@ -40,16 +40,15 @@ html
 
     br
     div.container
-      div.box
-        div.columns.is-mobile.is-multiline
-          for guild in guildsList
-            div.column.is-one-third
-              a(href='/dashboard/' + guild.id)
-                div.box(style=".box:hover{background-color:#3af2ec}")
-                  div(align="center")
-                    figure.image.is---128x128
-                      img.is-rounded(style="background-image: url(\"https://i.imgur.com/Kh4msMl.png\")", src="https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png?size=1024")
-                    h2.subtitle #{guild.name}
+      div.columns.is-mobile.is-multiline
+        for guild in guildsList
+          div.column.is-one-third
+            div.box
+              div(align="center")
+                figure.image.is-128x128
+                  img(src="https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png?size=1024")
+                h2.subtitle(style="margin-top:5px;margin-bottom:5px;") #{guild.name}
+                a.button.is-medium.is-fullwidth.is-rounded(href='/dashboard' + guild.id) <i class="fab fa-discord"></i>&nbsp;Go to dashboard
 
   br
   footer.footer

@@ -14,10 +14,6 @@ class Bot extends Client {
     this.version = '2.0.0'
   }
 
-  getMe (client) {
-    return client
-  }
-
   login (token) {
     super.login(token)
     return this
@@ -44,23 +40,6 @@ class Bot extends Client {
     }
     console.log(chalk.magenta('>') + ' [Commands] Done!')
   }
-
-  /*  loadCommands () {
-      const cmdFiles = fs.readdirSync(path.join(__dirname, '..', '/commands/')).filter(file => file.endsWith('.js'))
-      for (const file of cmdFiles) {
-        try {
-          const command = new (require(path.join(__dirname, '..', `/commands/${file}`)))(this)
-          this.commands.set(command.conf.name, command)
-          command.conf.aliases.forEach(alias => {
-            this.aliases.set(alias, command.conf.name)
-          })
-          console.log(chalk.green('>') + ` Registered command ${file} (name: ${command.conf.name} | aliases: ${command.conf.aliases})`)
-        } catch (e) {
-          console.log(chalk.gray('>') + ` Skipped command because it encountered an error: ${e}`)
-        }
-      }
-    }
-  */
 
   loadEvents () {
     console.log(chalk.magenta('>') + ' [Events] Beginning to check for events...')

@@ -42,7 +42,7 @@ html
         div.container
             div.notification.is-success
                 p <strong>Success:</strong> #{success_messages}
-
+      br
     
       nav.breadcrumb.is-centered.has-arrow-separator(aria-label="breadcrumbs")
         ul
@@ -50,23 +50,22 @@ html
           li <a href="/dashboard"> Dashboard</a>
           li.is-active(aria-current="page") <a href="#"> #{name}</a>
       .container
-        .box
-          .container
-            form(method="POST", action="/dashboard/" + id)
-              p Change your prefix here!
-              br
-              div.field
-                  p.control
-                      input(class="input is-rounded", for="inputPrefix", type="text", name="prefix", value=prefix, placeholder="New prefix")
-              hr
-              p Change your level up message here!
-              br
-              div.field
-                  p.control
-                      input(class="input is-rounded", for="inputLvlUpMsg", type="text", name="levelUpMessage", value=lvlMsg, placeholder="New level up message")
-              br
-              div(align="center")
-                  input(class="button is-success is-medium is-rounded", type="submit", value="Save Changes") 
+        .container
+          form(method="POST", action="/dashboard/" + id)
+            p Change your prefix here.
+            br
+            div.field
+                p.control
+                    input(class="input is-rounded", for="inputPrefix", type="text", name="prefix", value=prefix, placeholder="New prefix")
+            hr
+            p Change your level up message here. <a href="/variables">Read here for variables</a>
+            br
+            div.field
+                p.control
+                    input(class="input is-rounded", for="inputLvlUpMsg", type="text", name="levelUpMessage", value=lvlMsg, placeholder="New level up message")
+            br
+            div(align="center")
+                input(class="button is-success is-medium is-rounded", type="submit", value="Save Changes") 
 
   br
   footer.footer

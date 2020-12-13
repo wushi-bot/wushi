@@ -20,7 +20,7 @@ class Config extends Command {
     const embed = new discord.MessageEmbed()
       .setColor('#0099ff')
       .setTitle(`:tools: ${msg.guild.name}'s Configuration`)
-      .setDescription('This is the server\'s configuration.')
+      .setDescription('This is the server\'s configuration, you can also configure the bot on [the dashboard.](https://wushibot.xyz/dashboard/' + msg.guild.id + ')')
       .addField(':scroll: Prefix', `This is the prefix for your server, all commands must start with these character(s).\`\`\`${utils.getPrefix(msg.guild.id)}\`\`\``)
 
     if (config.get(`${msg.guild.id}.disabled`) === undefined || config.get(`${msg.guild.id}.disabled`).length === 0) {
