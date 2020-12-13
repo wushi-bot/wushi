@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="/web/public/assets/sushi.png" height="128" width="128"></img>
+
 ## wushi 🍣
 [![Discord](https://discordapp.com/api/guilds/777620712193392650/widget.png?style=shield)](https://discord.gg/7MtXvNB)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
