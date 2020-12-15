@@ -118,7 +118,9 @@ module.exports = async (client) => {
     if (!member.permissions.has('MANAGE_GUILD')) return res.redirect('/dashboard')
     let levelUpMessage = cfg.get(`${guild.id}.levelUpMessage`)
     levelUpMessage = levelUpMessage || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
-    res.render('settings', { prefix: utils.getPrefix(guild.id), id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+    let rankCardColor = cfg.get(`${guild.id}.rankCardColor`)
+    rankCardColor = rankCardColor || '#ff3f38'
+    res.render('settings', { prefix: utils.getPrefix(guild.id), cardColor: rankCardColor, id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
   })
 
   app.get('/levels/:id?', (req, res) => {
@@ -146,17 +148,23 @@ module.exports = async (client) => {
     if (!member) return res.redirect('/dashboard')
     if (!member.permissions.has('MANAGE_GUILD')) return res.redirect('/dashboard')
     const newPrefix = req.body.prefix
-    const newlevelUpMessage = req.body.levelUpMessage
-    if (!newlevelUpMessage || newlevelUpMessage !== cfg.get(`${req.params.guildID}.levelUpMessage`)) {
-      cfg.set(`${req.params.guildID}.levelUpMessage`, newlevelUpMessage)
+    const newLevelUpMessage = req.body.levelUpMessage
+    const newRankCardColor = req.body.rankCardColor
+    if (!newLevelUpMessage || newLevelUpMessage !== cfg.get(`${req.params.guildID}.levelUpMessage`)) {
+      cfg.set(`${req.params.guildID}.levelUpMessage`, newLevelUpMessage)
     }
     if (!newPrefix || newPrefix !== cfg.get(`${req.params.guildID}.prefix`)) {
       cfg.set(`${req.params.guildID}.prefix`, newPrefix)
     }
+    if (!newRankCardColor || newRankCardColor !== cfg.get(`${req.params.guildID}.rankCardColor`)) {
+      cfg.set(`${req.params.guildID}.rankCardColor`, newRankCardColor)
+    }
     let levelUpMessage = cfg.get(`${guild.id}.levelUpMessage`)
     levelUpMessage = levelUpMessage || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
+    let rankCardColor = cfg.get(`${guild.id}.rankCardColor`)
+    rankCardColor = rankCardColor || '#ff3f38'
     req.flash('success', 'Successfully saved changes.')
-    res.render('settings', { prefix: utils.getPrefix(guild.id), id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
+    res.render('settings', { prefix: utils.getPrefix(guild.id), cardColor: rankCardColor, id: guild.id, server: guild, name: guild.name, lvlMsg: levelUpMessage, bot: client, path: req.path, user: req.isAuthenticated() ? req.user : null, perms: Permissions })
   })
 
   app.get('/dashboard', checkAuth, async (req, res) => {
@@ -164,7 +172,7 @@ module.exports = async (client) => {
   })
 
   app.get('/', async (req, res) => {
-    return res.render('index')
+    return res.render('index', { user: req.isAuthenticated() ? req.user : null })
   })
 
   app.get('/invite', async (req, res) => {

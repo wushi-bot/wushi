@@ -18,10 +18,10 @@ html
               a.navbar-item(href="https://docs.wushibot.xyz") <i class="fas fa-book"></i>&nbsp;Documentation
               a.navbar-item(href="/variables") <i class="fas fa-tag"></i>&nbsp;Variables
           div.navbar-end
-            a.navbar-item.button.is-link.has-badge-rounded(href="/dashboard", data-badge="New!", style="margin-right: 8px") <i class="fas fa-satellite-dish"></i>&nbsp;Dashboard
-              a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub
-              a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server
-    
+            if user
+              a.navbar-item.button.is-link.has-badge-rounded(href="/dashboard", data-badge="New!", style="margin-right: 8px") <i class="fas fa-satellite-dish"></i>&nbsp;Dashboard
+            else
+              a.navbar-item.is-primary.button(href="/dashboard") <i class="fab fa-discord"></i>&nbsp;Login with Discord
     
     div(align="center")
       section.hero.is-small.is-primary.is-bold
@@ -48,10 +48,17 @@ html
                 figure.image.is-128x128
                   img(src="https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png?size=1024")
                 h2.subtitle(style="margin-top:5px;margin-bottom:5px;") #{guild.name}
-                a.button.is-medium.is-fullwidth.is-rounded(href='/dashboard' + guild.id) <i class="fab fa-discord"></i>&nbsp;Go to dashboard
+                div.container.is-fluid
+                  a.button.is-small.is-rounded(href='/dashboard/' + guild.id) <i class="fab fa-discord"></i>&nbsp;Go to dashboard
 
   br
   footer.footer
     div(align="center")
       div.container
-        p <strong><a href="https://github.com/xMinota">Minota</a></strong> © 2020         
+        p <strong><a href="https://github.com/xMinota">Minota</a></strong> © 2020 
+        br        
+        div.columns
+          div.column.is-one-half
+            a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub 
+          div.column.is-one-half
+            a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server

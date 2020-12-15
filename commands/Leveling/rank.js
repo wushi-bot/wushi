@@ -3,6 +3,7 @@ import Command from '../../models/Command'
 import { Canvas } from 'canvas-constructor'
 import req from '@aero/centra'
 const leveling = new db.table('leveling')
+const cfg = new db.table('config')
 
 class RankCommand extends Command {
   constructor (client) {
@@ -36,6 +37,8 @@ class RankCommand extends Command {
     }
     const progBar = Math.floor(Math.max((points / nextLevel) * 450, 10))
     const canvas = new Canvas(600, 400)
+    let rankCardColor = cfg.get(`${msg.guild.id}.rankCardColor`)
+    rankCardColor = rankCardColor || '#ff3f38'
     canvas
       .addTextFont('./resources/fonts/JosefinSans-Regular.ttf', 'Default')
       .addTextFont('./resources/fonts/JosefinSans-Bold.ttf', 'Default Bold')
@@ -54,7 +57,7 @@ class RankCommand extends Command {
       .addText(`${points} / ${nextLevel}`, 390, 316)
       .addBeveledRect(85, 336, 450, 24, 32)
       .restore()
-      .setColor('#ff3f38')
+      .setColor(rankCardColor)
       .addBeveledRect(91, 340, progBar, 16, 20)
       .restore()
     return msg.channel.send({ files: [{ attachment: canvas.toBuffer(), name: 'profile.png' }] })

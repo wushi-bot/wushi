@@ -18,10 +18,11 @@ html
               a.navbar-item(href="https://docs.wushibot.xyz") <i class="fas fa-book"></i>&nbsp;Documentation
               a.navbar-item(href="/variables") <i class="fas fa-tag"></i>&nbsp;Variables
           div.navbar-end
-            a.navbar-item.button.is-link.has-badge-rounded(href="/dashboard", data-badge="New!", style="margin-right: 8px") <i class="fas fa-satellite-dish"></i>&nbsp;Dashboard
-              a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub
-              a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server
-    
+            if user
+              a.navbar-item.button.is-link.has-badge-rounded(href="/dashboard", data-badge="New!", style="margin-right: 8px") <i class="fas fa-satellite-dish"></i>&nbsp;Dashboard
+            else
+              a.navbar-item.is-primary.button(href="/dashboard") <i class="fab fa-discord"></i>&nbsp;Login with Discord
+
     div(align="center")
       section.hero.is-small.is-primary.is-bold
         .hero-body
@@ -52,17 +53,32 @@ html
       .container
         .container
           form(method="POST", action="/dashboard/" + id)
-            p Change your prefix here.
-            br
-            div.field
-                p.control
-                    input(class="input is-rounded", for="inputPrefix", type="text", name="prefix", value=prefix, placeholder="New prefix")
-            hr
-            p Change your level up message here. <a href="/variables">Read here for variables</a>
-            br
-            div.field
-                p.control
-                    input(class="input is-rounded", for="inputLvlUpMsg", type="text", name="levelUpMessage", value=lvlMsg, placeholder="New level up message")
+            div.columns
+              div.column
+                div.box
+                  h1.title General
+                  hr
+                  p Change your prefix here.
+                  br
+                  div.field
+                    p.control
+                      input(class="input is-rounded", for="inputPrefix", type="text", name="prefix", value=prefix, placeholder="New prefix")
+              div.column
+                div.box
+                  h1.title Leveling
+                  hr
+                  p Change your level up message here. <a href="/variables">Read here for variables</a>
+                  br
+                  div.field
+                    p.control
+                      input(class="input is-rounded", for="inputLvlUpMsg", type="text", name="levelUpMessage", value=lvlMsg, placeholder="New level up message")
+                  br
+                  p Change rank card color here.
+                  div.field
+                    p.control
+                      input(class="input is-rounded is-medium", for="inputRankCardColor", type="color", name="rankCardColor", value=cardColor, placeholder="New level up message")
+                          
+            
             br
             div(align="center")
                 input(class="button is-success is-medium is-rounded", type="submit", value="Save Changes") 
@@ -71,4 +87,10 @@ html
   footer.footer
     div(align="center")
       div.container
-        p <strong><a href="https://github.com/xMinota">Minota</a></strong> © 2020         
+        p <strong><a href="https://github.com/xMinota">Minota</a></strong> © 2020 
+        br        
+        div.columns
+          div.column.is-one-half
+            a.navbar-item.is-light.button(href="https://github.com/xMinota/wushi", style="margin-right: 8px") <i class="fab fa-github-alt"></i>&nbsp;GitHub 
+          div.column.is-one-half
+            a.navbar-item.is-primary.button(href="https://discord.gg/zwmqwjrxR9") <i class="fab fa-discord"></i>&nbsp;Support Server
