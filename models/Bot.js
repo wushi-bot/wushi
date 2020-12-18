@@ -48,7 +48,7 @@ class Bot extends Client {
       files.forEach(file => {
         const event = require(path.join(__dirname, '..', `/events/${file}`))
         const eventName = file.split('.')[0]
-        console.log(chalk.blue('>') + ` [Events] Added event: ${eventName}`)
+        console.log(chalk.blue('>') + ` [Events] Added event: ${eventName}.js`)
         super.on(eventName, (...args) => event.run(this, ...args))
       })
     })

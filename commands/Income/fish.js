@@ -16,7 +16,7 @@ function generateRandomDrop () {
       break
     case 'tuna':
       display = 'Tuna'
-      loot = 5
+      loot = 25
       break
     case 'trout':
       display = 'Trout'
@@ -97,10 +97,9 @@ class Fish extends Command {
       .setDescription(':fishing_pole_and_fish: You\'ve started **fishing**...')
     msg.channel.send(embed).then(m => {
       embed
-        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
-        .addField('Durability', `${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100`, true)
-        .setDescription(`:fishing_pole_and_fish: You've **fished** up a :fish: **${stuff[0]}**, You've earned :coin: **+${earnings}**!`)
         .setTimestamp()
+        .setFooter(`Your fishing rod durability is at ${100 - eco.get(`${msg.author.id}.fishing_rod_durability`)}/100`)
+        .setDescription(`:fishing_pole_and_fish: You've **fished** up a :fish: **${stuff[0]}**!\n───────────────────────\n• You've earned :coin: **+${earnings}**!\n• Your new balance is :coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**.`)
       setTimeout(() => {
         m.edit(embed)
       }, 1500)

@@ -56,6 +56,19 @@ class Buy extends Command {
       msg.channel.send(embed)
       return
     }
+    if (item.max) {
+      var count = {}
+      eco.get(`${msg.author.id}.items`).forEach(function (i) { count[i] = (count[i] || 0) + 1 })
+      console.log(count[item.id])
+      if (count[item.id] >= item.max) {
+        const embed = new discord.MessageEmbed()
+          .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+          .setDescription(`${item.emoji} Maximum amount of ${item.emoji} **${item.display}**! | Your inventory has too much ${item.emoji} **${item.display}** to be able to buy more.`)
+          .setColor('#ff2803')
+        msg.channel.send(embed)
+        return
+      }
+    }
     eco.subtract(`${msg.author.id}.balance`, item.price)
     eco.push(`${msg.author.id}.items`, item.id)
     const embed = new discord.MessageEmbed()

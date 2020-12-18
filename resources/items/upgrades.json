@@ -5,22 +5,25 @@
     "id": "fishing_bait",
     "description": "Upgrades your fishing rod by **25%**",
     "display": "Fishing Bait",
-    "emoji": ":fish_cake:"
+    "emoji": ":fish_cake:",
+    "max": 5
   },
   {
-    "price": 2500,
+    "price": 10000,
     "sell_price": 500,
     "id": "refined_pickaxe",
     "description": "Upgrades your pickaxe by **15%**",
     "display": "Refined Pickaxe",
-    "emoji": ":gem:"
+    "emoji": ":gem:",
+    "max": 5
   },
   {
-    "price": 15000,
+    "price": 25000,
     "sell_price": 1250,
     "id": "farm_land",
     "description": "Upgrades your farm by **25%**",
     "display": "More Farmland",
-    "emoji": ":farmer:"
+    "emoji": ":farmer:",
+    "max": 5
   }  
 ]
