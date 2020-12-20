@@ -1,26 +1,26 @@
 import Command from '../../models/Command'
 import { MessageEmbed } from 'discord.js'
 
-class PatCommand extends Command {
+class LickCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'pat',
-      description: 'Give headpats to someone.',
-      category: 'Social',
-      aliases: ['headpat'],
-      usage: 'pat [@user]',
+      name: 'lick',
+      description: 'Give licks to someone.',
+      category: 'Actions',
+      aliases: ['licks'],
+      usage: 'lick [@user]',
       cooldown: 1
     })
   }
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    const img = await this.client.ksoft.images.random('pat')
+    const img = await this.client.ksoft.images.random('lick')
     const embed = new MessageEmbed()
     if (user === msg.member) {
-      embed.setDescription('You **patted** yourself! :heart: ||how sad!||')
+      embed.setDescription('You **licked** yourself! :heart: ||how sad!||')
     } else {
-      embed.setDescription(`You **patted** ${user.user.username}! :heart:`)
+      embed.setDescription(`You **licked** ${user.user.username}! :heart:`)
     }
     embed.setColor('#ff73e1')
     embed.setFooter('Images provided by Ksoft.si')
@@ -29,4 +29,4 @@ class PatCommand extends Command {
   }
 }
 
-module.exports = PatCommand
+module.exports = LickCommand

@@ -30,13 +30,10 @@ class BalanceCommand extends Command {
     let bank = eco.get(`${user.user.id}.bank`)
     bank = bank || 0
     const embed = new MessageEmbed()
-      .setAuthor(msg.author.tag, msg.author.avatarURL())
-      .setDescription(`This is **${msg.author.username}**'s balance & bank balance.`)
-      .addField(':purse: Balance', `:coin: **${utils.addCommas(eco.get(`${user.user.id}.balance`))}**`, true)
-      .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}**`, true)
+      .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+      .setDescription(`This is **${msg.author.username}**'s balance & bank balance.\n───────────────────────\n • Your balance is :coin: **${utils.addCommas(eco.get(`${user.user.id}.balance`))}**\n • Your bank balance is :coin: **${utils.addCommas(bank)}**`)
       .setColor('#0099ff')
       .setTimestamp()
-      .setFooter('You get more bank balance by gaining coins.')
     msg.channel.send(embed)
   }
 }

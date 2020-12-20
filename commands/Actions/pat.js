@@ -1,26 +1,26 @@
 import Command from '../../models/Command'
 import { MessageEmbed } from 'discord.js'
 
-class TickleCommand extends Command {
+class PatCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'tickle',
-      description: 'Give tickles to someone.',
-      category: 'Social',
-      aliases: ['tickles'],
-      usage: 'tickle [@user]',
+      name: 'pat',
+      description: 'Give headpats to someone.',
+      category: 'Actions',
+      aliases: ['headpat'],
+      usage: 'pat [@user]',
       cooldown: 1
     })
   }
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    const img = await this.client.ksoft.images.random('tickle')
+    const img = await this.client.ksoft.images.random('pat')
     const embed = new MessageEmbed()
     if (user === msg.member) {
-      embed.setDescription('You **tickled** yourself! :heart: ||how sad!||')
+      embed.setDescription('You **patted** yourself! :heart: ||how sad!||')
     } else {
-      embed.setDescription(`You **tickled** ${user.user.username}! :heart:`)
+      embed.setDescription(`You **patted** ${user.user.username}! :heart:`)
     }
     embed.setColor('#ff73e1')
     embed.setFooter('Images provided by Ksoft.si')
@@ -29,4 +29,4 @@ class TickleCommand extends Command {
   }
 }
 
-module.exports = TickleCommand
+module.exports = PatCommand

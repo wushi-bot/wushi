@@ -1,26 +1,26 @@
 import Command from '../../models/Command'
 import { MessageEmbed } from 'discord.js'
 
-class LickCommand extends Command {
+class TickleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'lick',
-      description: 'Give licks to someone.',
-      category: 'Social',
-      aliases: ['licks'],
-      usage: 'lick [@user]',
+      name: 'tickle',
+      description: 'Give tickles to someone.',
+      category: 'Actions',
+      aliases: ['tickles'],
+      usage: 'tickle [@user]',
       cooldown: 1
     })
   }
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    const img = await this.client.ksoft.images.random('lick')
+    const img = await this.client.ksoft.images.random('tickle')
     const embed = new MessageEmbed()
     if (user === msg.member) {
-      embed.setDescription('You **licked** yourself! :heart: ||how sad!||')
+      embed.setDescription('You **tickled** yourself! :heart: ||how sad!||')
     } else {
-      embed.setDescription(`You **licked** ${user.user.username}! :heart:`)
+      embed.setDescription(`You **tickled** ${user.user.username}! :heart:`)
     }
     embed.setColor('#ff73e1')
     embed.setFooter('Images provided by Ksoft.si')
@@ -29,4 +29,4 @@ class LickCommand extends Command {
   }
 }
 
-module.exports = LickCommand
+module.exports = TickleCommand

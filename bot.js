@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/node'
 import { Integrations } from '@sentry/tracing'
+import chalk from 'chalk'
 
 import Bot from './models/Bot'
 import 'dotenv/config'
@@ -14,6 +15,13 @@ import 'dotenv/config'
     \|____________|\|_______|\_________\|__|\|__|\|__|
                             \|_________|
 */
+
+if (!process.env.SENTRY) console.log(`${chalk.gray('>')} Cannot find SENTRY variable, error logging will not work.`)
+if (!process.env.CLIENT_SECRET) console.log(`${chalk.gray('>')} Cannot find CLIENT_SECRET variable, authentication will not work in the website.`)
+if (!process.env.DBL_TOKEN) console.log(`${chalk.gray('>')} Cannot find DBL_TOKEN variable, server posting will not work.`)
+if (!process.env.TOKEN) console.log(`${chalk.gray('>')} Cannot find TOKEN variable, the bot & web will not work.`)
+if (!process.env.DOMAIN) console.log(`${chalk.gray('>')} Cannot find DOMAIN variable, authentication will not work.`)
+if (!process.env.KSOFT_TOKEN) console.log(`${chalk.gray('>')} Cannot find KSOFT_TOKEN variable, Ksoft.si commands will not work.`)
 
 Sentry.init({
   dsn: process.env.SENTRY,

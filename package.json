@@ -60,6 +60,7 @@
     "passport-discord": "^0.1.4",
     "pug": "^3.0.0",
     "quick.db": "^7.1.2",
+    "tinycolor2": "^1.4.2",
     "url": "^0.11.0",
     "xkcd": "^1.1.3"
   },

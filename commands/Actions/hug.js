@@ -1,26 +1,26 @@
 import Command from '../../models/Command'
 import { MessageEmbed } from 'discord.js'
 
-class KissCommand extends Command {
+class HugCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'kiss',
-      description: 'Give kisses to someone.',
-      category: 'Social',
-      aliases: ['kith', 'smooch'],
-      usage: 'kiss [@user]',
+      name: 'hug',
+      description: 'Give hugs to someone.',
+      category: 'Actions',
+      aliases: ['cuddle'],
+      usage: 'hug [@user]',
       cooldown: 1
     })
   }
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    const img = await this.client.ksoft.images.random('kiss')
+    const img = await this.client.ksoft.images.random('hug')
     const embed = new MessageEmbed()
     if (user === msg.member) {
-      embed.setDescription('You **kissed** yourself! :heart: ||how sad!||')
+      embed.setDescription('You **hugged** yourself! :heart: ||how sad!||')
     } else {
-      embed.setDescription(`You **kissed** ${user.user.username}! :kiss:`)
+      embed.setDescription(`You **hugged** ${user.user.username}! :heart:`)
     }
     embed.setColor('#ff73e1')
     embed.setFooter('Images provided by Ksoft.si')
@@ -29,4 +29,4 @@ class KissCommand extends Command {
   }
 }
 
-module.exports = KissCommand
+module.exports = HugCommand

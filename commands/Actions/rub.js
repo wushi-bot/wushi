@@ -6,7 +6,7 @@ class HeadrubCommand extends Command {
     super(client, {
       name: 'headrub',
       description: 'Give headrubs to someone.',
-      category: 'Social',
+      category: 'Actions',
       aliases: ['rub'],
       usage: 'headrub [@user]',
       cooldown: 1
