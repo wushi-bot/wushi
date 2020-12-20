@@ -54,11 +54,18 @@ class MineCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    if (!eco.get(`${msg.author.id}.started`)) {
+      const embed = new discord.MessageEmbed()
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setColor('#f20f0f')
+        .setDescription(':x: You have no account setup! Set one up using `.start`.')
+      return msg.channel.send(embed)
+    }
     if (!eco.get(`${msg.author.id}.items`).includes('pickaxe')) {
       const embed = new discord.MessageEmbed()
-        .setColor('#ff2803')
-        .setTitle(':x: You don\'t have a pickaxe!')
-        .setDescription('You need a pickaxe to pickaxe, obviously.')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setColor('#f20f0f')
+        .setDescription(`You need a pickaxe to mine, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy pickaxe\``)
       msg.channel.send(embed)
       return
     }
@@ -91,9 +98,8 @@ class MineCommand extends Command {
       .setDescription(':pick: You\'ve started **mining**...')
     msg.channel.send(embed).then(m => {
       embed
-        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
-        .addField('Durability', `${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75`, true)
-        .setDescription(`:pick: You've **mined** up some **${stuff[0]}**, You've earned :coin: **+${utils.addCommas(earnings)}**!`)
+        .setFooter(`Your pickaxe durability is at ${75 - eco.get(`${msg.author.id}.pickaxe_durability`)}/75`)
+        .setDescription(`:pick: You've **mined** up some **${stuff[0]}**!\n───────────────────────\n• You've earned :coin: **+${earnings}**!\n• Your new balance is :coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**.`)
         .setTimestamp()
       setTimeout(() => {
         m.edit(embed)

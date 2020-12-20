@@ -69,11 +69,18 @@ class Farm extends Command {
   }
 
   async run (bot, msg, args) {
+    if (!eco.get(`${msg.author.id}.started`)) {
+      const embed = new discord.MessageEmbed()
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setColor('#f20f0f')
+        .setDescription(':x: You have no account setup! Set one up using `.start`.')
+      return msg.channel.send(embed)
+    }
     if (!eco.get(`${msg.author.id}.items`).includes('farm')) {
       const embed = new discord.MessageEmbed()
-        .setColor('#ff2d08')
-        .setTitle(':x: You don\'t have a farm!')
-        .setDescription('You need a farm to farm, obviously.')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+        .setColor('#f20f0f')
+        .setDescription(`You need a farm to farm, obviously. | Buy one on the store using \`${utils.getPrefix(msg.guild.id)}buy farm\``)
       msg.channel.send(embed)
       return
     }
@@ -102,9 +109,8 @@ class Farm extends Command {
       .setDescription(':seedling: You\'ve started **farming**...')
     msg.channel.send(embed).then(m => {
       embed
-        .addField('New Balance', `:coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**`, true)
-        .addField('Durability', `${150 - eco.get(`${msg.author.id}.farm_uses`)}/150`, true)
-        .setDescription(`:seedling: You've **harvested** up some **${stuff[0]}**, You've earned :coin: **+${utils.addCommas(out)}**!`)
+        .setFooter(`Your farm durability is at ${150 - eco.get(`${msg.author.id}.pickaxe_durability`)}/150`)
+        .setDescription(`:seedling: You've **farmed** some **${stuff[0]}**!\n───────────────────────\n• You've earned :coin: **+${out}**!\n• Your new balance is :coin: **${utils.addCommas(eco.get(`${msg.author.id}.balance`))}**.`)
         .setTimestamp()
       setTimeout(() => {
         m.edit(embed)

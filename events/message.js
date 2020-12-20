@@ -104,6 +104,12 @@ exports.run = (bot, message) => {
         }
       }
       if (cmd.conf.enabled === false) return
+<<<<<<< HEAD
+=======
+      if (cmd.conf.category === 'Admin') {
+        if (!bot.owners.includes(message.author.id)) return message.reply('You cannot use this command as you aren\'t a **Bot Admin**.')
+      }
+>>>>>>> 742ccee4fa367296299d284ba31b3c6e6d190e23
       cmd.run(bot, message, args)
       console.log(chalk.yellow('>') + ` [Event] ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
     } catch (e) {
