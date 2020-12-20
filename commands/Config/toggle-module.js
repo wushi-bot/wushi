@@ -3,11 +3,7 @@ import Command from '../../models/Command'
 import utils from '../../utils/utils'
 const config = new db.table('config')
 
-<<<<<<< HEAD:commands/Config/toggle-module.js
-const modules = ['Leveling', 'Meta', 'Economy', 'Util', 'Config', 'Social', 'Images']
-=======
 const modules = ['Leveling', 'Meta', 'Economy', 'Util', 'Config', 'Social', 'Images', 'Income']
->>>>>>> 742ccee4fa367296299d284ba31b3c6e6d190e23:commands/Config/toggle-module.js
 
 class ToggleModule extends Command {
   constructor (client) {
