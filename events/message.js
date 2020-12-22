@@ -29,7 +29,7 @@ exports.run = (bot, message) => {
               let lvlMsg = cfg.get(`${message.guild.id}.levelUpMessage`)
               lvlMsg = lvlMsg.replace('{level}', `${leveling.get(`${message.guild.id}.${message.author.id}.level`)}`)
               lvlMsg = lvlMsg.replace('{user.name}', `${message.author.username}`)
-              lvlMsg = lvlMsg.replace('{user.mention}', `${message.author.mention}`)
+              lvlMsg = lvlMsg.replace('{user.mention}', `<@!${message.author.id}>`)
               lvlMsg = lvlMsg.replace('{user.id}', `${message.author.id}`)
               lvlMsg = lvlMsg.replace('{user.discrim}', `${message.author.discriminator}`)
               lvlMsg = lvlMsg.replace('{nextExp}', `${leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`)}`)
