@@ -100,7 +100,7 @@ exports.run = (bot, message) => {
       }
       if (cfg.get(`${message.guild.id}.disabled`)) {
         if (cfg.get(`${message.guild.id}.disabled`).includes(cmd.conf.category)) {
-          return console.log(chalk.yellow('>') + ` [Event] ${message.author.username}#${message.author.discriminator} attempted to execute ${prefix}${command}, but that command was disabled.`)
+          return bot.logger.log('info', `[Event] ${message.author.username}#${message.author.discriminator} attempted to execute ${prefix}${command}, but that command was disabled.`)
         }
       }
       if (cmd.conf.enabled === false) return
@@ -108,7 +108,7 @@ exports.run = (bot, message) => {
         if (!bot.owners.includes(message.author.id)) return message.reply('You cannot use this command as you aren\'t a **Bot Admin**.')
       }
       cmd.run(bot, message, args)
-      console.log(chalk.yellow('>') + ` [Event] ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
+      bot.logger.log('info', `[Event] ${message.author.username}#${message.author.discriminator} executed ${prefix}${command}.`)
     } catch (e) {
       console.log(e)
     }

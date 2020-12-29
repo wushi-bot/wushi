@@ -29,6 +29,7 @@
   "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
     "@aero/centra": "^1.0.6",
+    "@drep/api": "^2.0.3",
     "@ksoft/api": "^3.1.9",
     "@sentry/node": "^5.29.0",
     "@sentry/tracing": "^5.29.0",
@@ -54,8 +55,10 @@
     "memorystore": "^1.6.4",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
+    "node-emoji": "^1.10.0",
     "node-sass": "^5.0.0",
     "nodemon": "^2.0.5",
+    "num-words": "^1.2.2",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "pug": "^3.0.0",

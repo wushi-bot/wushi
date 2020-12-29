@@ -22,6 +22,7 @@ if (!process.env.DBL_TOKEN) console.log(`${chalk.gray('>')} Cannot find DBL_TOKE
 if (!process.env.TOKEN) console.log(`${chalk.gray('>')} Cannot find TOKEN variable, the bot & web will not work.`)
 if (!process.env.DOMAIN) console.log(`${chalk.gray('>')} Cannot find DOMAIN variable, authentication will not work.`)
 if (!process.env.KSOFT_TOKEN) console.log(`${chalk.gray('>')} Cannot find KSOFT_TOKEN variable, Ksoft.si commands will not work.`)
+if (!process.env.DREP_TOKEN) console.log(`${chalk.gray('>')} Cannot find DREP_TOKEN variable, DiscordRep commands will not work.`)
 
 Sentry.init({
   dsn: process.env.SENTRY,
@@ -31,7 +32,7 @@ Sentry.init({
   tracesSampleRate: 1.0
 })
 
-const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS']
+const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
 const self = new Bot({
   ws: { intents: intents },
   fetchAllMembers: true

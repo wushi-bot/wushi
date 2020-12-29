@@ -4,15 +4,13 @@ import db from 'quick.db'
 const cfg = new db.table('config')
 
 exports.run = (bot, guild) => {
-  console.log(chalk.gray('------------------'))
-  console.log(chalk.blue('>') + ` Joined ${guild.name}, ID ${guild.id}.`)
+  bot.logger.log('info', `[Event] Joined ${guild.name}, ID ${guild.id}.`)
   if (!cfg.get(`${guild.id}.setup`)) {
-    console.log(chalk.blue('>') + ' Could not find proof of this server being setup, doing that now.')
+    bot.logger.log('info', '[Event] Could not find proof of this server being setup, doing that now.')
     cfg.set(`${guild.id}.setup`, true)
     cfg.set(`${guild.id}.disabled`, ['Leveling'])
-    console.log(chalk.green('>') + ' Successfully setup this guild.')
+    bot.logger.log('info', '[Event] Successfully setup this guild.')
   } else {
-    console.log(chalk.blue('>') + ' This server has been configurated before.')
+    bot.logger.log('info', '[Event] This server has been configurated before.')
   }
-  console.log(chalk.gray('------------------'))
 }

@@ -37,7 +37,7 @@ class WhoIsCommand extends Command {
     const joinDiscord = moment(user.user.createdAt).format('llll')
     const joinServer = moment(user.joinedTimestamp).format('llll')
     let sf = ''
-    switch (user.presence.status) {
+    switch (user.user.presence.status) {
       case 'online':
         sf = '<:status_online:767072323349250070> **Online**'
         break
@@ -54,6 +54,11 @@ class WhoIsCommand extends Command {
         break
     }
     const statusFormat = sf
+    const rep = await this.client.drep.rep(user.user.id)
+    const ksoftBan = await this.client.ksoft.bans.check(user.user.id)
+    let ksoftDis
+    if (!ksoftBan) ksoftDis = 'Hasn\'t been banned on KSoft.Si.'
+    if (ksoftBan) ksoftDis = 'Has been banned on KSoft.Si before.'
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())
       .setThumbnail(user.user.avatarURL())
@@ -62,11 +67,17 @@ class WhoIsCommand extends Command {
       .addField('Join Position', getJoinRank(user.id, msg.guild), true)
       .addField('Joined Discord at', joinDiscord, true)
       .addField('Joined Server at', joinServer, true)
-      .addField('Status', statusFormat)
+      .addField('Status', statusFormat, true)
+      .addField('Specials', ` • [DiscordRep](https://discordrep.com) Reputation: ${rep.reputation}\n • [KSoft.Si Bans](https://bans.ksoft.si/user/${user.user.id}): ${ksoftDis}`, true)
       .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
       .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`, true)
       .setTimestamp()
     return msg.channel.send(embed)
+  }
+
+  async getReputation (id) {
+    const rep = await this.client.drep.rep(id)
+    return rep
   }
 }
 

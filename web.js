@@ -204,12 +204,12 @@ module.exports = async (client) => {
     }
     const httpsServer = https.createServer(credentials, app)
     httpsServer.listen(443, () => {
-      console.log(chalk.green('>') + ' [Web] Server started listening on port 443!')
+      client.logger.log('info', '[Web] Server started listening on port 443!')
     })
   } catch (e) {
     const httpServer = http.createServer(app)
     httpServer.listen(8888, () => {
-      console.log(chalk.green('>') + ' [Web] Server started listening on port 8888!')
+      client.logger.log('info', '[Web] Server started listening on port 8888!')
     })
   }
 }
