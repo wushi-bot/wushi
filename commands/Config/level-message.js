@@ -27,6 +27,7 @@ class LevelMessageCommand extends Command {
     if (!args[0]) return msg.channel.send('You must insert a valid level up message.')
     if (args[0] === 'preview') {
       let lvlMsg = cfg.get(`${msg.guild.id}.levelUpMessage`)
+      lvlMsg = lvlMsg || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
       lvlMsg = lvlMsg.replace('{level}', `${leveling.get(`${msg.guild.id}.${msg.author.id}.level`)}`)
       lvlMsg = lvlMsg.replace('{user.name}', `${msg.author.username}`)
       lvlMsg = lvlMsg.replace('{user.mention}', `<@!${msg.author.id}>`)

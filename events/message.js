@@ -11,6 +11,7 @@ const expCooldowns = new discord.Collection()
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
+  if (!message.guild.me.hasPermission('SEND_MESSAGES')) return
   if (cfg.get(`${message.guild.id}.disabled`)) {
     if (!cfg.get(`${message.guild.id}.disabled`).includes('Leveling')) {
       utils.checkLevel(message.author.id, message.guild.id)
@@ -95,7 +96,6 @@ exports.run = (bot, message) => {
     }
 
     try {
-      if (!message.guild.me.hasPermission('SEND_MESSAGES')) return
       if (!message.guild.me.hasPermission('EMBED_LINKS')) {
         return message.reply('I lack the ability to create embeds, thus most commands will not work, please contact a **Server Administrator** about this.')
       }
