@@ -12,10 +12,10 @@ class ColorCommand extends Command {
     super(client, {
       name: 'color',
       description: 'Grab a color or a random color.',
-      category: 'Util',
+      category: 'Utility',
       aliases: ['colour'],
       usage: 'color',
-      cooldown: 1
+      cooldown: 10
     })
   }
 

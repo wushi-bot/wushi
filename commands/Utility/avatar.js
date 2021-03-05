@@ -6,7 +6,7 @@ class AvatarCommand extends Command {
     super(client, {
       name: 'avatar',
       description: 'Gets a user\'s avatar.',
-      category: 'Util',
+      category: 'Utility',
       aliases: ['avy', 'av', 'ava', 'user-avatar'],
       usage: 'avatar [user]',
       cooldown: 1

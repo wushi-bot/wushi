@@ -1,6 +1,7 @@
 import { Client, Collection } from 'discord.js'
 import { KSoftClient } from '@ksoft/api'
 import { DRepClient } from '@drep/api'
+import { XKCDClient } from '@aero/xkcd'
 import fs from 'fs'
 import path from 'path'
 import { Logger } from '../utils/logger'
@@ -15,8 +16,9 @@ class Bot extends Client {
     this.cooldowns = new Collection()
     this.ksoft = new KSoftClient(process.env.KSOFT_TOKEN)
     this.drep = new DRepClient(process.env.DREP_TOKEN)
+    this.xkcd = new XKCDClient()
     this.logger = new Logger()
-    this.version = '2.0.0'
+    this.version = '2.0.1'
     this.owners = ['488786712206770196']
   }
 

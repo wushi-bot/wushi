@@ -21,9 +21,8 @@ class StatsCommand extends Command {
     axios.get('https://api.github.com/repos/xMinota/wushi/commits').then(res => {
       const com = res.data[0].sha.slice(0, 6)
       const embed = new MessageEmbed()
-        .setAuthor(`wushi v${this.client.version} (${com})`, this.client.user.avatarURL(), 'https://github.com/xMinota/wushi')
         .setColor('#0099ff')
-        .setDescription(`───────────────────────\n • The bot is currently using **${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB** of memory.\n • And has been up for **${duration}**.\n • And can see **${this.client.users.cache.size.toLocaleString()}** users, **${this.client.guilds.cache.size.toLocaleString()}** guilds, **${this.client.channels.cache.size.toLocaleString()}** channels.\n • :sushi: [wushi](https://wushibot.xyz)'s running on **Node.js ${process.version}** & **Discord.js v${version}**\n • The bot has **${this.client.commands.array().length.toLocaleString()} commands**.`)
+        .setDescription(`:sushi: [wushi v${this.client.version} (**master/${com}**)](https://xMinota/wushi)\n──────────────────────\n • The bot is currently using **${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB** of memory.\n • And has been up for **${duration}**.\n • And can see **${this.client.users.cache.size.toLocaleString()}** users, **${this.client.guilds.cache.size.toLocaleString()}** guilds, **${this.client.channels.cache.size.toLocaleString()}** channels.\n • :sushi: [wushi](https://wushibot.xyz)'s running on **Node.js ${process.version}** & **Discord.js v${version}**\n • The bot has **${this.client.commands.array().length.toLocaleString()} commands**.`)
       return msg.channel.send(embed)
     })
   }

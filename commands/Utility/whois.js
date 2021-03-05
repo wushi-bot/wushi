@@ -18,7 +18,7 @@ class WhoIsCommand extends Command {
     super(client, {
       name: 'whois',
       description: 'Gets information about a user.',
-      category: 'Util',
+      category: 'Utility',
       aliases: ['who-is', 'user-info', 'userinfo', 'user'],
       usage: 'whois [user]',
       cooldown: 1
@@ -37,28 +37,23 @@ class WhoIsCommand extends Command {
     const joinDiscord = moment(user.user.createdAt).format('llll')
     const joinServer = moment(user.joinedTimestamp).format('llll')
     let sf = ''
-    switch (user.user.presence.status) {
+    switch (user.presence.status) {
       case 'online':
-        sf = '<:status_online:767072323349250070> **Online**'
+        sf = '<:online:313956277808005120> **Online**'
         break
       case 'idle':
-        sf = '<:status_idle:767072442488455209> **Idle**'
+        sf = '<:away:313956277220802560> **Idle**'
         break
       case 'dnd':
-        sf = '<:status_dnd:767072442832912444> **Do not Disturb**'
+        sf = '<:dnd:313956276893646850> **Do not Disturb**'
         break
       case 'offline':
-        sf = '<:status_offline:767072323584917544> **Offline**'
+        sf = '<:offline:313956277237710868> **Offline**'
         break
       default:
         break
     }
     const statusFormat = sf
-    const rep = await this.client.drep.rep(user.user.id)
-    const ksoftBan = await this.client.ksoft.bans.check(user.user.id)
-    let ksoftDis
-    if (!ksoftBan) ksoftDis = 'Hasn\'t been banned on KSoft.Si.'
-    if (ksoftBan) ksoftDis = 'Has been banned on KSoft.Si before.'
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())
       .setThumbnail(user.user.avatarURL())
@@ -67,17 +62,11 @@ class WhoIsCommand extends Command {
       .addField('Join Position', getJoinRank(user.id, msg.guild), true)
       .addField('Joined Discord at', joinDiscord, true)
       .addField('Joined Server at', joinServer, true)
-      .addField('Status', statusFormat, true)
-      .addField('Specials', ` • [DiscordRep](https://discordrep.com) Reputation: ${rep.reputation}\n • [KSoft.Si Bans](https://bans.ksoft.si/user/${user.user.id}): ${ksoftDis}`, true)
+      .addField('Status', statusFormat)
       .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
       .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`, true)
       .setTimestamp()
     return msg.channel.send(embed)
-  }
-
-  async getReputation (id) {
-    const rep = await this.client.drep.rep(id)
-    return rep
   }
 }
 

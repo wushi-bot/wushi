@@ -23,7 +23,6 @@ class EvalCommand extends Command {
   async run (bot, msg, args) {
     if (!args[0]) return msg.channel.send('You need a statement to run.')
     const evaluation = args.join(' ').replace(/--noPromise/g, '').replace('```js', '').replace('```', '')
-    console.log(evaluation)
     try {
       let evaled = eval(evaluation)
       if (typeof evaled !== 'string') {
@@ -31,7 +30,7 @@ class EvalCommand extends Command {
         var oe = evaled
         var regex = new RegExp('```', 'g')
 
-        evaled.replace(regex, '')
+        evaled.replace(regex, '').toString()
         if (msg.content.includes('--noPromise')) evaled = evaled.replace(/Promise { <pending> }/g, '')
 
         if (clean(evaled).length !== 0) {

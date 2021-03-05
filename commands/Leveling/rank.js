@@ -13,7 +13,7 @@ class RankCommand extends Command {
       aliases: ['level', 'r'],
       category: 'Leveling',
       usage: 'rank [@user]',
-      cooldown: 1
+      cooldown: 15
     })
   }
 

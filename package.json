@@ -1,6 +1,6 @@
 {
   "name": "@xminota/wushi",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "wushi bot",
   "main": "bot.js",
   "publishConfig": {
@@ -29,6 +29,7 @@
   "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
     "@aero/centra": "^1.0.6",
+    "@aero/xkcd": "^1.0.0",
     "@drep/api": "^2.0.3",
     "@ksoft/api": "^3.1.9",
     "@sentry/node": "^5.29.0",
@@ -63,7 +64,7 @@
     "num-words": "^1.2.2",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
-    "pug": "^3.0.0",
+    "pug": "^3.0.2",
     "quick.db": "^7.1.2",
     "tinycolor2": "^1.4.2",
     "url": "^0.11.0",
