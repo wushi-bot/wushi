@@ -41,7 +41,7 @@ class UnboxCommand extends Command {
     if (!validBoxes.includes(specified)) return msg.channel.send('That lootbox type does not exist.')
     if (!eco.get(`${msg.author.id}.items`).includes(specified)) return msg.channel.send('You don\'t have that lootbox type.')
     if (specified === 'common_lootbox') {
-      const num = utils.getRandomInt(1, 4)
+      const num = utils.getRandomInt(1, 3)
       const drops = []
       for (let i = 0; i < num; i++) {
         const randomElement = commonDrops[Math.floor(Math.random() * commonDrops.length)]
