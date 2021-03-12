@@ -1,15 +1,10 @@
 {
-  "name": "@xminota/wushi",
-  "version": "2.0.1",
-  "description": "wushi bot",
-  "main": "bot.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
+  "name": "@minota/wushi",
+  "version": "2.1.0",
+  "description": "wushi is a social discord bot which helps spice up communities.",
+  "main": "index.js",
   "scripts": {
-    "build": "npx nodemon --exec babel-node bot.js",
-    "css-build": "node-sass --omit-source-map-url web/public/scss/style.scss web/public/css/style.css",
-    "css-watch": "npm run css-build -- --watch"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,8 +13,10 @@
   "keywords": [
     "wushi",
     "discord",
-    "discord-js",
-    "javascript"
+    "typescript",
+    "chatbot",
+    "chat",
+    "bot"
   ],
   "author": "Minota",
   "license": "GPL-3.0",
@@ -28,54 +25,13 @@
   },
   "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
-    "@aero/centra": "^1.0.6",
-    "@aero/xkcd": "^1.0.0",
-    "@drep/api": "^2.0.3",
-    "@ksoft/api": "^3.1.9",
-    "@sentry/node": "^5.29.0",
-    "@sentry/tracing": "^5.29.0",
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
+    "@types/node": "^14.14.31",
     "bufferutil": "^4.0.3",
-    "bulma": "^0.9.1",
-    "bulma-badge": "^3.0.1",
-    "canvas": "^2.6.1",
-    "canvas-constructor": "^3.2.0",
-    "chalk": "^4.1.0",
-    "connect-flash": "^0.1.1",
-    "date-and-time": "^0.14.2",
-    "dblapi.js": "^2.4.1",
-    "demoji": "^2.0.0",
-    "discord.js": "^12.3.1",
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "erlpack": "github:discord/erlpack",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "fs": "0.0.1-security",
-    "fs-nextra": "^0.3.5",
-    "http": "0.0.1-security",
-    "https": "^1.0.0",
-    "memorystore": "^1.6.4",
-    "moment": "^2.29.1",
-    "moment-duration-format": "^2.3.2",
-    "node-emoji": "^1.10.0",
-    "node-sass": "^5.0.0",
-    "nodemon": "^2.0.5",
-    "num-words": "^1.2.2",
-    "passport": "^0.4.1",
-    "passport-discord": "^0.1.4",
-    "pug": "^3.0.2",
-    "quick.db": "^7.1.2",
-    "tinycolor2": "^1.4.2",
-    "url": "^0.11.0",
+    "sodium": "^3.0.2",
     "utf-8-validate": "^5.0.4",
-    "xkcd": "^1.1.3",
     "zlib-sync": "^0.1.7"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.11.5",
-    "concurrently": "^5.3.0"
   }
 }
