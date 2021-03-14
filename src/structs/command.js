@@ -1,10 +1,5 @@
-import Bot from "./client"
-
-export default class Command {
-  client: Bot
-  conf: any
-
-  constructor (client: Bot, {
+class Command {
+  constructor (client, {
     name = null,
     description = 'No description provided.',
     category = 'Miscellaneous',
@@ -18,3 +13,4 @@ export default class Command {
     this.conf = { name, description, category, usage, enabled, guildOnly, aliases, cooldown }
   }
 }
+module.exports = Command

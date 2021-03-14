@@ -1,29 +1,26 @@
-import { 
-  Client, 
-  ClientOptions, 
-  Collection 
-} from 'discord.js'
-import { readdirSync, readdir } from 'fs'
+import { Client, Collection } from 'discord.js'
+import { readdir, readdirSync } from 'fs'
 import path from 'path'
+import chalk from 'chalk'
 
-export default class Bot extends Client {
-  commands = new Collection() 
-  aliases = new Collection()
-  cooldowns = new Collection()
-  version: String = '2.1.0'
-  owners: Array<String> = ['488786712206770196']
-  token: string
+import 'dotenv/config'
 
-  constructor(token: string, options: ClientOptions) {
+class Bot extends Client {
+  constructor (options) {
     super(options)
-    this.token = token
+    this.commands = new Collection()
+    this.aliases = new Collection()
+    this.cooldowns = new Collection()
+    this.version = '2.1.0'
+    this.owners = ['488786712206770196']
   }
 
-  run() {
-    super.login(this.token)
+  login (token) {
+    super.login(token)
+    return this
   }
 
-  async loadCommands () {
+  loadCommands () {
     console.log('Beginning to check for commands...')
     const folders = readdirSync(path.join(__dirname, '..', '/commands/'), { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
@@ -59,3 +56,5 @@ export default class Bot extends Client {
     console.log('All possible events have been added.')
   }
 }
+
+module.exports = Bot
