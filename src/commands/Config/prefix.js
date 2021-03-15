@@ -1,6 +1,8 @@
 import { MessageEmbed } from 'discord.js'
 import Command from '../../structs/command'
 import utils from '../../utils/utils'
+import db from 'quick.db'
+const cfg = new db.table('config')
 
 class PrefixCommand extends Command {
   constructor(client) {
@@ -15,12 +17,16 @@ class PrefixCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
-      .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
-      .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${utils.getPrefix(msg.guild.id)}\``)
-      
-    msg.reply(embed)
+    //TODO: Create admin permissions setup via wushi.
+    if (!args[0]) {
+      this.client.emit('customError', 'You need to assign a new prefix!', msg)
+    } else {
+      cfg.set(`${msg.guild.id}.prefix`, args[0])
+      const embed = new MessageEmbed()
+        .addField('<:check:820704989282172960> Success!', `The prefix for the server has successfully been changed to \`${args[0]}\`.`)
+        .setColor(msg.member.roles.highest.color)
+      msg.reply(embed)
+    }
   }
 }
 

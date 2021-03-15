@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/xMinota/wushi#readme",
   "dependencies": {
+    "@aero/centra": "^1.0.6",
     "@babel/core": "^7.11.6",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
