@@ -16,7 +16,8 @@ class ModLogCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!msg.member.roles.cache.some(role => cfg.get(`${msg.guild.id}.admins`).includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
+    const admins = cfg.get(`${msg.guild.id}.admins`) || []
+    if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
       return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
     }
     if (!args[0]) {
@@ -50,6 +51,7 @@ class ModLogCommand extends Command {
             .addField('<:check:820704989282172960> Success!', `Successfully set the mod-log channel to <#${channel.id}>.`)
           msg.reply(embed)
         } catch (e) {
+          console.log(e)
           const embed = new MessageEmbed()
             .setColor(msg.member.roles.highest.color)
             .addField('<:channel_locked:821178111278317648> Channel locked', `[wushi](https://www.youtube.com/watch?v=xTmj_CqUZls) cannot access <#${channel.id}>, you may have to reconfigure the permissions for that channel for me.`)

@@ -7,9 +7,9 @@ const cfg = new db.table('config')
 class ModRoleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'modrole',
+      name: 'mod-role',
       description: 'Configure/gets the mod roles.',
-      aliases: ['mods', 'mod-role'], 
+      aliases: ['mods', 'modrole'], 
       cooldown: 1.5,
       category: 'Configuration',
       usage: 'modrole'
@@ -17,7 +17,8 @@ class ModRoleCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!msg.member.roles.cache.some(role => cfg.get(`${msg.guild.id}.admins`).includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
+    const admins = cfg.get(`${msg.guild.id}.admins`) || []
+    if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
       return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
     }
     if (!args[0]) {

@@ -7,9 +7,9 @@ const cfg = new db.table('config')
 class AdminRoleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'adminrole',
+      name: 'admin-role',
       description: 'Configure/gets the admin roles.',
-      aliases: ['admins', 'admin-role'], 
+      aliases: ['admins', 'adminrole'], 
       cooldown: 1.5,
       category: 'Configuration',
       usage: 'adminrole'

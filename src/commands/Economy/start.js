@@ -1,15 +1,17 @@
 import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js'
- 
-class PingCommand extends Command {
+import db from 'quick.db'
+const eco = new db.table('economy') 
+
+class StartCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'ping',
-      description: 'Gets the bot\'s latency.',
-      category: 'Meta',
-      aliases: ['ping-pong', 'ms'],
-      usage: 'ping',
-      cooldown: 3.5
+      name: 'start',
+      description: 'Registers your bank account in the server.',
+      category: 'Economy',
+      aliases: [],
+      usage: 'start',
+      cooldown: 2.5
     })
   }
 
@@ -24,4 +26,4 @@ class PingCommand extends Command {
   }
 }
 
-module.exports = PingCommand
+module.exports = StartCommand

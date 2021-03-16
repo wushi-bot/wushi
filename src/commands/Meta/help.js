@@ -49,17 +49,21 @@ class HelpCommand extends Command {
     } else {
       const embed = new MessageEmbed()
       let command = args[0]
-      if (this.client.commands.has(command)) {
+      if (this.client.commands.has(command) || this.client.aliases.has(command)) {
         command = this.client.commands.get(command)
-        let aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ``').replace(/,/gi, '`, ``')
+        if (!command) {
+          let c = this.client.aliases.get(args[0])
+          command = this.client.commands.get(c)
+        }
+        let aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
         if (!aliases) aliases = 'None'
-        else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ``').replace(/,/gi, '`, ``')
+        else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
         embed
           .setColor(msg.member.roles.highest.color)
           .addField('Command', `\`${command.conf.name}\``)
           .addField('Description', command.conf.description)
           .addField('Usage', `\`${utils.getPrefix(msg.guild.id)}${command.conf.usage}\``)
-          .addField('Category', command.conf.category)
+          .addField('Category', `${key[command.conf.category]} **${command.conf.category}**`)
           .addField('Aliases', aliases)
         msg.reply(embed)
       }
