@@ -1,16 +1,10 @@
 
-import req from '@aero/centra'
+import { MessageEmbed, MessageAttachment } from 'discord.js'
 
 exports.run = async (bot, error, message) => {
-  const img = await req(bot.carbonaraURL)
-    .method('POST')
-    .path('/api/cook')
-    .body({
-      code: error, 
-      language: 'auto',
-      fontFamily: 'Monokai',
-      windowControls: false
-    }, 'json')
-    .raw()
-  message.reply({ files: [{ attachment: img, name: 'card.png' }] })
+  const embed = new MessageEmbed()
+    .setColor(message.member.roles.highest.color)
+    .addField('<:cross:821028198330138644> Error!', 'An error occured, you may have to join the [support server](https://discord.gg/zjqeYbNU5F) to get this resolved.')
+    .addField('<:info:820704940682510449> Error Message', error)
+  message.reply(embed)
 }

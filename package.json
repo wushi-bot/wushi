@@ -4,7 +4,7 @@
   "description": "wushi is a social discord bot which helps spice up communities.",
   "main": "src/bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon --exec babel-node src/bot.js"
   },
   "repository": {
     "type": "git",

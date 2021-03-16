@@ -18,6 +18,9 @@ class PrefixCommand extends Command {
 
   async run (bot, msg, args) {
     //TODO: Create admin permissions setup via wushi.
+    if (!msg.member.roles.cache.some(role => cfg.get(`${msg.guild.id}.admins`).includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
+      return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+    }
     if (!args[0]) {
       this.client.emit('customError', 'You need to assign a new prefix!', msg)
     } else {

@@ -13,7 +13,6 @@ class Bot extends Client {
     this.cooldowns = new Collection()
     this.version = '2.1.0'
     this.owners = ['488786712206770196']
-    this.carbonaraURL = process.env.CARBONARA
   }
 
   login (token) {
