@@ -1,0 +1,10 @@
+[
+  {
+    "price": 100,
+    "sell_price": 35,
+    "id": "flimsy_fishing_rod",
+    "description": "Allows you to do `[PRE]fish` and make money from fishing.",
+    "display": "Flimsy Fishing Rod",
+    "emoji": ":fishing_pole_and_fish:"
+  }
+]

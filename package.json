@@ -32,7 +32,7 @@
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
     "chalk": "^4.1.0",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js-light": "github:timotejroiko/discord.js-light",
     "dotenv": "^8.2.0",
     "erlpack": "github:discord/erlpack",
     "moment": "^2.29.1",

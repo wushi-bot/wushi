@@ -24,10 +24,12 @@ class StartCommand extends Command {
     eco.set(`${msg.guild.id}.${msg.author.id}.balance`, 100)
     eco.set(`${msg.guild.id}.${msg.author.id}.bank`, 0)
     eco.set(`${msg.guild.id}.${msg.author.id}.prestige`, 0)
+    eco.set(`${msg.guild.id}.${msg.author.id}.items`, [])
+    eco.set(`${msg.guild.id}.${msg.author.id}.sack`, [])
     eco.set(`${msg.guild.id}.${msg.author.id}.multiplier`, 0)
     const e = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
-      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account in **[${msg.guild.name}](https://www.youtube.com/watch?v=2ZIpFytCSVc)**, it's recommended to purchase a fishing rod via \`${utils.getPrefix(msg.guild.id)}buy fishing_rod\`.`)
+      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account in **[${msg.guild.name}](https://www.youtube.com/watch?v=2ZIpFytCSVc)**, it's recommended to purchase a fishing rod via \`${utils.getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`)
     msg.reply(e)
   }
 }

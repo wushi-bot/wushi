@@ -4,7 +4,7 @@ import 'dotenv/config'
 const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
 const self = new Bot({
   intents: intents,
-  fetchAllMembers: true
+  //fetchAllMembers: true
 })
 self.loadCommands()
 self.loadEvents()
