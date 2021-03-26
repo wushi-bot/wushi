@@ -41,9 +41,7 @@ class BuyCommand extends Command {
     eco.subtract(`${msg.guild.id}.${msg.author.id}.balance`, item.price)
     eco.push(`${msg.guild.id}.${msg.author.id}.items`, item.id)
     const embed = new MessageEmbed()
-      
-      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
-      .setFooter(`Balance: 🪙 ${utils.addCommas(Math.floor(eco.get(`${msg.guild.id}.${msg.author.id}.balance`)))}`)
+      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${utils.addCommas(Math.floor(eco.get(`${msg.guild.id}.${msg.author.id}.balance`)))}** | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       .setColor(msg.member.roles.highest.color)
     msg.reply(embed)
   }

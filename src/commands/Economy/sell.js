@@ -17,7 +17,10 @@ class SellCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    
+    if (!eco.get(`${msg.guild.id}.${msg.author.id}.started`)) {
+      return this.client.emit('customError', `You have no account setup in this server! Set one up using \`${utils.getPrefix(msg.guild.id)}start\`.`, msg)
+    }
+    const sack = eco.get(`${msg.guild.id}.${msg.author.id}.sack`) || []
   }
 }
 
