@@ -1,7 +1,8 @@
 <div align="center">
 
 # wushi 🍣
-A social discord bot with a unique economy
+A social discord bot with a unique economy system!
+
 [![Discord](https://discordapp.com/api/guilds/777620712193392650/widget.png?style=shield)](https://discord.gg/7MtXvNB)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -9,7 +10,7 @@ A social discord bot with a unique economy
 
 ### Invite ✨
 
-The invite to the bot is listed here: [Click here](https://discord.com/api/oauth2/authorize?client_id=770415051168677949&permissions=3691375831&scope=bot), the permissions have been made in a way so that it only uses the permissions needs, without any administrative access. 
+The invite to the bot is listed here: [Click here](https://discord.com/api/oauth2/authorize?client_id=755526238466080830&permissions=3691375831&scope=bot), the permissions have been made in a way so that it only uses the permissions needs, without any administrative access. 
 
 ### Inspiration ❤️
 
