@@ -1,0 +1,10 @@
+[
+  {
+    "price": 150,
+    "sell_price": 50,
+    "id": "fishing_bait",
+    "description": "Increases the bonus fish you get when fishing, regardless of fishing rod. Automatically activates when you fish via `[PRE]fish`.",
+    "display": "Fishing Bait",
+    "emoji": ":fish_cake:"
+  }
+]

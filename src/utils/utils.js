@@ -2,6 +2,8 @@ import db, { all } from 'quick.db'
 const cfg = new db.table('config')
 
 import tools from '../resources/items/tools.json'
+import materials from '../resources/items/materials.json'
+import upgrades from '../resources/items/upgrades.json'
 
 module.exports.getPrefix = function (id) {
   if (!cfg.get(`${id}.prefix`)) {
@@ -45,6 +47,12 @@ module.exports.allItems = function () {
   for (const item in tools) {
     allItems.push(tools[item])
   }
+  for (const item in materials) {
+    allItems.push(materials[item])
+  }  
+  for (const item in upgrades) {
+    allItems.push(upgrades[item])
+  }   
   return allItems
 }
 

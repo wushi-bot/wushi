@@ -25,9 +25,9 @@ class BalanceCommand extends Command {
     const wallet = eco.get(`${msg.guild.id}.${user.user.id}.balance`) || 0
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}'s Balance`, user.user.avatarURL()) 
-      .addField(':bank: Bank', `:coin: **${bank}**`, true)
-      .addField(':purse: Wallet', `:coin: **${wallet}**`, true)
-      .addField(':moneybag: Total', `:coin: **${wallet + bank}**`, true)
+      .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}**`)
+      .addField(':purse: Wallet', `:coin: **${utils.addCommas(wallet)}**`)
+      .addField(':moneybag: Total', `:coin: **${utils.addCommas(wallet + bank)}**`)
       .setColor(msg.member.roles.highest.color)
     msg.reply(embed)
   }

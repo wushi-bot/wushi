@@ -4,7 +4,7 @@ exports.run = (bot, message) => {
   if (message.author.bot) return
   const prefix = getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
-  const command = message.content.split(' ')[0].slice(prefix.length)
+  const command = message.content.toLowerCase().split(' ')[0].slice(prefix.length)
   const args = message.content.split(' ').slice(1)
   let cmd
   if (bot.commands.has(command)) {

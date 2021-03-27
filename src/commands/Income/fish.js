@@ -47,11 +47,18 @@ class FishCommand extends Command {
     }
     let bonus
     if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
-      bonus = 0
-    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
       bonus = utils.getRandomInt(1, 5)
+    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
+      bonus = utils.getRandomInt(7, 15)
     } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
-      bonus = utils.getRandomInt(9, 15)
+      bonus = utils.getRandomInt(25, 35)
+    }
+    let fishingBaitBonus
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('fishing_bait')) {
+      let i = utils.removeA(eco.get(`${msg.guild.id}.${msg.author.id}.items`), 'fishing_bait')
+      eco.set(`${msg.guild.id}.${msg.author.id}.items`, i)
+      bonus = bonus + utils.getRandomInt(3, 10)
+      fishingBaitBonus = true
     }
     const goldenReelBonus = utils.getRandomInt(45, 175)
     const fishReeled = utils.getRandomInt(1, 12)
@@ -60,7 +67,12 @@ class FishCommand extends Command {
     }
     const embed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
-      .addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} **(+${bonus})**!`)
+    if (!fishingBaitBonus) {
+      embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} **(+${bonus})**!`)
+    } else {
+      embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***!`)
+    }
+    
     if (goldenReeling) {
       eco.add(`${msg.guild.id}.${msg.author.id}.balance`, goldenReelBonus)
       embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
