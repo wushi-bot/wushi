@@ -6,7 +6,7 @@ class InviteCommand extends Command {
     super(client, {
       name: 'invite',
       description: 'Sends an invite to invite the bot to other servers.',
-      aliases: ['inv'],
+      aliases: ['i'],
       category: 'Meta',
       usage: 'invite',
       cooldown: 1.5

@@ -1,7 +1,18 @@
 import { getPrefix } from '../utils/utils'
+import { MessageEmbed } from 'discord.js'
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
+  if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
+    const embed = new MessageEmbed()
+      .setColor('#0099ff')
+      .setAuthor(message.author.tag, message.author.avatarURL())
+      .setThumbnail(bot.user.avatarURL())
+      .setDescription(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${getPrefix(message.guild.id)}\` in this server, do \`${getPrefix(message.guild.id)}help\` to see a list of my commands!`)
+      .addField(':floppy_disk: Support', 'https://discord.gg/zjqeYbNU5F', true)
+      .addField(':scroll: Documentation', 'https://docs.wushibot.xyz', true)
+    return message.channel.send(embed)
+  }
   const prefix = getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
   const command = message.content.toLowerCase().split(' ')[0].slice(prefix.length)

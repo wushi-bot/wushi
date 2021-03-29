@@ -33,9 +33,11 @@ class FishCommand extends Command {
     let goldenReelingChance = 0
     if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
       goldenReelingChance = 7.5
-    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
       goldenReelingChance = 25.5
-    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
       goldenReelingChance = 60
     }
     const odds = utils.getRandomInt(0, 100)
@@ -48,9 +50,11 @@ class FishCommand extends Command {
     let bonus
     if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
       bonus = utils.getRandomInt(1, 5)
-    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
       bonus = utils.getRandomInt(7, 15)
-    } else if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
       bonus = utils.getRandomInt(25, 35)
     }
     let fishingBaitBonus
@@ -61,7 +65,16 @@ class FishCommand extends Command {
       fishingBaitBonus = true
     }
     const goldenReelBonus = utils.getRandomInt(45, 175)
-    const fishReeled = utils.getRandomInt(1, 12)
+    let fishReeled
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+      fishReeled = utils.getRandomInt(1, 12)
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('decent_fishing_rod')) {
+      fishReeled = utils.getRandomInt(7, 24)
+    } 
+    if (eco.get(`${msg.guild.id}.${msg.author.id}.items`).includes('great_fishing_rod')) {
+      fishReeled = utils.getRandomInt(9, 27)
+    }
     for (let int = 0; int < fishReeled; int++) {
       eco.push(`${msg.guild.id}.${msg.author.id}.sack`, 'fish')
     }

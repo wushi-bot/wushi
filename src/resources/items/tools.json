@@ -10,7 +10,7 @@
   },
   {
     "price": 10000,
-    "sell_price": 35,
+    "sell_price": 1250,
     "id": "decent_fishing_rod",
     "description": "Allows you to do `[PRE]fish` and make money from fishing. Slightly better fishing rod than the flimsy fishing rod.",
     "display": "Decent Fishing Rod",
@@ -18,11 +18,11 @@
     "max": 1
   },
   {
-    "price": 20000,
-    "sell_price": 35,
-    "id": "decent_fishing_rod",
+    "price": 35000,
+    "sell_price": 5000,
+    "id": "great_fishing_rod",
     "description": "Allows you to do `[PRE]fish` and make money from fishing. Slightly better fishing rod than the decent fishing rod.",
-    "display": "Decent Fishing Rod",
+    "display": "Great Fishing Rod",
     "emoji": ":fishing_pole_and_fish::three:",
     "max": 1
   }
