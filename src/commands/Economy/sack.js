@@ -20,10 +20,10 @@ class SackCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.guild.id}.${msg.author.id}.started`)) {
+    if (!eco.get(`${msg.author.id}.started`)) {
       return this.client.emit('customError', 'You don\'t have a bank account in the server!', msg)
     }
-    const sack = eco.get(`${msg.guild.id}.${msg.author.id}.sack`) || []
+    const sack = eco.get(`${msg.author.id}.sack`) || []
     if (sack.length === 0) {
       return this.client.emit('customError', 'You have nothing in your sack.', msg)
     }

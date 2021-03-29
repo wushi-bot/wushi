@@ -10,7 +10,7 @@ class SellCommand extends Command {
     super(client, {
       name: 'sell',
       description: 'Allows you to sell your sack.',
-      category: 'Income',
+      category: 'Economy',
       aliases: [],
       usage: 'sell',
       cooldown: 3.5
@@ -18,10 +18,10 @@ class SellCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.guild.id}.${msg.author.id}.started`)) {
+    if (!eco.get(`${msg.author.id}.started`)) {
       return this.client.emit('customError', 'You don\'t have a bank account in the server!', msg)
     }
-    const sack = eco.get(`${msg.guild.id}.${msg.author.id}.sack`) || []
+    const sack = eco.get(`${msg.author.id}.sack`) || []
     if (sack.length === 0) {
       return this.client.emit('customError', 'You have nothing in your sack.', msg)
     }
@@ -35,8 +35,8 @@ class SellCommand extends Command {
       const i = utils.getItem(allItems, item.toLowerCase())
       if (i) {
         l2.push(i.sell_price)
-        let n = utils.removeA(eco.get(`${msg.guild.id}.${msg.author.id}.sack`), i.id)
-        eco.set(`${msg.guild.id}.${msg.author.id}.sack`, n)
+        let n = utils.removeA(eco.get(`${msg.author.id}.sack`), i.id)
+        eco.set(`${msg.author.id}.sack`, n)
         if (count[item] > 1) {
           if (!alreadySeen.includes(item)) {
             l.push(`${i.emoji} ${i.display} **x${count[item]}**`)
@@ -50,7 +50,7 @@ class SellCommand extends Command {
     let finalProfit = 0
     l2.forEach(earning => {
       finalProfit = finalProfit + earning
-      eco.add(`${msg.guild.id}.${msg.author.id}.balance`, earning)
+      eco.add(`${msg.author.id}.balance`, earning)
     })
     const embed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)

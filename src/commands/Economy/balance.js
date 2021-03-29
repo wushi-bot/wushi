@@ -17,12 +17,12 @@ class BalanceCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.guild.id}.${msg.author.id}.started`)) {
+    if (!eco.get(`${msg.author.id}.started`)) {
       return this.client.emit('customError', 'You don\'t have a bank account in the server!', msg)
     }
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    const bank = eco.get(`${msg.guild.id}.${user.user.id}.bank`) || 0
-    const wallet = eco.get(`${msg.guild.id}.${user.user.id}.balance`) || 0
+    const bank = eco.get(`${user.user.id}.bank`) || 0
+    const wallet = eco.get(`${user.user.id}.balance`) || 0
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}'s Balance`, user.user.avatarURL()) 
       .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}**`)
