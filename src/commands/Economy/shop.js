@@ -25,14 +25,46 @@ class ShopCommand extends Command {
         .setColor(msg.member.roles.highest.color)
       msg.reply(embed)
     } else if (args[0].toLowerCase() === 'tools') {
-      const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
-        .setTitle(':tools: **Tools**')
-        .setDescription(`The tools catalog, buy tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
-      tools.forEach(tool => {
-        embed.addField(`${tool.emoji} ${tool.display}`, `ID: \`${tool.id}\` | Price: **:coin: ${utils.addCommas(tool.price)}** | ${tool.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
-      })
-      msg.reply(embed)
+      if (!args[1]) {
+        const embed = new MessageEmbed()
+          .setColor(msg.member.roles.highest.color)
+          .setTitle(':tools: **Tools**')
+          .setDescription(`The tools catalog, buy tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
+          .setFooter(`To go to the next page, send ${utils.getPrefix(msg.guild.id)}shop tools 2`)
+        for (let int = 0; int < 3; int++) {
+          embed.addField(`${tools[int].emoji} ${tools[int].display}`, `ID: \`${tools[int].id}\` | Price: **:coin: ${utils.addCommas(tools[int].price)}** | ${tools[int].description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        }
+        msg.reply(embed)
+      } else if (args[1] === '2') {
+        const embed = new MessageEmbed()
+          .setColor(msg.member.roles.highest.color)
+          .setTitle(':tools: **Tools** (page 2)')
+          .setDescription(`The tools catalog, buy tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
+          .setFooter(`To go to the next page, send ${utils.getPrefix(msg.guild.id)}shop tools 3`)
+        for (let int = 3; int < 6; int++) {
+          embed.addField(`${tools[int].emoji} ${tools[int].display}`, `ID: \`${tools[int].id}\` | Price: **:coin: ${utils.addCommas(tools[int].price)}** | ${tools[int].description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        }
+        msg.reply(embed)
+      } else if (args[1] === '3') {
+        const embed = new MessageEmbed()
+          .setColor(msg.member.roles.highest.color)
+          .setTitle(':tools: **Tools** (page 3)')
+          .setDescription(`The tools catalog, buy tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
+          .setFooter(`To go to the next page, send ${utils.getPrefix(msg.guild.id)}shop tools 4`)
+        for (let int = 6; int < 9; int++) {
+          embed.addField(`${tools[int].emoji} ${tools[int].display}`, `ID: \`${tools[int].id}\` | Price: **:coin: ${utils.addCommas(tools[int].price)}** | ${tools[int].description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        }
+        msg.reply(embed)
+      } else if (args[1] === '4') {
+        const embed = new MessageEmbed()
+          .setColor(msg.member.roles.highest.color)
+          .setTitle(':tools: **Tools** (page 4)')
+          .setDescription(`The tools catalog, buy tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
+        for (let int = 9; int < 12; int++) {
+          embed.addField(`${tools[int].emoji} ${tools[int].display}`, `ID: \`${tools[int].id}\` | Price: **:coin: ${utils.addCommas(tools[int].price)}** | ${tools[int].description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+        }
+        msg.reply(embed)
+      }
     } else if (args[0].toLowerCase() === 'upgrades') {
       const embed = new MessageEmbed()
         .setColor(msg.member.roles.highest.color)
