@@ -8,7 +8,7 @@ class StartCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'start',
-      description: 'Registers your bank account in the server.',
+      description: 'Registers your bank account.',
       category: 'Economy',
       aliases: [],
       usage: 'start',
@@ -18,7 +18,7 @@ class StartCommand extends Command {
 
   async run (bot, msg, args) {
     if (eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You already have a bank account in the server!', msg)
+      return this.client.emit('customError', 'You already have a bank account!', msg)
     }
     eco.set(`${msg.author.id}.started`, true)
     eco.set(`${msg.author.id}.balance`, 100)

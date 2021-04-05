@@ -18,7 +18,7 @@ class BalanceCommand extends Command {
 
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account in the server!', msg)
+      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     }
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
     const bank = eco.get(`${user.user.id}.bank`) || 0

@@ -25,7 +25,7 @@ class BuyCommand extends Command {
       return this.client.emit('customError', 'The item you\'ve inserted is not a valid item, please try again or try to retype it.', msg)
     }
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', `You have no account setup in this server! Set one up using \`${utils.getPrefix(msg.guild.id)}start\`.`, msg)
+      return this.client.emit('customError', `You have no account setup! Set one up using \`${utils.getPrefix(msg.guild.id)}start\`.`, msg)
     }
     if (eco.get(`${msg.author.id}.balance`) < item.price) {
       return this.client.emit('customError', `${item.emoji} Insufficient coins! | You are :coin: **${utils.addCommas(item.price - eco.get(`${msg.author.id}.balance`))}** off.`, msg)
