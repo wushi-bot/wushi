@@ -9,7 +9,7 @@ class MuteRoleCommand extends Command {
     super(client, {
       name: 'muterole',
       description: 'Creates the mute role for your server.',
-      category: 'Moderation',
+      category: 'Configuration',
       aliases: ['mr'],
       usage: 'muterole [create|role id/mention]',
       cooldown: 3.5

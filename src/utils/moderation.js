@@ -26,6 +26,26 @@ module.exports.runUnmuteChecks = async function (bot) {
   }, (8000))
 }
 
+module.exports.runUnlockChecks = async function (bot) {
+  setInterval(() => {
+    const date = new Date().getTime()
+    const unlocks = mod.get('unlocks') || []
+    if (unlocks.length > 0) {
+      for (let unlock of unlocks) {
+        if (unlock.unlockAt !== false) {
+          if (unlock.unlockAt <= date) {
+            let removing = unlocks.filter(function (x) { return x === unlock })[0]
+            let i = unlocks.indexOf(removing)
+            unlocks.splice(i, 1)
+            mod.set('unlocks', unlocks)
+            attemptUnlock(unlock.guild, unlock.channel, unlock.punisher, bot)
+          }
+        }
+      }
+    }
+  }, (8000))
+}
+
 async function attemptUnmute (guild, user, punisher, bot) {
   const mR = cfg.get(`${guild}.mutedRole`)
   const g = bot.guilds.cache.get(guild)
@@ -45,6 +65,25 @@ async function attemptUnmute (guild, user, punisher, bot) {
   }
 }
 
+async function attemptUnlock (guild, c, punisher, bot) {
+  const g = bot.guilds.cache.get(guild)
+  const ch = g.channels.cache.get(c)
+  const m2 = g.members.cache.get(punisher)
+  const channel = g.channels.cache.get(cfg.get(`${guild}.modLog`))
+  try {
+    ch.updateOverwrite(g.roles.everyone, {
+      SEND_MESSAGES: null
+    })
+    const embed = new MessageEmbed() 
+      .setColor('#5ca5e0')
+      .setAuthor(`${m2.user.username}#${m2.user.discriminator} (${m2.user.id})`, m2.user.avatarURL())
+      .setDescription(`**Channel:** <#${ch.id}>\n**Action:** Unlock\n**Reason:** Automatic Unlock`)
+    channel.send(embed)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 module.exports.addUnmute = async function (guild, users, punisher, date, c) {
   if (!(users instanceof Array)) {
     users = [users]
@@ -54,6 +93,19 @@ module.exports.addUnmute = async function (guild, users, punisher, date, c) {
       mod.push('unmutes', { guild: guild, user: user, punisher: punisher, unmuteAt: date, caseId: c }) 
     } else {
       mod.push('unmutes', { guild: guild, user: user, punisher: punisher, unmuteAt: false, caseId: c }) 
+    }
+  }
+}
+
+module.exports.addUnlock = async function (guild, channels, punisher, date, c) {
+  if (!(channels instanceof Array)) {
+    channels = [channels]
+  }
+  for (let channel of channels) {
+    if (date !== -1) {
+      mod.push('unlocks', { guild: guild, channel: channel, punisher: punisher, unlockAt: date, caseId: c }) 
+    } else {
+      mod.push('unlocks', { guild: guild, channel: channels, punisher: punisher, unlockAt: false, caseId: c }) 
     }
   }
 }

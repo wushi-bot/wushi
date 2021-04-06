@@ -43,7 +43,7 @@ class MuteCommand extends Command {
     }
     let reason
     let time = args[1] 
-    if (!time) {
+    if (!args[1]) {
       reason = 'No reason specified'
     } else {
       if (!ms(time)) {
@@ -85,18 +85,23 @@ class MuteCommand extends Command {
         moderationUtils.addUnmute(msg.guild.id, user.user.id, msg.author.id, -1, mod.get(`${msg.guild.id}.cases`))
       }
     }
-    if (cfg.get(`${msg.guild.id}.modLog`)) {
-    const t = time || undefined
-    const channel = msg.guild.channels.cache.get(cfg.get(`${msg.guild.id}.modLog`))
-    const mlE = new MessageEmbed() 
-      .setColor('#ff9e1f')
-      .setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.avatarURL())
-    if (t) {
-      mlE.setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Mute\n**Reason:** ${reason}\n**Duration:** ${ms(time, { long: true })}`)
+    let t
+    if (!time) {
+      t = 'forever'
     } else {
-      mlE.setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Mute\n**Reason:** ${reason}\n**Duration:** Forever`)
+      t = ms(time, { long: true })
     }
-    channel.send(mlE)
+    if (cfg.get(`${msg.guild.id}.modLog`)) {
+      const channel = msg.guild.channels.cache.get(cfg.get(`${msg.guild.id}.modLog`))
+      const mlE = new MessageEmbed()
+        .setColor('#ff9e1f')
+        .setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.avatarURL())
+      if (t !== 'forever') {
+        mlE.setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Mute\n**Reason:** ${reason}\n**Duration:** ${ms(time, { long: true })}`)
+      } else {
+        mlE.setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Mute\n**Reason:** ${reason}\n**Duration:** Forever`)
+      }
+      channel.send(mlE)
     }
     msg.reply(embed)
   }

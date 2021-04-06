@@ -10,5 +10,8 @@ const self = new Bot({
 })
 self.loadCommands()
 self.loadEvents()
+
 moderationUtils.runUnmuteChecks(self)
+moderationUtils.runUnlockChecks(self)
+
 self.login(process.env.TOKEN)

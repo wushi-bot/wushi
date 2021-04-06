@@ -1,8 +1,9 @@
 import Command from '../../structs/command'
-import { MessageAttachment, MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 import db from 'quick.db'
 
 const cfg = new db.table('config')
+const mod = new db.table('moderation')
 
 class SoftBanCommand extends Command {
   constructor (client) {
@@ -33,6 +34,7 @@ class SoftBanCommand extends Command {
       return this.client.emit('customError', 'This person cannot be softbanned as they already have permissions or are an admin/mod.', msg)
     }
     let reason = args[1] ? args.slice(1).join(' ') : 'No reason specified'
+    mod.add(`${msg.guild.id}.cases`, 1)
     try {
       await user.ban({ days: 7, reason: 'Softbanning user' })
       await msg.guild.members.unban(user.user.id, 'Unbanning from softban')
@@ -41,7 +43,7 @@ class SoftBanCommand extends Command {
         .addField('<:check:820704989282172960> Success!', `Successfully softbanned **${user.user.username}#${user.user.discriminator}**. (${reason})`)
       msg.reply(embed)
     } catch (e) {
-      return this.client.emit('customError', 'wushi lacks permission to add the muted role to people.', msg)
+      return this.client.emit('customError', 'wushi lacks permission to softban people.', msg)
     }
     if (cfg.get(`${msg.guild.id}.modLog`)) {
       const channel = msg.guild.channels.cache.get(cfg.get(`${msg.guild.id}.modLog`))

@@ -43,7 +43,7 @@ class HelpCommand extends Command {
         }
       })
       categories.forEach(category => {
-        embed.addField(`${key[category]} ${category}`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
+        embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
       return msg.reply(embed)
     } else {
