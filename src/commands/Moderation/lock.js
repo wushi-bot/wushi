@@ -16,7 +16,7 @@ class LockCommand extends Command {
       description: 'Locks the channel for a provided amount of time for a provided reason.',
       category: 'Moderation',
       aliases: ['l'],
-      usage: 'lock <time> [reason]',
+      usage: 'lock [time] [reason]',
       cooldown: 3.5
     })
   }
@@ -91,7 +91,7 @@ class LockCommand extends Command {
       } else {
         mlE.setDescription(`**Channel:** <#${channel.id}>\n**Action:** Lock\n**Reason:** ${reason}\n**Duration:** Forever`)
       }
-      ml.send(mlE)
+      if (ml) ml.send(mlE)
     }
     msg.reply(embed)
   }

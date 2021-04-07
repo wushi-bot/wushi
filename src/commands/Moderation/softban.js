@@ -51,7 +51,7 @@ class SoftBanCommand extends Command {
         .setColor('#ff9e1f')
         .setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.avatarURL())
         .setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Softban\n**Reason:** ${reason}`)
-      channel.send(mlE)
+      if (channel) channel.send(mlE)
     }
   }
 }

@@ -26,7 +26,12 @@ class ConfigCommand extends Command {
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
       .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${utils.getPrefix(msg.guild.id)}\``)
       .addField('<:channel:821178111184863272> Mod-log', `The mod-log for this server is <#${modLog}>.`)
-      .addField('<:role:821012711403683841> Muted role', `The mute role for this server is <@&${mutedRole}>.`)
+    if (mutedRole === 'Not set') {
+      embed.addField('<:role:821012711403683841> Muted role', `The mute role for this server is \`Not set\`.`)
+    } else {
+      embed.addField('<:role:821012711403683841> Muted role', `The mute role for this server is <@&${mutedRole}>.`)
+    }
+      
     if (admins.length === 0) {
       embed.addField('<:role:821012711403683841> Admins', `\`\`\`None\`\`\``)
     } else {

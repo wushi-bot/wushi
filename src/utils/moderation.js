@@ -26,6 +26,26 @@ module.exports.runUnmuteChecks = async function (bot) {
   }, (8000))
 }
 
+module.exports.runUnbanChecks = async function (bot) {
+  setInterval(() => {
+    const date = new Date().getTime()
+    const bans = mod.get('unbans') || []
+    if (bans.length > 0) {
+      for (let ban of bans) {
+        if (ban.unbanAt !== false) {
+          if (ban.unbanAt <= date) {
+            let removing = bans.filter(function (x) { return x === ban })[0]
+            let i = bans.indexOf(removing)
+            bans.splice(i, 1)
+            mod.set('unbans', bans)
+            attemptUnban(ban.guild, ban.user, ban.punisher, bot)
+          }
+        }
+      }
+    }
+  }, (8000))
+}
+
 module.exports.runUnlockChecks = async function (bot) {
   setInterval(() => {
     const date = new Date().getTime()
@@ -65,6 +85,23 @@ async function attemptUnmute (guild, user, punisher, bot) {
   }
 }
 
+async function attemptUnban (guild, user, punisher, bot) {
+  const g = bot.guilds.cache.get(guild)
+  const m = bot.users.cache.get(user)
+  const m2 = g.members.cache.get(punisher)
+  const channel = g.channels.cache.get(cfg.get(`${guild}.modLog`))
+  try {
+    await g.members.unban(user, 'Unbanning user')
+    const embed = new MessageEmbed() 
+      .setColor('#5ca5e0')
+      .setAuthor(`${m2.user.username}#${m2.user.discriminator} (${m2.user.id})`, m2.user.avatarURL())
+      .setDescription(`**User:** ${m.username}#${m.discriminator} (${m.id})\n**Action:** Unban\n**Reason:** Automatic Unban`)
+    channel.send(embed)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 async function attemptUnlock (guild, c, punisher, bot) {
   const g = bot.guilds.cache.get(guild)
   const ch = g.channels.cache.get(c)
@@ -93,6 +130,19 @@ module.exports.addUnmute = async function (guild, users, punisher, date, c) {
       mod.push('unmutes', { guild: guild, user: user, punisher: punisher, unmuteAt: date, caseId: c }) 
     } else {
       mod.push('unmutes', { guild: guild, user: user, punisher: punisher, unmuteAt: false, caseId: c }) 
+    }
+  }
+}
+
+module.exports.addUnban = async function (guild, users, punisher, date, c) {
+  if (!(users instanceof Array)) {
+    users = [users]
+  }
+  for (let user of users) {
+    if (date !== -1) {
+      mod.push('unbans', { guild: guild, user: user, punisher: punisher, unbanAt: date, caseId: c }) 
+    } else {
+      mod.push('unbans', { guild: guild, user: user, punisher: punisher, unbanAt: false, caseId: c }) 
     }
   }
 }

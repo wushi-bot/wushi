@@ -101,7 +101,7 @@ class MuteCommand extends Command {
       } else {
         mlE.setDescription(`**User:** ${user.user.username}#${user.user.discriminator} (${user.user.id})\n**Action:** Mute\n**Reason:** ${reason}\n**Duration:** Forever`)
       }
-      channel.send(mlE)
+      if (channel) channel.send(mlE)
     }
     msg.reply(embed)
   }

@@ -44,7 +44,7 @@ class UnlockCommand extends Command {
         .setColor('#5ca5e0')
         .setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.avatarURL())
         .setDescription(`**Channel:** <#${channel.id}>\n**Action:** Unlock\n**Reason:** ${reason}`)
-      ch.send(mlE)
+      if (ch) ch.send(mlE)
     }
   }
 }
