@@ -1,5 +1,6 @@
 import { getPrefix } from '../utils/utils'
 import { MessageEmbed } from 'discord.js'
+import chalk from 'chalk'
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
@@ -26,6 +27,7 @@ exports.run = (bot, message) => {
   if (cmd != null) {
     try {
       cmd.run(bot, message, args)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
     } catch (e) {
       console.error(e)
     }
