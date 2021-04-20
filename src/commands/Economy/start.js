@@ -23,13 +23,11 @@ class StartCommand extends Command {
     eco.set(`${msg.author.id}.started`, true)
     eco.set(`${msg.author.id}.balance`, 100)
     eco.set(`${msg.author.id}.bank`, 0)
-    eco.set(`${msg.author.id}.prestige`, 0)
-    eco.set(`${msg.author.id}.items`, [])
-    eco.set(`${msg.author.id}.sack`, [])
-    eco.set(`${msg.author.id}.multiplier`, 0)
+    eco.set(`${msg.author.id}.prestige`, 1)
+    eco.set(`${msg.author.id}.multiplier`, 1)
     const e = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
-      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account, it's recommended to purchase a fishing rod via \`${utils.getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`)
+      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account. See the help page for :bank: **Economy** to learn how to make money!`)
     msg.reply(e)
   }
 }

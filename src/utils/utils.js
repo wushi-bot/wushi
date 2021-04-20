@@ -1,10 +1,6 @@
 import db, { all } from 'quick.db'
 const cfg = new db.table('config')
 
-import tools from '../resources/items/tools.json'
-import materials from '../resources/items/materials.json'
-import upgrades from '../resources/items/upgrades.json'
-
 module.exports.getPrefix = function (id) {
   if (!cfg.get(`${id}.prefix`)) {
     return '.'
@@ -12,7 +8,6 @@ module.exports.getPrefix = function (id) {
     return cfg.get(`${id}.prefix`)
   }
 }
-
 module.exports.removeA = function (arr) {
   const a = arguments
   let L = a.length
