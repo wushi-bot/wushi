@@ -9,6 +9,11 @@ A social discord bot with a unique economy system!
 
 </div>
 
+### Donations 
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U54D4O8)
+
+
 ### Invite ✨
 
 The invite to the bot is listed here: [Click here](https://discord.com/api/oauth2/authorize?client_id=755526238466080830&permissions=3691375831&scope=bot), the permissions have been made in a way so that it only uses the permissions needs, without any administrative access. 
