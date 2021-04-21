@@ -7,7 +7,7 @@ class Command {
     enabled = true,
     guildOnly = false,
     aliases = [],
-    cooldown = 0
+    cooldown = false
   }) {
     this.client = client
     this.conf = { name, description, category, usage, enabled, guildOnly, aliases, cooldown }

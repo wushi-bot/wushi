@@ -12,14 +12,12 @@ class BalanceCommand extends Command {
       category: 'Economy',
       aliases: ['bal'],
       usage: 'balance',
-      cooldown: 1.5
+      cooldown: 3.5
     })
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    }
+    if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
     const bank = eco.get(`${user.user.id}.bank`) || 0
     const wallet = eco.get(`${user.user.id}.balance`) || 0

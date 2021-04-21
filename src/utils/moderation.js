@@ -107,17 +107,19 @@ async function attemptUnlock (guild, c, punisher, bot) {
   const ch = g.channels.cache.get(c)
   const m2 = g.members.cache.get(punisher)
   const channel = g.channels.cache.get(cfg.get(`${guild}.modLog`))
-  try {
-    ch.updateOverwrite(g.roles.everyone, {
-      SEND_MESSAGES: null
-    })
-    const embed = new MessageEmbed() 
-      .setColor('#5ca5e0')
-      .setAuthor(`${m2.user.username}#${m2.user.discriminator} (${m2.user.id})`, m2.user.avatarURL())
-      .setDescription(`**Channel:** <#${ch.id}>\n**Action:** Unlock\n**Reason:** Automatic Unlock`)
-    channel.send(embed)
-  } catch (e) {
-    console.error(e)
+  if (ch) {
+    try {
+      ch.updateOverwrite(g.roles.everyone, {
+        SEND_MESSAGES: null
+      })
+      const embed = new MessageEmbed() 
+        .setColor('#5ca5e0')
+        .setAuthor(`${m2.user.username}#${m2.user.discriminator} (${m2.user.id})`, m2.user.avatarURL())
+        .setDescription(`**Channel:** <#${ch.id}>\n**Action:** Unlock\n**Reason:** Automatic Unlock`)
+      channel.send(embed)
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 

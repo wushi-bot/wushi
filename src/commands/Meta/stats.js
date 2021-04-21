@@ -13,7 +13,7 @@ class StatsCommand extends Command {
       aliases: [],
       category: 'Meta',
       usage: 'stats',
-      cooldown: 5
+      cooldown: 1.5
     })
   }
 

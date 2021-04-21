@@ -1,6 +1,7 @@
 import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js'
 import db from 'quick.db'
+import utils from '../../utils/utils'
 const eco = new db.table('economy') 
 
 class DepositCommand extends Command {
@@ -30,15 +31,16 @@ class DepositCommand extends Command {
       amount = eco.get(`${msg.author.id}.balance`)
     } else if (args[0] === 'half') {
       amount = eco.get(`${msg.author.id}.balance`) / 2
+    } else {
+      amount = utils.abbreviationToNumber(args[0])
+    }
+    if (amount > eco.get(`${msg.author.id}.balance`)) {
+      return this.client.emit('customError', 'The amount you inserted is more than you have!', msg)
     }
     if (!amount) {
-      amount = eco.get(`${msg.author.id}.balance`)
       if (isNaN(amount)) {
         return this.client.emit('customError', 'You need to enter a valid number!', msg)
       } 
-      if (amount > eco.get(`${msg.author.id}.balance`)) {
-        return this.client.emit('customError', 'The amount you inserted is more than you have!', msg)
-      }
     }
     eco.subtract(`${msg.author.id}.balance`, amount)
     eco.add(`${msg.author.id}.bank`, amount)

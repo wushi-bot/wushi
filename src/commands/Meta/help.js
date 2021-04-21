@@ -15,7 +15,7 @@ class HelpCommand extends Command {
       aliases: ['h'],
       category: 'Meta',
       usage: 'help [command]',
-      cooldown: 2
+      cooldown: 2.5
     })
   }
 

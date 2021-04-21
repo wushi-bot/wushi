@@ -1,6 +1,10 @@
 import db, { all } from 'quick.db'
 const cfg = new db.table('config')
 
+import tools from '../resources/items/tools.json'
+import materials from '../resources/items/materials.json'
+import upgrades from '../resources/items/upgrades.json'
+
 module.exports.getPrefix = function (id) {
   if (!cfg.get(`${id}.prefix`)) {
     return '.'
@@ -17,6 +21,20 @@ module.exports.removeA = function (arr) {
     arr.splice(ax, 1)
   }
   return arr
+}
+
+module.exports.abbreviationToNumber = function (val) {
+  if (isNaN(val)) {
+    let multiplier = val.substr(-1).toLowerCase()
+    if (multiplier == 'k')
+      return parseFloat(val) * 1000
+    else if (multiplier === 'm')
+      return parseFloat(val) * 1000000
+    else if (multiplier === 'b')
+      return parseFloat(val) * 1000000000
+  } else {
+    return val
+  }
 }
 
 module.exports.getRandomInt = function (min, max) {
