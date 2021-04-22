@@ -6,5 +6,13 @@
     "description": "Increases the bonus fish you get when fishing, regardless of fishing rod. Automatically gets consumed when you fish via `[PRE]fish`.",
     "display": "Fishing Bait",
     "emoji": ":fish_cake:"
+  },
+  {
+    "price": 1000,
+    "sell_price": 150,
+    "id": "divining_rod",
+    "description": "Increases the bonus mine you get when mining, regardless of pickaxe. Automatically gets consumed when you mine via `[PRE]mine`.",
+    "display": "Divning Rod",
+    "emoji": ":chopsticks:"
   }
 ]

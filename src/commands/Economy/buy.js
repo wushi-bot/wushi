@@ -32,7 +32,8 @@ class BuyCommand extends Command {
     }
     if (item.max) {
       var count = {}
-      eco.get(`${msg.author.id}.items`).forEach(function (i) { count[i] = (count[i] || 0) + 1 })
+      const items = eco.get(`${msg.author.id}.items`) || []
+      items.forEach(function (i) { count[i] = (count[i] || 0) + 1 })
       console.log(count[item.id])
       if (count[item.id] >= item.max) {
         return this.client.emit('customError', `${item.emoji} Maximum amount of ${item.emoji} **${item.display}**! | Your inventory has too much ${item.emoji} **${item.display}** to be able to buy more.`, msg)

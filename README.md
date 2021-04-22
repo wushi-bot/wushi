@@ -13,6 +13,11 @@ A social discord bot with a unique economy system!
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U54D4O8)
 
+### Support ❓
+
+Need help setting up the bot or having issues with the bot? Join the support server! 
+[![Discord](https://discordapp.com/api/guilds/777620712193392650/widget.png?style=banner3)](https://discord.gg/7MtXvNB)
+
 
 ### Invite ✨
 

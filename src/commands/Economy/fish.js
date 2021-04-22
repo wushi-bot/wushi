@@ -2,6 +2,7 @@
 import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js'
 import utils from '../../utils/utils'
+import ecoUtils from '../../utils/economy'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
@@ -50,7 +51,7 @@ class FishCommand extends Command {
       correctChoice = 'ice pond'
     }
     await msg.reply(chooserEmbed)
-    msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
+    await msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(collected => {
         const choice = collected.first()
         if (choice.content.toLowerCase() === correctChoice) {
@@ -126,7 +127,7 @@ class FishCommand extends Command {
         }
         
         if (goldenReeling) {
-          eco.add(`${msg.author.id}.balance`, goldenReelBonus)
+          ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
         msg.reply(embed)

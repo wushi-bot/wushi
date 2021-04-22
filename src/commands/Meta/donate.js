@@ -14,7 +14,10 @@ class DonateCommand extends Command {
   }
 
   async run (bot, msg, args) {
-
+    const embed = new MessageEmbed()
+      .addField(':money_with_wings: Donate', 'Help support wushi by donating via [this URL](https://ko-fi.com/minota).')
+      .setColor(msg.member.roles.highest.color)
+    msg.reply(embed)
   }
 }
 
