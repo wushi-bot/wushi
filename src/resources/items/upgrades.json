@@ -12,7 +12,7 @@
     "sell_price": 150,
     "id": "divining_rod",
     "description": "Increases the bonus mine you get when mining, regardless of pickaxe. Automatically gets consumed when you mine via `[PRE]mine`.",
-    "display": "Divning Rod",
+    "display": "Divining Rod",
     "emoji": ":chopsticks:"
   }
 ]

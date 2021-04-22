@@ -11,7 +11,7 @@ class MuteRoleCommand extends Command {
       description: 'Creates the mute role for your server.',
       category: 'Configuration',
       aliases: ['mr'],
-      usage: 'muterole [create|role id/mention]',
+      usage: 'muterole [create|@role]',
       cooldown: 3.5
     })
   }
