@@ -48,10 +48,12 @@ class Bot extends Client {
     readdir(path.join(__dirname, '..', '/events/'), (err, files) => {
       if (err) return console.error(err)
       files.forEach(file => {
-        const event = require(path.join(__dirname, '..', `/events/${file}`))
-        const eventName = file.split('.')[0]
-        this.logger.log('runner', `Added event: ${eventName}`)
-        super.on(eventName, (...args) => event.run(this, ...args))
+        if (file.endsWith('.js')) {
+          const event = require(path.join(__dirname, '..', `/events/${file}`))
+          const eventName = file.split('.')[0]
+          this.logger.log('runner', `Added event: ${eventName}`)
+          super.on(eventName, (...args) => event.run(this, ...args))
+        }
       })
     })
     this.logger.log('info', 'All possible events have been added.')

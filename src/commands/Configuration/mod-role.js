@@ -12,7 +12,7 @@ class ModRoleCommand extends Command {
       aliases: ['mods', 'modrole'], 
       cooldown: 1.5,
       category: 'Configuration',
-      usage: 'modrole'
+      usage: 'modrole [@role]'
     })
   }
 

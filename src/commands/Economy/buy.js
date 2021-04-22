@@ -13,7 +13,7 @@ class BuyCommand extends Command {
       description: 'Purchase something on the store.',
       category: 'Economy',
       aliases: ['purchase'],
-      usage: 'buy',
+      usage: 'buy <id>',
       cooldown: 3.5
     })
   }

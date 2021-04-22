@@ -66,6 +66,7 @@ class HelpCommand extends Command {
           .addField('Usage', `\`${utils.getPrefix(msg.guild.id)}${command.conf.usage}\``)
           .addField('Category', `${key[command.conf.category]} **${command.conf.category}**`)
           .addField('Aliases', aliases)
+        if (command.conf.cooldown !== false) embed.addField('Cooldown', `${command.conf.cooldown}s (${command.conf.cooldown / 2}s for Premium users)`)
         msg.reply(embed)
       }
     }

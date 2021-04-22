@@ -12,7 +12,7 @@ class AdminRoleCommand extends Command {
       aliases: ['admins', 'adminrole'], 
       cooldown: 1.5,
       category: 'Configuration',
-      usage: 'adminrole'
+      usage: 'adminrole [create|@role]'
     })
   }
 

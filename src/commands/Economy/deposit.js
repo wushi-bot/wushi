@@ -11,7 +11,7 @@ class DepositCommand extends Command {
       description: 'Deposit coins to your balance.',
       category: 'Economy',
       aliases: ['dep'],
-      usage: 'deposit <amount | half | all>',
+      usage: 'deposit <amount|half|all>',
       cooldown: 3.5
     })
   }

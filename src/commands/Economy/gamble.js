@@ -13,7 +13,7 @@ class GambleCommand extends Command {
       description: 'Allows you to gamble a provided amount of money via a dice roll.',
       category: 'Economy',
       aliases: ['bet'],
-      usage: 'gamble',
+      usage: 'gamble <amount>',
       cooldown: 15
     })
   }
@@ -30,7 +30,7 @@ class GambleCommand extends Command {
       .setColor(msg.member.roles.highest.color)
     let amount
     if (yourGamble > wushiGamble) {
-      amount = ecoUtils.addMoney(msg.author.id, bet)
+      amount = ecoUtils.addMoney(msg.author.id, bet * 2)
       embed.addField('<:check:820704989282172960> You win!', `You won the gamble, you earn :coin: **${utils.addCommas(amount)}**!`)
     } else if (yourGamble < wushiGamble) {
       amount = bet
@@ -40,8 +40,8 @@ class GambleCommand extends Command {
       embed.addField('<:cross:821028198330138644> Draw!', `You both tied to the same score, you win or lose nothing!`)
     }
     embed
-      .addField('Wushi Roll', `\`${wushiGamble}\``, true)
-      .addField('Your Roll', `\`${yourGamble}\``, true)
+      .addField('Wushi Roll', `\`${wushiGamble}\``)
+      .addField('Your Roll', `\`${yourGamble}\``)
     msg.reply(embed)
   }
 }

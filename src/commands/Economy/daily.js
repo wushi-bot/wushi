@@ -24,6 +24,12 @@ class DailyCommand extends Command {
     if (eco.get(`${msg.author.id}.daily`)) {
       let time = new Date().getTime()
       if (eco.get(`${msg.author.id}.daily`) >= time) return this.client.emit('customError', `You're still on cooldown for this command! Please wait **${ms(eco.get(`${msg.author.id}.daily`) - time, { long: true })}**.`, msg)
+      const amount = ecoUtils.addMoney(msg.author.id, 500)
+      eco.set(`${msg.author.id}.daily`, new Date().getTime() + 86400000)
+      const embed = new MessageEmbed()
+        .setColor(msg.member.roles.highest.color)
+        .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${utils.addCommas(amount)}** for today, you can claim this again in **24 hours**.`)
+      msg.reply(embed)
     } else {
       const amount = ecoUtils.addMoney(msg.author.id, 500)
       eco.set(`${msg.author.id}.daily`, new Date().getTime() + 86400000)

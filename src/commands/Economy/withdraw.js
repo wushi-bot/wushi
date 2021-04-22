@@ -11,7 +11,7 @@ class WithdrawCommand extends Command {
       description: 'Withdraw coins from your bank.',
       category: 'Economy',
       aliases: ['with'],
-      usage: 'withdraw <amount | half | all>',
+      usage: 'withdraw <amount|half|all>',
       cooldown: 3.5
     })
   }

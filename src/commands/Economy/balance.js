@@ -11,7 +11,7 @@ class BalanceCommand extends Command {
       description: 'Gets your bank/purse balance.',
       category: 'Economy',
       aliases: ['bal'],
-      usage: 'balance',
+      usage: 'balance [@user]',
       cooldown: 3.5
     })
   }
