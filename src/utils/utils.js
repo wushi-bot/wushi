@@ -1,5 +1,6 @@
 import db, { all } from 'quick.db'
 const cfg = new db.table('config')
+const leveling = new db.table('leveling')
 
 import tools from '../resources/items/tools.json'
 import materials from '../resources/items/materials.json'
@@ -12,6 +13,22 @@ module.exports.getPrefix = function (id) {
     return cfg.get(`${id}.prefix`)
   }
 }
+
+module.exports.checkLevel = function (id, serverId) {
+  if (!leveling.get(`${serverId}.${id}.expNeeded`)) {
+    leveling.set(`${serverId}.${id}.expNeeded`, 100)
+  }
+  if (!leveling.get(`${serverId}.${id}.level`)) {
+    leveling.set(`${serverId}.${id}.level`, 0)
+  }
+  if (!leveling.get(`${serverId}.${id}.exp`)) {
+    leveling.set(`${serverId}.${id}.exp`, 0)
+  }
+  if (!leveling.get(`${serverId}.${id}.totalExp`)) {
+    leveling.set(`${serverId}.${id}.totalExp`, 0)
+  }
+}
+
 module.exports.removeA = function (arr) {
   const a = arguments
   let L = a.length

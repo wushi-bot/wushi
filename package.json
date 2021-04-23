@@ -44,6 +44,8 @@
     "romanize-number": "^1.0.1",
     "sodium": "^3.0.2",
     "timeago.js": "^4.0.2",
+    "tinycolor2": "^1.4.2",
+    "urban-dictionary": "^3.0.0",
     "utf-8-validate": "^5.0.4",
     "zlib-sync": "^0.1.7"
   }

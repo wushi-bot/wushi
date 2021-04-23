@@ -1,9 +1,48 @@
 import { getPrefix } from '../utils/utils'
 import { MessageEmbed, Collection } from 'discord.js'
+import utils from '../utils/utils'
 import chalk from 'chalk'
+import db from 'quick.db'
+
+const cfg = new db.table('config')
+const leveling = new db.table('leveling')
+const expCooldowns = new Collection()
 
 exports.run = (bot, message) => {
   if (message.author.bot) return
+  if (cfg.get(`${message.guild.id}.leveling`)) {
+    if (cfg.get(`${message.guild.id}.leveling`)) {
+      utils.checkLevel(message.author.id, message.guild.id)
+      if (!message.content.startsWith(utils.getPrefix(message.guild.id))) {
+        if (!expCooldowns.has(message.author.id)) {
+          const exp = utils.getRandomInt(5, 15)
+          leveling.add(`${message.guild.id}.${message.author.id}.exp`, exp)
+          leveling.add(`${message.guild.id}.${message.author.id}.totalExp`, exp)
+          if (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) <= leveling.get(`${message.guild.id}.${message.author.id}.exp`)) {
+            leveling.add(`${message.guild.id}.${message.author.id}.level`, 1)
+            leveling.subtract(`${message.guild.id}.${message.author.id}.exp`, leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`))
+            leveling.set(`${message.guild.id}.${message.author.id}.expNeeded`, Math.floor(leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) + (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) * 0.1)))
+            if (!cfg.get(`${message.guild.id}.levelUpMessage`)) { // Fallback to default thingy
+              message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.guild.id}.${message.author.id}.level`)}**!`)
+            } else {
+              let lvlMsg = cfg.get(`${message.guild.id}.levelUpMessage`)
+              lvlMsg = lvlMsg.replace('{level}', `${leveling.get(`${message.guild.id}.${message.author.id}.level`)}`)
+              lvlMsg = lvlMsg.replace('{user.name}', `${message.author.username}`)
+              lvlMsg = lvlMsg.replace('{user.mention}', `<@!${message.author.id}>`)
+              lvlMsg = lvlMsg.replace('{user.id}', `${message.author.id}`)
+              lvlMsg = lvlMsg.replace('{user.discrim}', `${message.author.discriminator}`)
+              lvlMsg = lvlMsg.replace('{nextExp}', `${leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`)}`)
+              message.channel.send(lvlMsg)
+            }
+          }
+          expCooldowns.set(message.author.id, new Collection())
+          setTimeout(() => {
+            expCooldowns.delete(message.author.id)
+          }, 60000)
+        }
+      }
+    }
+  }
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
     const embed = new MessageEmbed()
       .setColor('#0099ff')

@@ -1,0 +1,52 @@
+import Command from '../../structs/command'
+import utils from '../../utils/utils'
+import { MessageEmbed } from 'discord.js'
+import db from 'quick.db'
+
+const eco = new db.table('economy')
+
+class TopCommand extends Command {
+  constructor (client) {
+    super(client, {
+      name: 'top',
+      description: 'Gets the top balances in the server.',
+      category: 'Economy',
+      aliases: ['rich', 'leaderboard', 'lb'],
+      usage: 'top',
+      cooldown: 5
+    })
+  }
+
+  async run (bot, msg, args) {
+    let list = []
+    eco.all().forEach(entry => {
+      const user = this.client.users.cache.get(entry.ID)
+      if (msg.guild.members.resolveID(user)) {
+        list.push({ id: entry.ID, bal: entry.data.balance, bank: entry.data.bank })
+      }
+    })
+    list.sort(function (a, b) { return (b.bal + b.bank) - (a.bal + a.bank) })
+    list = list.slice(0, 9)
+
+    const embed = new MessageEmbed()
+      .setColor(msg.member.roles.highest.color)
+      .setFooter('🏆 Richest poeple in your server.')
+    let x = 1
+    list.forEach(i => {
+      const user = this.client.users.cache.get(i.id)
+      if (x === 1) {
+        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
+      } else if (x === 2) {
+        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
+      } else if (x === 3) {
+        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
+      } else {
+        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Balance: :coin: **${utils.addCommas(i.bal + i.bank)}**`)
+      }
+      x++
+    })
+    return msg.reply(embed)
+  }
+}
+
+module.exports = TopCommand

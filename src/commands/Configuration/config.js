@@ -55,6 +55,11 @@ class ConfigCommand extends Command {
       })
       embed.addField('<:role:821012711403683841> Mods', `${modRoles.join(', ')}`)
     }
+    if (cfg.get(`${msg.guild.id}.levelUpMessage`)) {
+      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://docs.wushibot.xyz/variables). \`\`\`${config.get(`${msg.guild.id}.levelUpMessage`)}\`\`\``)
+    } else {
+      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://docs.wushibot.xyz/variables). \`\`\`Congratulations, **{user.name}**, you've leveled :up: to **Level {level}**!\`\`\``)
+    }
       
     msg.reply(embed)
   }

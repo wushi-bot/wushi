@@ -16,6 +16,7 @@ A social discord bot with a unique economy system!
 ### Support ❓
 
 Need help setting up the bot or having issues with the bot? Join the support server! 
+
 [![Discord](https://discordapp.com/api/guilds/777620712193392650/widget.png?style=banner3)](https://discord.gg/7MtXvNB)
 
 
