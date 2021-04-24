@@ -1,4 +1,3 @@
-
 import { MessageEmbed } from 'discord.js'
 import Command from '../../structs/command'
 import key from '../../resources/key.json'
@@ -31,15 +30,16 @@ class HelpCommand extends Command {
         const category = command.conf.category
         if (!categories.includes(category)) {
           if (category !== 'Admin' && msg.author.id !== '488786712206770196') disabled.push('Admin')
-          const disabled = cfg.get(`${msg.guild.id}.disabled`) || []
-          if (!disabled.includes(category)) categories.push(category)
+          const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
+          if (!disabledModules.includes(category)) categories.push(category)
         }
       })
       commandsList.forEach(command => {
         if (commandsInCategory[command.conf.category] === undefined) {
           commandsInCategory[command.conf.category] = []
         }
-        if (command.conf.enabled === true) {
+        const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
+        if (command.conf.enabled === true && !disabledCommands.includes(command.conf.name)) {
           commandsInCategory[command.conf.category].push(command.conf.name)
         }
       })

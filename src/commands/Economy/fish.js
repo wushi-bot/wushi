@@ -135,8 +135,73 @@ class FishCommand extends Command {
       .catch(() => {
         const quizResult = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
-          .addField(':fishing_pole_and_fish: Fishing', '**Ran out of time!** You dropped your fishing pole and you can\'t fish for now!')
+          .addField(':fishing_pole_and_fish: Fishing', '**Ran out of time!** You dropped your fishing pole and you won\'t get a bonus for now!')
         msg.reply(quizResult)
+        let bonus = 0
+        let goldenReelingChance = 0
+        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+          goldenReelingChance = 7.5
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+          goldenReelingChance = 25.5
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+          goldenReelingChance = 60
+        }
+        const odds = utils.getRandomInt(0, 100)
+        let goldenReeling = false
+        if (odds < goldenReelingChance) {
+          goldenReeling = true
+        } else {
+          goldenReeling = false
+        }
+    
+        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+          bonus = bonus + 0
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+          bonus = bonus + utils.getRandomInt(7, 15)
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+          bonus = bonus + utils.getRandomInt(25, 35)
+        }
+        let fishingBaitBonus
+        if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
+          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
+          eco.set(`${msg.author.id}.items`, i)
+          bonus = bonus + utils.getRandomInt(3, 10)
+          fishingBaitBonus = true
+        }
+        const goldenReelBonus = utils.getRandomInt(45, 175)
+        let fishReeled
+        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+          fishReeled = utils.getRandomInt(1, 12)
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+          fishReeled = utils.getRandomInt(7, 24)
+        } 
+        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+          fishReeled = utils.getRandomInt(9, 27)
+        }
+        let profit = 0
+        for (let int = 0; int < fishReeled + bonus; int++) {
+          let amount = utils.getRandomInt(2, 8)
+          eco.add(`${msg.author.id}.balance`, amount)
+          profit = profit + amount
+        }
+        const embed = new MessageEmbed()
+          .setColor(msg.member.roles.highest.color)
+        if (!fishingBaitBonus) {
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${profit}**!`)
+        } else {
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${profit}**!`)
+        }
+        
+        if (goldenReeling) {
+          ecoUtils.addMoney(msg.author.id, goldenReelBonus)
+          embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
+        }
+        msg.reply(embed)
       })
 
   }

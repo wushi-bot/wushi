@@ -21,6 +21,10 @@ class ConfigCommand extends Command {
     const mutedRole = cfg.get(`${msg.guild.id}.mutedRole`) || 'Not set'
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
+    
+    const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
+    const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`)
+
     const embed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
@@ -30,6 +34,18 @@ class ConfigCommand extends Command {
     } else {
       embed.addField('<:channel:821178111184863272> Mod-log', `The mod-log for this server is **${modLog}**.`)
     } 
+
+    if (disabledModules.length === 0) {
+      embed.addField(':newspaper: Disabled Modules', `\`\`\`None\`\`\``)
+    } else {
+      embed.addField(':newspaper: Disabled Modules', `\`\`\`${cfg.get(`${msg.guild.id}.disabledModules`).join(', ')}\`\`\``)
+    }
+
+    if (disabledCommands.length === 0) {
+      embed.addField(':newspaper: Disabled Commands', `\`\`\`None\`\`\``)
+    } else {
+      embed.addField(':newspaper: Disabled Commands', `\`\`\`${cfg.get(`${msg.guild.id}.disabledCommands`).join(', ')}\`\`\``)
+    }
      
     if (mutedRole === 'Not set') {
       embed.addField('<:role:821012711403683841> Muted role', `The mute role for this server is \`Not set\`.`)
@@ -56,9 +72,9 @@ class ConfigCommand extends Command {
       embed.addField('<:role:821012711403683841> Mods', `${modRoles.join(', ')}`)
     }
     if (cfg.get(`${msg.guild.id}.levelUpMessage`)) {
-      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://docs.wushibot.xyz/variables). \`\`\`${config.get(`${msg.guild.id}.levelUpMessage`)}\`\`\``)
+      embed.addField(':sparkles: Level Up Message', `\`\`\`${cfg.get(`${msg.guild.id}.levelUpMessage`)}\`\`\``)
     } else {
-      embed.addField(':sparkles: Level Up Message', `This message will show up when you level up, change it using \`${utils.getPrefix(msg.guild.id)}level-message <message>\`, to get a list of variables, [click here](https://docs.wushibot.xyz/variables). \`\`\`Congratulations, **{user.name}**, you've leveled :up: to **Level {level}**!\`\`\``)
+      embed.addField(':sparkles: Level Up Message', `\`\`\`Congratulations, **{user.name}**, you've leveled :up: to **Level {level}**!\`\`\``)
     }
       
     msg.reply(embed)

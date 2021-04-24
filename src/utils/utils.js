@@ -2,6 +2,7 @@ import db, { all } from 'quick.db'
 const cfg = new db.table('config')
 const leveling = new db.table('leveling')
 
+import keys from '../resources/key.json'
 import tools from '../resources/items/tools.json'
 import materials from '../resources/items/materials.json'
 import upgrades from '../resources/items/upgrades.json'
@@ -12,6 +13,14 @@ module.exports.getPrefix = function (id) {
   } else {
     return cfg.get(`${id}.prefix`)
   }
+}
+
+module.exports.getCategories = function () {
+  const categories = []
+  for (const category in keys) {
+    if (category) categories.push(category)
+  }
+  return categories
 }
 
 module.exports.checkLevel = function (id, serverId) {
@@ -27,6 +36,15 @@ module.exports.checkLevel = function (id, serverId) {
   if (!leveling.get(`${serverId}.${id}.totalExp`)) {
     leveling.set(`${serverId}.${id}.totalExp`, 0)
   }
+}
+
+module.exports.toTitleCase = function (str) {
+  return str.replace(
+    /\w\S*/g,
+    function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    }
+  )
 }
 
 module.exports.removeA = function (arr) {

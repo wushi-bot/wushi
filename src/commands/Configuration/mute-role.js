@@ -7,10 +7,10 @@ const cfg = new db.table('config')
 class MuteRoleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'muterole',
+      name: 'mute-role',
       description: 'Creates the mute role for your server.',
       category: 'Configuration',
-      aliases: ['mr'],
+      aliases: ['mr', 'muterole'],
       usage: 'muterole [create|@role]',
       cooldown: 3.5
     })
