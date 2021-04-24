@@ -11,7 +11,7 @@ class ToggleCommand extends Command {
       name: 'toggle',
       description: 'Toggle a command or module.',
       category: 'Configuration',
-      aliases: ['t'],
+      aliases: ['to'],
       usage: 'toggle <module/command>',
       cooldown: 10
     })

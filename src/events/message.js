@@ -6,6 +6,7 @@ import db from 'quick.db'
 
 const cfg = new db.table('config')
 const leveling = new db.table('leveling')
+const tags = new db.table('tags')
 const expCooldowns = new Collection()
 
 exports.run = (bot, message) => {
@@ -41,6 +42,14 @@ exports.run = (bot, message) => {
           }, 60000)
         }
       }
+    }
+  }
+  if (message.content.startsWith(getPrefix(message.guild.id))) {
+    const tag = message.content.toLowerCase().split(' ')[0].slice(getPrefix(message.guild.id).length)
+    if (tags.get(`${message.guild.id}.${tag}`)) {
+      const { content } = tags.get(`${message.guild.id}.${tag}`)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + tag)} (tag) in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
+      return message.channel.send(content)
     }
   }
   if (message.content === `<@!${bot.user.id}>` || message.content === `<@${bot.user.id}>`) {
