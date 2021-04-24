@@ -34,8 +34,17 @@ class FishCommand extends Command {
     const season = utils.getRandomInt(1, 4)
     let correctChoice
     let bonus 
-    const filter = m => m.author.id === msg.author.id && m.content.toLowerCase() === 'ocean' || m.content.toLowerCase() === 'ice pond' || m.content.toLowerCase() === 'lake'
-
+    const filter = m => {
+      if (m.author.id === msg.author.id) {
+        if (m.content.toLowerCase() === 'ocean' || m.content.toLowerCase() === 'ice pond' || m.content.toLowerCase() === 'lake') {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    }
     const chooserEmbed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .setTitle(':fishing_pole_and_fish: Fishing')

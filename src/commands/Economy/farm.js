@@ -33,8 +33,17 @@ class FarmCommand extends Command {
     const harvestInSeason = utils.getRandomInt(1, 4)
     let correctChoice
     let bonus 
-    const filter = m => m.author.id == msg.author.id && m.content.toLowerCase() === 'carrots' || m.content.toLowerCase() === 'corn' || m.content.toLowerCase() === 'tomato'
-
+    const filter = m => {
+      if (m.author.id === msg.author.id) {
+        if (m.content.toLowerCase() === 'carrots' || m.content.toLowerCase() === 'corn' || m.content.toLowerCase() === 'tomato') {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    }
     const chooserEmbed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .setTitle(':seedling: Farming')
@@ -57,7 +66,7 @@ class FarmCommand extends Command {
           bonus = utils.getRandomInt(2, 10)
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
-            .addField(':seedling: Farmings', `**Correct choice!** You will get **+${bonus}** bonus harvest!`)
+            .addField(':seedling: Farming', `**Correct choice!** You will get **+${bonus}** bonus harvest!`)
           collected.first().reply(quizResult)
         } else {
           bonus = 0
