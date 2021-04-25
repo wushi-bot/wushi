@@ -58,7 +58,7 @@ class FarmCommand extends Command {
       chooserEmbed.addField('Vegetable in Season: Tomato :tomato:', 'Choose the most profitable harvest to farm: `Carrots`, `Corn`, `Tomato`. Send your choice in chat, picking the correct harvest will allow you to receive more bonus harvest!')
       correctChoice = 'tomato'
     }
-    await msg.reply(chooserEmbed)
+    const message = await msg.reply(chooserEmbed)
     await msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(collected => {
         const choice = collected.first()

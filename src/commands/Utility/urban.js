@@ -19,7 +19,6 @@ class UrbanCommand extends Command {
     if (!args[0]) return this.client.emit('customError', 'You need a word to define.', msg)
     const word = args.join(' ')
     ud.define(word).then((results) => {
-      console.log(results[0])
       const embed = new MessageEmbed()
         .addField(`Defining ${results[0].word}`, `**Definition:** ${results[0].definition}\n**Example:** ${results[0].example}`)
         .setFooter(`👍 ${results[0].thumbs_up} / 👎 ${results[0].thumbs_down}`)
