@@ -48,7 +48,7 @@ class HuntCommand extends Command {
     const chooserEmbed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .setTitle(':gun: Hunting')
-      .setFooter('You have 8 seconds to pick a location.')
+      .setFooter('You have 8 seconds to pick an animal.')
     if (animalInSeason === 1) {
       chooserEmbed.addField('Animal in Season: Pig :pig:', 'Choose an animal in season to hunt: `Pig`, `Rabbit`, `Deer`. Send your choice in chat, picking the correct location will allow you to receive more bonus game!')
       correctChoice = 'pig'
@@ -135,7 +135,7 @@ class HuntCommand extends Command {
           embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${profit}**!`)
         }
         
-        if (goldenGooseBonus) {
+        if (goldenGoose) {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
@@ -201,7 +201,7 @@ class HuntCommand extends Command {
           embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${profit}**!`)
         }
         
-        if (goldenGooseBonus) {
+        if (goldenGoose) {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }

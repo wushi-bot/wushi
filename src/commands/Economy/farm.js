@@ -47,7 +47,7 @@ class FarmCommand extends Command {
     const chooserEmbed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .setTitle(':seedling: Farming')
-      .setFooter('You have 8 seconds to pick harvest.')
+      .setFooter('You have 8 seconds to pick a crop to harvest.')
     if (harvestInSeason === 1) {
       chooserEmbed.addField('Vegetable in Season: Carrots :carrot:', 'Choose the most profitable harvest to farm: `Carrots`, `Corn`, `Tomato`. Send your choice in chat, picking the correct harvest will allow you to receive more bonus harvest!')
       correctChoice = 'carrots'
