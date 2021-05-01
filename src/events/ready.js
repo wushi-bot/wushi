@@ -14,20 +14,20 @@ function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     console.log(req.body)
-    const user = bot.users.cache.get(req.body.json().user)
+    const user = bot.users.cache.get(res.json(req.body).user)
     const embed = new MessageEmbed()
     let bonus
-    if (req.body.json().isWeekend) {
-      eco.add(`${req.body.json().user}.balance`, 15750)
-      eco.add(`${req.body.json().user}.multiplier`, 8)
+    if (res.json(req.body).isWeekend) {
+      eco.add(`${res.json(req.body).user}.balance`, 15750)
+      eco.add(`${res.json(req.body).user}.multiplier`, 8)
       bonus = true
     } else {
-      eco.add(`${req.body.json().user}.balance`, 15000)
-      eco.add(`${req.body.json().user}.multiplier`, 5)
+      eco.add(`${res.json(req.body).user}.balance`, 15000)
+      eco.add(`${res.json(req.body).user}.multiplier`, 5)
       bonus = false
     }
-    eco.set(`${req.body.json().user}.voted`, true)
-    eco.push('unvotes', { user: req.body.json().user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
+    eco.set(`${res.json(req.body).user}.voted`, true)
+    eco.push('unvotes', { user: res.json(req.body).user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
     try {
       if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,750*\n+ :crown: **8% Multiplier**')
       else embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000*\n+ :crown: **5% Multiplier**')
