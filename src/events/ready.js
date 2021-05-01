@@ -38,7 +38,7 @@ function webServer(bot) {
     res.status(200).end()
   })
   
-  app.listen(process.env.PORT, () => console.log(process.env.PORT))
+  app.listen(process.env.PORT, () => {})
 }
 
 module.exports.run = (bot) => {
