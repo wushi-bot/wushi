@@ -7,6 +7,7 @@ app.use(bodyParser.json())
 
 app.post('/dblHook', (req, res) => {
   console.log(req.body)
+  console.log(req.get('Authorization'))
   res.status(200).end()
 })
 
