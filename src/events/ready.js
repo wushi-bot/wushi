@@ -42,9 +42,40 @@ function webServer(bot) {
   app.listen(process.env.PORT, () => {})
 }
 
+const statuses = [
+  {
+    type: 'LISTENING',
+    name: '.help | .support'
+  },
+  {
+    type: 'PLAYING',
+    name: 'vote for the bot using .vote'
+  },
+  {
+    type: 'LISTENING',
+    name: '.vote'
+  },
+  {
+    type: 'PLAYING',
+    name: '.help | .vote'
+  },
+  {
+    type: 'LISTENING',
+    name: '.support | Did you join the support server?'
+  }
+]
+
+function changeStatus (bot) {
+  const status = statuses[~~(Math.random() * statuses.length)]
+  let type = status.type
+  bot.user.setActivity(status.name, {
+    type: type
+  })
+}
+
 module.exports.run = (bot) => {
   bot.logger.log('info', `Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
   console.log(chalk.black('────────────────────────────────────────────────────────────'))
-  bot.user.setActivity('.help | .support', { type: 'LISTENING' })
   webServer(bot)
+  setInterval(() => changeStatus(bot), 60000)
 }
