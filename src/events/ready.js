@@ -10,7 +10,7 @@ app.post('/dblHook', (req, res) => {
   res.status(200).end()
 })
 
-app.listen(80, () => console.log(process.env.PORT))
+app.listen(process.env.PORT, () => console.log(process.env.PORT))
 
 module.exports.run = (bot) => {
   bot.logger.log('info', `Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
