@@ -13,7 +13,7 @@ function webServer(bot) {
   app.post('/dblHook', (req, res) => {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
-    console.log(req.body)
+    res.status(200).end()
     const user = bot.users.cache.get(res.json(req.body).user)
     const embed = new MessageEmbed()
     let bonus
@@ -35,7 +35,6 @@ function webServer(bot) {
       embed.setColor('#ff4747')
       user.send(embed)
     } catch {}  
-    res.status(200).end()
   })
   
   app.listen(process.env.PORT, () => {})
