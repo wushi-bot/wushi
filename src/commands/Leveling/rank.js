@@ -35,7 +35,7 @@ class RankCommand extends Command {
       points = 0
     }
     const progBar = Math.floor(Math.max((points / nextLevel) * 450, 10))
-    let rankCardColor = cfg.get(`${msg.guild.id}.rankCardColor`)
+    let rankCardColor = leveling.get(`${msg.author.id}.rankCardColor`)
     rankCardColor = rankCardColor || '#ff3f38'
     const canvas = new Canvas(600, 300)
     const bg = await req('https://cdn.discordapp.com/attachments/777628711256064030/828002823185629264/a9620396df0e63802087054fbffabe931ab4de15.png').raw()
