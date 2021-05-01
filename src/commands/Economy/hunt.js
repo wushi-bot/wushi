@@ -130,9 +130,9 @@ class HuntCommand extends Command {
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (goldenGoose) {

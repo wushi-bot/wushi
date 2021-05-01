@@ -14,5 +14,21 @@
     "description": "Increases the bonus mine you get when mining, regardless of pickaxe. Automatically gets consumed when you mine via `[PRE]mine`.",
     "display": "Divining Rod",
     "emoji": ":chopsticks:"
+  },
+  {
+    "price": 2500,
+    "sell_price": 500,
+    "id": "fertilizer",
+    "description":"Increases the bonus crops you get when farming, regardless of hoe. Automatically gets consumed when you farm via `[PRE]farm`.",
+    "display": "Fertilizer",
+    "emoji": ":cow:"
+  },
+  {
+    "price": 5000,
+    "sell_price": 1250,
+    "id": "trap",
+    "description": "Increases the bonus game you get when hunting, regardless of rifle. Automatically gets consumed when you hunt via `[PRE]hunt`.",
+    "display": "Trap",
+    "emoji": ":mouse_trap:"
   }
 ]
