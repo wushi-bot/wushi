@@ -1,5 +1,6 @@
 import Bot from './structs/client'
 import moderationUtils from './utils/moderation'
+import economyUtils from './utils/economy'
 
 import 'dotenv/config'
 
@@ -13,6 +14,7 @@ const self = new Bot({
 self.loadCommands()
 self.loadEvents()
 
+economyUtils.runUnvoteChecks(self)
 moderationUtils.runUnmuteChecks(self)
 moderationUtils.runUnlockChecks(self)
 moderationUtils.runUnbanChecks(self)
