@@ -11,9 +11,9 @@ function webServer(bot) {
   app.use(bodyParser.json())
   
   app.post('/dblHook', (req, res) => {
-    console.log(req.body)
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
+    console.log(req.body)
     const user = bot.users.cache.get(req.body.json().user)
     const embed = new MessageEmbed()
     let bonus
