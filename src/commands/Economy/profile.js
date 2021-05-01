@@ -20,7 +20,7 @@ class ProfileCommand extends Command {
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-
+    if (!eco.get(`${user.user.id}.started`)) return this.client.emit('customError', 'That user does not have a bank account!', msg)
     const bank = eco.get(`${user.user.id}.bank`) || 0
     const balance = eco.get(`${user.user.id}.balance`) || 0
     let prestige = eco.get(`${user.user.id}.prestige`) || 1

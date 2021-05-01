@@ -24,7 +24,6 @@ class EvalCommand extends Command {
     if (!args[0]) return msg.channel.send('You need a statement to run.')
     if (msg.author.id !== '488786712206770196') return
     const evaluation = args.join(' ').replace(/--noPromise/g, '').replace('```js', '').replace('```', '')
-    console.log(evaluation)
     try {
       let evaled = eval(evaluation)
       if (typeof evaled !== 'string') {

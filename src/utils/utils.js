@@ -4,7 +4,6 @@ const leveling = new db.table('leveling')
 
 import keys from '../resources/key.json'
 import tools from '../resources/items/tools.json'
-import materials from '../resources/items/materials.json'
 import upgrades from '../resources/items/upgrades.json'
 
 module.exports.getPrefix = function (id) {
@@ -95,9 +94,6 @@ module.exports.allItems = function () {
   for (const item in tools) {
     allItems.push(tools[item])
   }
-  for (const item in materials) {
-    allItems.push(materials[item])
-  }  
   for (const item in upgrades) {
     allItems.push(upgrades[item])
   }   
