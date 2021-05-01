@@ -14,7 +14,7 @@ module.exports.runUnvoteChecks = function (bot) {
   setInterval(() => {
     const date = new Date().getTime()
     const unvotes = eco.get('unvotes') || []
-    if (unvote.length > 0) {
+    if (unvotes.length > 0) {
       for (let unvote of unvotes) {
         if (unvote.unvoteAt !== false) {
           if (unvote.unvoteAt <= date) {
