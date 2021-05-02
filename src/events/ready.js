@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import express from 'express'
 import bodyParser from 'body-parser'
 import { MessageEmbed } from 'discord.js'
+import { updateStats } from '../utils/utils'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
@@ -78,4 +79,10 @@ module.exports.run = (bot) => {
   console.log(chalk.black('────────────────────────────────────────────────────────────'))
   webServer(bot)
   setInterval(() => changeStatus(bot), 60000)
+  setInterval(async () => {
+    if (bot.user.id === '755526238466080830') {
+      await updateStats(bot.guilds.cache.size)
+      bot.logger.log('runner', 'Updated guild stats on top.gg')
+    }
+  }, 3600000)
 }
