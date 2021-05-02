@@ -48,7 +48,6 @@ function webServer(bot) {
     const embed = new MessageEmbed()
     eco.add(`${req.body.id}.balance`, 15000)
     eco.add(`${req.body.id}.multiplier`, 5)
-    bonus = false
     eco.set(`${req.body.id}.voted`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
     try {
