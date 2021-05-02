@@ -29,8 +29,8 @@ class HelpCommand extends Command {
       commandsList.forEach(command => {
         const category = command.conf.category
         if (!categories.includes(category)) {
-          if (category !== 'Admin' && msg.author.id !== '488786712206770196') disabled.push('Admin')
           const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
+          if (category !== 'Admin' && msg.author.id !== '488786712206770196') disabledModules.push('Admin')
           if (!disabledModules.includes(category)) categories.push(category)
         }
       })
