@@ -49,7 +49,7 @@ function webServer(bot) {
     eco.add(`${req.body.id}.balance`, 15000)
     eco.add(`${req.body.id}.multiplier`, 5)
     eco.set(`${req.body.id}.voted`, true)
-    eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
+    eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000 })
     try {
       embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
       embed.setFooter('These perks will expire when your vote renews again.')
