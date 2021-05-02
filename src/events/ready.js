@@ -39,7 +39,26 @@ function webServer(bot) {
       user.send(embed)
     } catch {}  
   })
-  
+ 
+  app.post('/dbl2Hook', (req, res) => {
+    if (!req.get('Authorization')) return res.status(400).end()
+    if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
+    res.status(200).end()
+    const user = bot.users.cache.get(req.body.id)
+    const embed = new MessageEmbed()
+    eco.add(`${req.body.id}.balance`, 15000)
+    eco.add(`${req.body.id}.multiplier`, 5)
+    bonus = false
+    eco.set(`${req.body.id}.voted`, true)
+    eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
+    try {
+      embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
+      embed.setFooter('These perks will expire when your vote renews again.')
+      embed.setColor('#ff4747')
+      user.send(embed)
+    } catch {}  
+  })
+
   app.listen(process.env.PORT, () => {})
 }
 
