@@ -21,12 +21,12 @@ function webServer(bot) {
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
-      eco.add(`${req.body.user}.balance`, 15750)
-      eco.add(`${req.body.user}.multiplier`, 8)
+      eco.add(`${user.user.id}.balance`, 5250)
+      eco.add(`${user.user.id}.multiplier`, 2)
       bonus = true
     } else {
-      eco.add(`${req.body.user}.balance`, 15000)
-      eco.add(`${req.body.user}.multiplier`, 5)
+      eco.add(`${user.user.id}.balance`, 5000)
+      eco.add(`${user.user.id}.multiplier`, 1)
       bonus = false
     }
     eco.set(`${req.body.user}.voted`, true)
@@ -46,8 +46,8 @@ function webServer(bot) {
     res.status(200).end()
     const user = bot.users.cache.get(req.body.id)
     const embed = new MessageEmbed()
-    eco.add(`${req.body.id}.balance`, 15000)
-    eco.add(`${req.body.id}.multiplier`, 5)
+    eco.add(`${user.user.id}.balance`, 5000)
+    eco.add(`${user.user.id}.multiplier`, 1)
     eco.set(`${req.body.id}.voted`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000 })
     try {
