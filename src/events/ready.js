@@ -17,18 +17,16 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
-    console.log(req.body, req.body.user)
     const user = bot.users.cache.get(req.body.user)
-    console.log(user)
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
-      eco.add(`${user.user.id}.balance`, 5250)
-      eco.add(`${user.user.id}.multiplier`, 2)
+      eco.add(`${user.id}.balance`, 5250)
+      eco.add(`${user.id}.multiplier`, 2)
       bonus = true
     } else {
-      eco.add(`${user.user.id}.balance`, 5000)
-      eco.add(`${user.user.id}.multiplier`, 1)
+      eco.add(`${user.id}.balance`, 5000)
+      eco.add(`${user.id}.multiplier`, 1)
       bonus = false
     }
     eco.set(`${req.body.user}.voted`, true)
@@ -48,8 +46,8 @@ async function webServer(bot) {
     res.status(200).end()
     const user = bot.users.cache.get(req.body.id)
     const embed = new MessageEmbed()
-    eco.add(`${user.user.id}.balance`, 5000)
-    eco.add(`${user.user.id}.multiplier`, 1)
+    eco.add(`${user.id}.balance`, 5000)
+    eco.add(`${user.id}.multiplier`, 1)
     eco.set(`${req.body.id}.voted`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
