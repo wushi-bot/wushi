@@ -68,17 +68,13 @@ class HuntCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':gun: Hunting', `**Correct choice!** You will get **+${bonus}** bonus game!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':gun: Hunting', `**Incorrect choice!** You will get no bonus game!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         }
         let goldenGooseChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
@@ -143,9 +139,7 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
-        setTimeout(() => {
-          message.edit(embed)
-        }, 3000)
+        message.edit(embed)
       })
       .catch(() => {
         let goldenGooseChance = 0

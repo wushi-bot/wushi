@@ -67,17 +67,13 @@ class FarmCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':seedling: Farming', `**Correct choice!** You will get **+${bonus}** bonus harvest!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':seedling: Farming', `**Incorrect choice!** You will get no bonus harvest!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         }
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {

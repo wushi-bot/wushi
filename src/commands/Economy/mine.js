@@ -68,17 +68,13 @@ class MineCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':pick: Mining', `**Correct choice!** You will get **+${bonus}** bonus minerals!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':pick: Mining', `**Incorrect choice!** You will get no bonus minerals!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         }
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
@@ -153,9 +149,7 @@ class MineCommand extends Command {
         const quizResult = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField(':pick: Mining', '**Ran out of time!** You dropped your pickaxe and you won\'t get a bonus!')
-        setTimeout(() => {
-          message.edit(quizResult)
-        }, 3000)
+        message.edit(quizResult)
         let bonus = 0 
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {

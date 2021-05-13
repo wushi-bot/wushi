@@ -68,17 +68,13 @@ class FishCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Correct choice!** You will get **+${bonus}** bonus fish!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Incorrect choice!** You will get no bonus fish!`)
-          setTimeout(() => {
-            message.edit(quizResult)
-          }, 3000)
+          message.edit(quizResult)
         }
         let goldenReelingChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
