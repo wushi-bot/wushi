@@ -21,19 +21,19 @@ async function webServer(bot) {
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
-      eco.add(`${user.id}.balance`, 5250)
+      eco.add(`${user.id}.balance`, 1000)
       eco.add(`${user.id}.multiplier`, 2)
       bonus = true
     } else {
-      eco.add(`${user.id}.balance`, 5000)
+      eco.add(`${user.id}.balance`, 750)
       eco.add(`${user.id}.multiplier`, 1)
       bonus = false
     }
     eco.set(`${req.body.user}.voted`, true)
     eco.push('unvotes', { user: req.body.user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus, site: 'topgg' })
     try {
-      if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,750**\n+ :crown: **8% Multiplier**')
-      else embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
+      if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **1,000**\n+ :crown: **2% Multiplier**')
+      else embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **750**\n+ :crown: **1% Multiplier**')
       embed.setFooter('These perks will expire when your vote renews again.')
       embed.setColor('#ff4747')
       user.send(embed)
@@ -46,12 +46,12 @@ async function webServer(bot) {
     res.status(200).end()
     const user = bot.users.cache.get(req.body.id)
     const embed = new MessageEmbed()
-    eco.add(`${user.id}.balance`, 5000)
+    eco.add(`${user.id}.balance`, 750)
     eco.add(`${user.id}.multiplier`, 1)
     eco.set(`${req.body.id}.voted`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
-      embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
+      embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **750**\n+ :crown: **1% Multiplier**')
       embed.setFooter('These perks will expire when your vote renews again.')
       embed.setColor('#ff4747')
       user.send(embed)
