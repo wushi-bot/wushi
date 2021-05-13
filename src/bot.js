@@ -7,9 +7,11 @@ import 'dotenv/config'
 const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
 const partials = ['USER']
 const self = new Bot({
+  cacheMembers: true,
+  cacheRoles: true,
+  cacheChannels: true,
   intents: intents,
   partials: partials
-  //fetchAllMembers: true
 })
 self.loadCommands()
 self.loadEvents()

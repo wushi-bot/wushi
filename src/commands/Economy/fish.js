@@ -59,7 +59,7 @@ class FishCommand extends Command {
       chooserEmbed.addField('Season: Winter :snowflake:', 'Choose a location to fish at: `Ocean`, `Ice Pond`, `Lake`. Send your choice in chat, picking the correct location will allow you to receive more bonus fish!')
       correctChoice = 'ice pond'
     }
-    await msg.reply(chooserEmbed)
+    const message = await msg.reply(chooserEmbed)
     await msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(collected => {
         const choice = collected.first()
@@ -68,13 +68,13 @@ class FishCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Correct choice!** You will get **+${bonus}** bonus fish!`)
-          collected.first().reply(quizResult)
+          message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Incorrect choice!** You will get no bonus fish!`)
-          collected.first().reply(quizResult)
+          message.edit(quizResult)
         }
         let goldenReelingChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
@@ -139,13 +139,17 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField(':fishing_pole_and_fish: Fishing', '**Ran out of time!** You dropped your fishing pole and you won\'t get a bonus for now!')
-        msg.reply(quizResult)
+        setTimeout(() => {
+          message.edit(quizResult)
+        }, 3000)
         let bonus = 0
         let goldenReelingChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
@@ -210,7 +214,9 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
 
   }
