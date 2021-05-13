@@ -8,6 +8,7 @@ const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
 const partials = ['USER']
 const self = new Bot({
   cacheMembers: true,
+  cacheRoles: true,
   intents: intents,
   partials: partials
 })
