@@ -17,10 +17,7 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
-    console.log(req.body)
     const user = bot.users.cache.get(req.body.user)
-    console.log(user)
-    console.log(bot.users.cache)
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
@@ -47,10 +44,7 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
-    console.log(req.body)
     const user = bot.users.cache.get(req.body.id)
-    console.log(user)
-    console.log(bot.users.cache)
     const embed = new MessageEmbed()
     eco.add(`${user.user.id}.balance`, 5000)
     eco.add(`${user.user.id}.multiplier`, 1)
