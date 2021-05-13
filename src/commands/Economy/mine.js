@@ -58,7 +58,7 @@ class MineCommand extends Command {
       chooserEmbed.addField('Most Profitable: River :ocean:', 'Choose a location to mine at: `Mountains`, `Caverns`, `River`. Send your choice in chat, picking the correct location will allow you to receive more bonus minerals!')
       correctChoice = 'river'
     }
-    await msg.reply(chooserEmbed)
+    const message = await msg.reply(chooserEmbed)
 
     await msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(collected => {
@@ -68,13 +68,17 @@ class MineCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':pick: Mining', `**Correct choice!** You will get **+${bonus}** bonus minerals!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':pick: Mining', `**Incorrect choice!** You will get no bonus minerals!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         }
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
@@ -141,13 +145,17 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField(':pick: Mining', '**Ran out of time!** You dropped your pickaxe and you won\'t get a bonus!')
-        msg.reply(quizResult)
+        setTimeout(() => {
+          message.edit(quizResult)
+        }, 3000)
         let bonus = 0 
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
@@ -214,7 +222,9 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
   }
 }

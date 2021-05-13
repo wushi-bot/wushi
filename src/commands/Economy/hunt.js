@@ -59,7 +59,7 @@ class HuntCommand extends Command {
       chooserEmbed.addField('Animal in Season: Deer :deer:', 'Choose an animal in season to hunt: `Pig`, `Rabbit`, `Deer`. Send your choice in chat, picking the correct location will allow you to receive more bonus game!')
       correctChoice = 'deer'
     }
-    await msg.reply(chooserEmbed)
+    const message = await msg.reply(chooserEmbed)
     await msg.channel.awaitMessages(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(collected => {
         const choice = collected.first()
@@ -68,13 +68,17 @@ class HuntCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':gun: Hunting', `**Correct choice!** You will get **+${bonus}** bonus game!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':gun: Hunting', `**Incorrect choice!** You will get no bonus game!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         }
         let goldenGooseChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
@@ -139,7 +143,9 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
       .catch(() => {
         let goldenGooseChance = 0
@@ -196,16 +202,18 @@ class HuntCommand extends Command {
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (goldenGoose) {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
 
   }

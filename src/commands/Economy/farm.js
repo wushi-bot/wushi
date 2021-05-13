@@ -67,13 +67,17 @@ class FarmCommand extends Command {
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':seedling: Farming', `**Correct choice!** You will get **+${bonus}** bonus harvest!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
             .setColor(msg.member.roles.highest.color) 
             .addField(':seedling: Farming', `**Incorrect choice!** You will get no bonus harvest!`)
-          collected.first().reply(quizResult)
+          setTimeout(() => {
+            message.edit(quizResult)
+          }, 3000)
         }
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
@@ -140,13 +144,17 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField(':seedling: Farming', '**Ran out of time!** You dropped your hoe and you won\'t get a bonus for now!')
-        msg.reply(quizResult)
+        setTimeout(() => {
+          message.edit(quizResult)
+        }, 3000)
         let bonus = 0 
         let goldChance = 0
         if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
@@ -213,7 +221,9 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        msg.reply(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
       })
   }
 }
