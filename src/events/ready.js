@@ -7,7 +7,7 @@ import db from 'quick.db'
 
 const eco = new db.table('economy')
 
-function webServer(bot) {
+async function webServer(bot) {
   const app = express()
   app.use(bodyParser.json())
   app.use(express.json()) 
@@ -18,7 +18,7 @@ function webServer(bot) {
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
     console.log(req.body)
-    const user = bot.users.cache.get(req.body.id)
+    const user = bot.users.cache.get(req.body.user)
     console.log(user)
     console.log(bot.users.cache)
     const embed = new MessageEmbed()
@@ -98,10 +98,10 @@ function changeStatus (bot) {
   })
 }
 
-module.exports.run = (bot) => {
+module.exports.run = async (bot) => {
   bot.logger.log('info', `Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
   console.log(chalk.black('────────────────────────────────────────────────────────────'))
-  webServer(bot)
+  await webServer(bot)
   setInterval(() => changeStatus(bot), 60000)
   setInterval(async () => {
     if (bot.user.id === '755526238466080830') {
