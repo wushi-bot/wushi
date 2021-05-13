@@ -24,9 +24,9 @@ module.exports.runUnvoteChecks = function (bot) {
             eco.set('unvotes', unvotes)
             eco.set(`${unvote.user}.voted`, false)
             if (unvote.bonus) {
-              eco.subtract(`${unvote.user}.multiplier`, 8)
+              eco.subtract(`${unvote.user}.multiplier`, 2)
             } else {
-              eco.subtract(`${unvote.user}.multiplier`, 5)
+              eco.subtract(`${unvote.user}.multiplier`, 1)
             }
           }
         }
