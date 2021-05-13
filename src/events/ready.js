@@ -17,8 +17,9 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
-    console.log(req.body)
+    console.log(req.body, req.body.user)
     const user = bot.users.cache.get(req.body.user)
+    console.log(user)
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
