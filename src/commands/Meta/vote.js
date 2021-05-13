@@ -22,4 +22,4 @@ class VoteCommand extends Command {
   }
 }
 
-module.exports = VoteCommande
+module.exports = VoteCommand
