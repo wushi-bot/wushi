@@ -9,6 +9,7 @@ const partials = ['USER']
 const self = new Bot({
   cacheMembers: true,
   cacheRoles: true,
+  cacheChannels: true,
   intents: intents,
   partials: partials
 })

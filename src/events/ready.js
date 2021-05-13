@@ -17,7 +17,10 @@ function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
-    const user = bot.users.cache.get(req.body.user)
+    console.log(req.body)
+    const user = bot.users.cache.get(req.body.id)
+    console.log(user)
+    console.log(bot.users.cache)
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
@@ -30,7 +33,7 @@ function webServer(bot) {
       bonus = false
     }
     eco.set(`${req.body.user}.voted`, true)
-    eco.push('unvotes', { user: req.body.user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus })
+    eco.push('unvotes', { user: req.body.user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus, site: 'topgg' })
     try {
       if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,750**\n+ :crown: **8% Multiplier**')
       else embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
@@ -44,12 +47,15 @@ function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
     res.status(200).end()
+    console.log(req.body)
     const user = bot.users.cache.get(req.body.id)
+    console.log(user)
+    console.log(bot.users.cache)
     const embed = new MessageEmbed()
     eco.add(`${user.user.id}.balance`, 5000)
     eco.add(`${user.user.id}.multiplier`, 1)
     eco.set(`${req.body.id}.voted`, true)
-    eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000 })
+    eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
       embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n\n+ :coin: **15,000**\n+ :crown: **5% Multiplier**')
       embed.setFooter('These perks will expire when your vote renews again.')
