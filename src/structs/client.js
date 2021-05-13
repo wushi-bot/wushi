@@ -1,4 +1,4 @@
-import { Client, Collection } from 'discord.js'
+import { Client, Collection } from 'discord.js-light'
 import { readdir, readdirSync } from 'fs'
 import path from 'path'
 import { Logger } from '../utils/logger'
