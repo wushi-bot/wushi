@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import Command from '../../structs/command'
 import key from '../../resources/key.json'
 import utils from '../../utils/utils'

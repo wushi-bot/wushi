@@ -1,5 +1,5 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 const levels = new db.table('leveling')
 

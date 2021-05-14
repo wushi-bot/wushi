@@ -1,5 +1,5 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import romanizeNumber from 'romanize-number'
 import utils from '../../utils/utils'
 import db from 'quick.db'

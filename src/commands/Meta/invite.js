@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import Command from '../../structs/command'
 
 class InviteCommand extends Command {

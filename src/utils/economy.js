@@ -1,5 +1,7 @@
 import db from 'quick.db'
+import utils from './utils'
 const eco = new db.table('economy')
+const pets = new db.table('pets')
 
 module.exports.addMoney = function (user, amount) {
   let multiplier = eco.get(`${user}.multiplier`) || 1
@@ -8,6 +10,29 @@ module.exports.addMoney = function (user, amount) {
   let final = amount + multiplied 
   eco.add(`${user}.balance`, Math.floor(final))
   return final
+}
+
+module.exports.runPetChecks = async function (bot) {
+  setInterval(() => {
+    pets.all().forEach(user => {
+      let list = pets.get(`${user.ID}.pets`) || []
+      const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0]
+      const i = list.indexOf(a)
+      const chance = utils.getRandomInt(1, 10)
+      if (chance === 5) {
+        if (a.happiness !== 0) a.happiness--
+      } else if (chance === 6) {
+        if (a.hunger !== 0) a.hunger--
+      }
+      const health = (a.hunger + a.happiness / 200) * 100
+      list[i] = a
+      let income = a.income
+      if (health < 50) income = a.income / 2
+      pets.add(`${user.ID}.income`, income)
+      if (pets.get(`${user.ID}.energy`) !== 10) pets.add(`${user.ID}.energy`, 1)
+      pets.set(`${user.ID}.pets`, list)
+    })
+  }, 1800000)
 }
 
 module.exports.runUnvoteChecks = function (bot) {

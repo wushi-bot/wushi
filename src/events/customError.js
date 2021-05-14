@@ -1,5 +1,5 @@
 
-import { MessageEmbed, MessageAttachment } from 'discord.js'
+import { MessageEmbed, MessageAttachment } from 'discord.js-light'
 import utils from '../utils/utils'
 
 exports.run = async (bot, error, message) => {

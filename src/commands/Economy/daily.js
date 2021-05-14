@@ -1,5 +1,5 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import ecoUtils from '../../utils/economy'
 import utils from '../../utils/utils'
 import ms from 'ms'

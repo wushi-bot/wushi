@@ -1,7 +1,7 @@
 import Command from '../../structs/command'
 import utils from '../../utils/utils'
 import ecoUtils from '../../utils/economy'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 
 const eco = new db.table('economy')

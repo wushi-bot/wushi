@@ -1,8 +1,7 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import ms from 'ms' 
 
-import utils from '../../utils/utils'
 import moderationUtils from '../../utils/moderation'
 import db from 'quick.db'
 

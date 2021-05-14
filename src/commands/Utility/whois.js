@@ -1,5 +1,5 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import moment from 'moment'
 
 function getJoinRank (ID, guild) { // Call it with the ID of the user and the guild

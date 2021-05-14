@@ -1,5 +1,5 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 
 import db from 'quick.db'
 import utils from '../../utils/utils'
@@ -34,7 +34,6 @@ class BuyCommand extends Command {
       var count = {}
       const items = eco.get(`${msg.author.id}.items`) || []
       items.forEach(function (i) { count[i] = (count[i] || 0) + 1 })
-      console.log(count[item.id])
       if (count[item.id] >= item.max) {
         return this.client.emit('customError', `${item.emoji} Maximum amount of ${item.emoji} **${item.display}**! | Your inventory has too much ${item.emoji} **${item.display}** to be able to buy more.`, msg)
       }
@@ -42,7 +41,7 @@ class BuyCommand extends Command {
     eco.subtract(`${msg.author.id}.balance`, item.price)
     eco.push(`${msg.author.id}.items`, item.id)
     const embed = new MessageEmbed()
-      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${utils.addCommas(Math.floor(eco.get(`${msg.guild.id}.${msg.author.id}.balance`)))}** | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       .setColor(msg.member.roles.highest.color)
     msg.reply(embed)
   }
