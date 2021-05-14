@@ -25,12 +25,13 @@ module.exports.runPetChecks = async function (bot) {
         if (a.hunger !== 0) a.hunger--
       }
       const health = (a.hunger + a.happiness / 200) * 100
-      list[i] = a
       let income = a.income
       if (health < 50) income = a.income / 2
+      list[i] = a
       pets.add(`${user.ID}.income`, income)
       if (pets.get(`${user.ID}.energy`) !== 10) pets.add(`${user.ID}.energy`, 1)
       pets.set(`${user.ID}.pets`, list)
+      bot.logger.log('runner', 'Updated pets, next one in 30 minutes.')
     })
   }, 1800000)
 }
