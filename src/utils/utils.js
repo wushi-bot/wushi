@@ -8,6 +8,7 @@ const leveling = new db.table('leveling')
 import keys from '../resources/key.json'
 import tools from '../resources/items/tools.json'
 import upgrades from '../resources/items/upgrades.json'
+import petstuff from '../resources/items/petstuff.json'
 
 module.exports.updateStats = function (guildCount) {
   return dbl.postStats(guildCount)
@@ -95,6 +96,17 @@ module.exports.getItem = function (arr, value) {
   return returnedItem
 }
 
+module.exports.getPet = function (arr, value) {
+  let returnedItem
+  arr.forEach(pet => {
+    if (pet.id === value) {
+      returnedItem = pet
+    }
+  })
+  if (!returnedItem) return undefined
+  return returnedItem
+}
+
 module.exports.allItems = function () {
 
   const allItems = []
@@ -104,6 +116,9 @@ module.exports.allItems = function () {
   for (const item in upgrades) {
     allItems.push(upgrades[item])
   }   
+  for (const item in petstuff) {
+    allItems.push(petstuff[item])
+  }    
   return allItems
 }
 

@@ -1,6 +1,6 @@
 import db from 'quick.db'
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 
 const cfg = new db.table('config')
 const leveling = new db.table('leveling')

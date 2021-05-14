@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 import moment from 'moment'
-import { version, MessageEmbed } from 'discord.js'
+import { version, MessageEmbed } from 'discord.js-light'
 import Command from '../../structs/command'
 require('moment-duration-format')
 

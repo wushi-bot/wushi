@@ -1,11 +1,12 @@
 import chalk from 'chalk'
 import express from 'express'
 import bodyParser from 'body-parser'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import { updateStats } from '../utils/utils'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const pets = new db.table('pets')
 
 async function webServer(bot) {
   const app = express()
@@ -23,10 +24,14 @@ async function webServer(bot) {
     if (req.body.isWeekend) {
       eco.add(`${user.id}.balance`, 1000)
       eco.add(`${user.id}.multiplier`, 2)
+      pets.add(`${user.id}.food`, 20)
+      pets.set(`${user.id}.energy`, 20)
       bonus = true
     } else {
       eco.add(`${user.id}.balance`, 750)
       eco.add(`${user.id}.multiplier`, 1)
+      pets.add(`${user.id}.food`, 10)
+      pets.set(`${user.id}.energy`, 10)
       bonus = false
     }
     eco.set(`${req.body.user}.voted`, true)
@@ -48,6 +53,8 @@ async function webServer(bot) {
     const embed = new MessageEmbed()
     eco.add(`${user.id}.balance`, 750)
     eco.add(`${user.id}.multiplier`, 1)
+    pets.add(`${user.id}.food`, 10)
+    pets.set(`${user.id}.energy`, 10)
     eco.set(`${req.body.id}.voted`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {

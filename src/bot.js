@@ -13,10 +13,12 @@ const self = new Bot({
   intents: intents,
   partials: partials
 })
+
 self.loadCommands()
 self.loadEvents()
 
 economyUtils.runUnvoteChecks(self)
+economyUtils.runPetChecks(self)
 moderationUtils.runUnmuteChecks(self)
 moderationUtils.runUnlockChecks(self)
 moderationUtils.runUnbanChecks(self)

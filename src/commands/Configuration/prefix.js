@@ -1,6 +1,5 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import Command from '../../structs/command'
-import utils from '../../utils/utils'
 import db from 'quick.db'
 const cfg = new db.table('config')
 

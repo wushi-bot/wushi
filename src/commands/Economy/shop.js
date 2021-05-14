@@ -1,8 +1,9 @@
 import Command from '../../structs/command'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 
 import tools from '../../resources/items/tools.json'
 import upgrades from '../../resources/items/upgrades.json'
+import petstuff from '../../resources/items/petstuff.json'
 import utils from '../../utils/utils'
 
 class ShopCommand extends Command {
@@ -22,6 +23,7 @@ class ShopCommand extends Command {
       const embed = new MessageEmbed()
         .addField(':tools: Tools', `\`${utils.getPrefix(msg.guild.id)}shop tools\` | See the catalog for the tools in your server.`)
         .addField(':up: Upgrades', `\`${utils.getPrefix(msg.guild.id)}shop upgrades\` | See the catalog for the upgrades for tools in your server.`)
+        .addField(':dog: Pet Stuff', `\`${utils.getPrefix(msg.guild.id)}shop pets\` | See the catalog for pet stuff.`)
         .setColor(msg.member.roles.highest.color)
       msg.reply(embed)
     } else if (args[0].toLowerCase() === 'tools') {
@@ -72,6 +74,15 @@ class ShopCommand extends Command {
         .setDescription(`The upgrades catalog, buy upgrades for tools using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
       upgrades.forEach(upgrade => {
         embed.addField(`${upgrade.emoji} ${upgrade.display}`, `ID: \`${upgrade.id}\` | Price: **:coin: ${utils.addCommas(upgrade.price)}** | ${upgrade.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
+      })
+      msg.reply(embed)
+    } else if (args[0].toLowerCase() === 'pets') {
+      const embed = new MessageEmbed()
+        .setColor(msg.member.roles.highest.color)
+        .setTitle(':dog: **Pet Stuff**')
+        .setDescription(`The pet stuff catalog, buy stuff for your pets using \`${utils.getPrefix(msg.guild.id)}buy <id>\`.`)
+        petstuff.forEach(stuff => {
+        embed.addField(`${stuff.emoji} ${stuff.display}`, `ID: \`${stuff.id}\` | Price: **:coin: ${utils.addCommas(stuff.price)}** | ${stuff.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
       })
       msg.reply(embed)
     }

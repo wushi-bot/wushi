@@ -1,5 +1,5 @@
 import { getPrefix } from '../utils/utils'
-import { MessageEmbed, Collection } from 'discord.js'
+import { MessageEmbed, Collection } from 'discord.js-light'
 import utils from '../utils/utils'
 import chalk from 'chalk'
 import db from 'quick.db'

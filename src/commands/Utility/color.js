@@ -1,7 +1,7 @@
 import Command from '../../structs/command'
 import canvas from 'canvas-constructor'
 import color from 'tinycolor2'
-import { MessageAttachment, MessageEmbed } from 'discord.js'
+import { MessageAttachment, MessageEmbed } from 'discord.js-light'
 
 // This command contains some snippets from another bot to work, credit goes to https://aero.bot for the idea.
 

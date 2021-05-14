@@ -1,6 +1,6 @@
 
 import db from 'quick.db'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js-light'
 import utils from './utils'
 
 const mod = new db.table('moderation')
