@@ -15,6 +15,7 @@ module.exports.addMoney = function (user, amount) {
 module.exports.runPetChecks = async function (bot) {
   setInterval(() => {
     pets.all().forEach(user => {
+      bot.logger.log('runner', 'Pets have been updated.')
       let list = pets.get(`${user.ID}.pets`) || []
       const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0]
       const i = list.indexOf(a)

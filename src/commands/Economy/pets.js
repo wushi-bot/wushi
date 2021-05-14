@@ -2,6 +2,7 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 
 import utils from '../../utils/utils'
+import ecoUtils from '../../utils/economy'
 import db from 'quick.db'
 
 import petsList from '../../resources/items/pets.json'
@@ -46,7 +47,7 @@ class PetsCommand extends Command {
         else if (happiness < 80) emoji = ':slight_smile:'
         else if (happiness < 90) emoji = ':smile:'
         else if (happiness === 100) emoji = ':smiley:'
-        embed.addField(`${display.emoji} **${display.display}** (Level ${pet.level})`, ` EXP: :sparkles: **${exp}/100**\n Health: :heart: **${health}%**\nHappiness: ${emoji} **${pet.happiness}%**\n Hunger: :meat_on_bone: **${pet.hunger}%**\n Income: :coin: **${pet.income}**`)
+        embed.addField(`${display.emoji} **${display.display}** (Level ${pet.level})`, `EXP: :sparkles: **${exp}/100**\nHealth: :heart: **${health}%**\nHappiness: ${emoji} **${pet.happiness}%**\nHunger: :meat_on_bone: **${pet.hunger}%**\nIncome: :coin: **${pet.income}**`)
         embed.addField(':bust_in_silhouette: You', `Food: :meat_on_bone: **${utils.addCommas(food)}**\nEnergy: :cloud_lightning: **${energy}/10**`)
         if (income !== 0) embed.addField(`:money_with_wings: Income`, `You have earned :coin: **${utils.addCommas(pets.get(`${msg.author.id}.income`))}** from your pet, collect it using \`${utils.getPrefix(msg.guild.id)}pet collect\`.`)
       if (health < 50) {
@@ -190,8 +191,8 @@ class PetsCommand extends Command {
       }
       msg.reply(embed)
     } else if (args[0] === 'collect') {
-      const income = pets.get(`${msg.author.id}.income`)
-      eco.add(`${msg.author.id}.balance`, income)
+      let income = pets.get(`${msg.author.id}.income`)
+      income = ecoUtils.addMoney(`${msg.author.id}`, income)
       pets.set(`${msg.author.id}.income`, 0)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully collected :coin: **${utils.addCommas(Math.floor(income))}** from your pet!`)
