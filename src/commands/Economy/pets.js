@@ -37,6 +37,7 @@ class PetsCommand extends Command {
         const happiness = pet.happiness || 0
         const display = utils.getPet(petsList, pet.pet)
         const health = Math.floor(((pet.happiness + pet.hunger) / 200) * 100)
+        const income = pets.get(`${msg.author.id}.income`) || 0
         const exp = pet.exp
         let emoji = ':smile:'
         if (happiness < 20) emoji = ':rage:'
@@ -47,7 +48,7 @@ class PetsCommand extends Command {
         else if (happiness === 100) emoji = ':smiley:'
         embed.addField(`${display.emoji} **${display.display}** (Level ${pet.level})`, ` EXP: :sparkles: **${exp}/100**\n Health: :heart: **${health}%**\nHappiness: ${emoji} **${pet.happiness}%**\n Hunger: :meat_on_bone: **${pet.hunger}%**\n Income: :coin: **${pet.income}**`)
         embed.addField(':bust_in_silhouette: You', `Food: :meat_on_bone: **${utils.addCommas(food)}**\nEnergy: :cloud_lightning: **${energy}/10**`)
-        if (pets.get(`${msg.author.id}.income`) || pets.get(`${msg.author.id}.income`) !== 0) embed.addField(`:money_with_wings: Income`, `You have earned :coin: **${utils.addCommas(pets.get(`${msg.author.id}.income`))}** from your pet, collect it using \`${utils.getPrefix(msg.guild.id)}pet collect\`.`)
+        if (income !== 0) embed.addField(`:money_with_wings: Income`, `You have earned :coin: **${utils.addCommas(pets.get(`${msg.author.id}.income`))}** from your pet, collect it using \`${utils.getPrefix(msg.guild.id)}pet collect\`.`)
       if (health < 50) {
         embed.addField(':broken_heart: Health Alert!', `Your pet is doing poor in health! Please feed your pet (\`${utils.getPrefix(msg.guild.id)}pet feed\`) and play (\`${utils.getPrefix(msg.guild.id)}pet play\`) with it!`)
       }
