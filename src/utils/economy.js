@@ -19,12 +19,14 @@ module.exports.runPetChecks = async function (bot) {
       const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0]
       const i = list.indexOf(a)
       const chance = utils.getRandomInt(1, 10)
+      const hunger = a.hunger || 100
+      const happiness = a.happiness || 100
       if (chance === 5) {
         if (a.happiness !== 0) a.happiness--
       } else if (chance === 6) {
         if (a.hunger !== 0) a.hunger--
       }
-      const health = (a.hunger + a.happiness / 200) * 100
+      const health = (hunger + happiness / 200) * 100
       let income = a.income
       if (health < 50) income = a.income / 2
       list[i] = a
