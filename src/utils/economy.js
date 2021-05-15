@@ -16,25 +16,27 @@ module.exports.runPetChecks = async function (bot) {
   setInterval(() => {
     pets.all().forEach(user => {
       let list = pets.get(`${user.ID}.pets`) || []
-      const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0]
-      const i = list.indexOf(a)
-      const chance = utils.getRandomInt(1, 10)
-      const hunger = a.hunger || 100
-      const happiness = a.happiness || 100
-      if (chance === 5) {
-        if (a.happiness !== 0) a.happiness--
-      } else if (chance === 6) {
-        if (a.hunger !== 0) a.hunger--
+      const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0] || undefined
+      if (a) {
+        const i = list.indexOf(a)
+        const chance = utils.getRandomInt(1, 10)
+        const hunger = a.hunger || 100
+        const happiness = a.happiness || 100
+        if (chance === 5) {
+          if (a.happiness !== 0) a.happiness--
+        } else if (chance === 6) {
+          if (a.hunger !== 0) a.hunger--
+        }
+        const health = (hunger + happiness / 200) * 100
+        let income = a.income
+        if (health < 50) income = a.income / 2
+        list[i] = a
+        pets.add(`${user.ID}.income`, income)
+        if (pets.get(`${user.ID}.energy`) !== 10) pets.add(`${user.ID}.energy`, 1)
+        pets.set(`${user.ID}.pets`, list)
       }
-      const health = (hunger + happiness / 200) * 100
-      let income = a.income
-      if (health < 50) income = a.income / 2
-      list[i] = a
-      pets.add(`${user.ID}.income`, income)
-      if (pets.get(`${user.ID}.energy`) !== 10) pets.add(`${user.ID}.energy`, 1)
-      pets.set(`${user.ID}.pets`, list)
-      bot.logger.log('runner', 'Updated pets, next one in 30 minutes.')
     })
+    bot.logger.log('runner', 'Updated pets, next one in 30 minutes.')
   }, 1800000)
 }
 
