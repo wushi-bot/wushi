@@ -29,7 +29,7 @@ class HuntCommand extends Command {
       !items.includes('decent_rifle') && 
       !items.includes('great_rifle')
     ) {
-      return this.client.emit('customError', `You need a rifle to fish, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
+      return this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
     }
     const animalInSeason = utils.getRandomInt(1, 4)
     let correctChoice

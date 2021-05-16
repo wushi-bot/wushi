@@ -51,10 +51,10 @@ class FishCommand extends Command {
       .setFooter('You have 8 seconds to pick a location.')
     if (season === 1) {
       chooserEmbed.addField('Season: Summer :sunny:', 'Choose a location to fish at: `Ocean`, `Ice Pond`, `Lake`. Send your choice in chat, picking the correct location will allow you to receive more bonus fish!')
-      correctChoice = 'lake'
+      correctChoice = 'ocean'
     } else if (season === 2) {
       chooserEmbed.addField('Season: Spring :seedling:', 'Choose a location to fish at: `Ocean`, `Ice Pond`, `Lake`. Send your choice in chat, picking the correct location will allow you to receive more bonus fish!')
-      correctChoice = 'ocean'
+      correctChoice = 'lake'
     } else if (season === 3) {
       chooserEmbed.addField('Season: Winter :snowflake:', 'Choose a location to fish at: `Ocean`, `Ice Pond`, `Lake`. Send your choice in chat, picking the correct location will allow you to receive more bonus fish!')
       correctChoice = 'ice pond'

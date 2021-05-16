@@ -9,7 +9,6 @@ const partials = ['USER']
 const self = new Bot({
   cacheMembers: true,
   cacheRoles: true,
-  cacheChannels: true,
   intents: intents,
   partials: partials
 })
@@ -19,6 +18,7 @@ self.loadEvents()
 
 economyUtils.runUnvoteChecks(self)
 economyUtils.runPetChecks(self)
+
 moderationUtils.runUnmuteChecks(self)
 moderationUtils.runUnlockChecks(self)
 moderationUtils.runUnbanChecks(self)
