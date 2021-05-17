@@ -10,7 +10,7 @@ class LevelMessageCommand extends Command {
     super(client, {
       name: 'level-message',
       description: 'Change the bot\'s level up message.',
-      category: 'Configuration',
+      category: 'Leveling',
       aliases: ['lvl-msg', 'lm', 'lvl-message'],
       usage: 'level-message <message>',
       cooldown: 1

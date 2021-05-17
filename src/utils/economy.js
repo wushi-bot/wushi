@@ -15,12 +15,11 @@ module.exports.addMoney = function (user, amount) {
 module.exports.runPetChecks = async function (bot) {
   setInterval(() => {
     pets.all().forEach(user => {
-      bot.logger.log('runner', 'Pets have been updated.')
       let list = pets.get(`${user.ID}.pets`) || []
       const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0] || undefined
       if (a) {
         const i = list.indexOf(a)
-        const chance = utils.getRandomInt(1, 10)
+        const chance = utils.getRandomInt(1, 7)
         const hunger = a.hunger || 100
         const happiness = a.happiness || 100
         if (chance === 5) {

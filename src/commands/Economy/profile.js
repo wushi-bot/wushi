@@ -25,7 +25,6 @@ class ProfileCommand extends Command {
     const balance = eco.get(`${user.user.id}.balance`) || 0
     let prestige = eco.get(`${user.user.id}.prestige`) || 1
     let multiplier = eco.get(`${user.user.id}.multiplier`) || 1
-    let luck = eco.get(`${user.user.id}.luck`) || 0
     let inventory = eco.get(`${user.user.id}.items`) || []
     var count = 0
     inventory.forEach(function () { count++ })
@@ -38,12 +37,13 @@ class ProfileCommand extends Command {
       .addField(':bank: Banking', `Bank: :coin: **${utils.addCommas(bank)}**\nWallet: :coin: **${utils.addCommas(balance)}**`, true)
       .addField(':medal: Prestige', `Prestige Level: **${romanizeNumber(prestige)}**`, true)
       .addField(':crown: Multiplier', `Multiplier: **${multiplier}%**`, true)
-      .addField(':four_leaf_clover: Luck', `Luck: **${luck}%**`, true)
       .addField(':handbag: Inventory', `**${count} items** in Inventory`, true)
     let time = new Date().getTime()
     if (!eco.get(`${user.user.id}.daily`)) embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
     else if (eco.get(`${user.user.id}.daily`) >= new Date().getTime()) embed.addField(':date: Daily', `<:cross:821028198330138644> (**${ms(eco.get(`${user.user.id}.daily`) - time, { long: true })}**)`, true)
     else embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
+    if (eco.get(`${msg.author.id}.voted`)) embed.addField(':up: Voted?', `<:check:820704989282172960>`, true)
+    else embed.addField(':up: Voted?', '<:cross:821028198330138644>', true)
 
     return msg.reply(embed)
   }
