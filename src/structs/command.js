@@ -7,10 +7,11 @@ class Command {
     enabled = true,
     guildOnly = false,
     aliases = [],
+    subcommands = [],
     cooldown = false
   }) {
     this.client = client
-    this.conf = { name, description, category, usage, enabled, guildOnly, aliases, cooldown }
+    this.conf = { name, description, category, usage, enabled, guildOnly, aliases, cooldown, subcommands }
   }
 }
 module.exports = Command

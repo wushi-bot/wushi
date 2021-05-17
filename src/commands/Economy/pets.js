@@ -15,8 +15,9 @@ class PetsCommand extends Command {
     super(client, {
       name: 'pets',
       description: 'Main command for pets',
-      category: 'Economy',
+      category: 'Pets',
       aliases: ['pet'],
+      subcommands: ['shop', 'buy', 'set', 'redeem', 'feed', 'play', 'collect', 'list'],
       usage: 'pets [subcommand]',
       cooldown: 1.5
     })

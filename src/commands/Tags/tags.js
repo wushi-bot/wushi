@@ -13,6 +13,7 @@ class TagsCommand extends Command {
       description: 'Main command for custom tags in your server.',
       category: 'Tags',
       aliases: ['t'],
+      subcommands: ['create', 'edit', 'list', 'delete'],
       usage: 'tags',
       cooldown: 3.5
     })

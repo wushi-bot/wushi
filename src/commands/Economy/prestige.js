@@ -24,13 +24,14 @@ class PrestigeCommand extends Command {
     eco.set(`${msg.author.id}.bank`, 0)
     eco.set(`${msg.author.id}.balance`, 0)
     eco.add(`${msg.author.id}.prestige`, 1)
+    eco.set(`${msg.author.id}.items`, [])
     eco.add(`${msg.author.id}.luck`, 1)
-    eco.set(`${msg.author.id}.multiplier`, 2)
+    eco.add(`${msg.author.id}.multiplier`, 1)
     let prestige = eco.get(`${msg.author.id}.prestige`) || 1
     const e = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .addField('<:check:820704989282172960> Success!', `Sucessfully prestiged to **Prestige ${romanizeNumber(prestige)}**!`)
-      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **2% Multiplier**\n+ **1 Luck Stat**`)
+      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **1% Multiplier**\n+ **1 Luck Stat**`)
     return msg.reply(e)
   }
 }

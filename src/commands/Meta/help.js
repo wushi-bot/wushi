@@ -30,8 +30,10 @@ class HelpCommand extends Command {
         const category = command.conf.category
         if (!categories.includes(category)) {
           const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
-          if (category !== 'Admin' && msg.author.id !== '488786712206770196') disabledModules.push('Admin')
-          if (!disabledModules.includes(category)) categories.push(category)
+          let check
+          if (category === 'Admin' && msg.author.id !== '488786712206770196') check = false
+          else check = true
+          if (!disabledModules.includes(category) && check) categories.push(category)
         }
       })
       commandsList.forEach(command => {
@@ -40,6 +42,11 @@ class HelpCommand extends Command {
         }
         const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
         if (command.conf.enabled === true && !disabledCommands.includes(command.conf.name)) {
+          if (command.conf.subcommands) {
+            command.conf.subcommands.forEach(subcommand => {
+              commandsInCategory[command.conf.category].push(`${command.conf.name} ${subcommand}`)
+            })
+          }
           commandsInCategory[command.conf.category].push(command.conf.name)
         }
       })

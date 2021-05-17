@@ -19,7 +19,7 @@ module.exports.runPetChecks = async function (bot) {
       const a = list.filter(value => value.id === pets.get(`${user.ID}.active`))[0] || undefined
       if (a) {
         const i = list.indexOf(a)
-        const chance = utils.getRandomInt(1, 10)
+        const chance = utils.getRandomInt(1, 7)
         const hunger = a.hunger || 100
         const happiness = a.happiness || 100
         if (chance === 5) {
