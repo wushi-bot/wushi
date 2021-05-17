@@ -18,9 +18,9 @@ class AvatarCommand extends Command {
     if (!user) return this.client.emit('customError', 'Please insert a valid user.', msg)
     const embed = new MessageEmbed()
       .setColor(user.roles.highest.color)
-      .setImage(`${user.user.avatarURL({ size: 2048 })}`)
+      .setImage(`${user.user.avatarURL({ size: 2048, dynamic: true })}`)
       .setFooter(`Avatar ID: ${user.user.avatar}`)
-      .setDescription(`[\`png\`](${user.user.avatarURL({ dynamic: true, format: 'png', size: 2048 })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg', size: 2048 })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif', size: 2048 })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp', size: 2048 })})`, true)
+      .setDescription(`[\`png\`](${user.user.avatarURL({ format: 'png', size: 2048 })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg', size: 2048 })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif', size: 2048 })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp', size: 2048 })})`, true)
     return msg.reply(embed)
   }
 }

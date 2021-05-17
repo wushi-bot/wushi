@@ -192,7 +192,7 @@ class PetsCommand extends Command {
       msg.reply(embed)
     } else if (args[0] === 'collect') {
       let income = pets.get(`${msg.author.id}.income`)
-      income = ecoUtils.addMoney(`${msg.author.id}`, income)
+      income = ecoUtils.addMoney(msg.author.id, Math.floor(income))
       pets.set(`${msg.author.id}.income`, 0)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully collected :coin: **${utils.addCommas(Math.floor(income))}** from your pet!`)
