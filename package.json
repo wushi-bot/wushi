@@ -1,6 +1,6 @@
 {
   "name": "@minota/wushi",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "wushi is a social discord bot which helps spice up communities.",
   "main": "src/bot.js",
   "scripts": {

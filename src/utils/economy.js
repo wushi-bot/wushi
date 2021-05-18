@@ -52,7 +52,8 @@ module.exports.runUnvoteChecks = function (bot) {
             let i = unvotes.indexOf(removing)
             unvotes.splice(i, 1)
             eco.set('unvotes', unvotes)
-            eco.set(`${unvote.user}.voted`, false)
+            if (unvote.site === 'discordbotlistcom') eco.set(`${unvote.user}.votedDBL`, false)
+            else if (unvote.site === 'topgg') eco.set(`${unvote.user}.votedTop`, false)
             if (unvote.bonus) {
               eco.subtract(`${unvote.user}.multiplier`, 2)
             } else {

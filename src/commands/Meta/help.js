@@ -53,7 +53,7 @@ class HelpCommand extends Command {
       categories.forEach(category => {
         embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
-      embed.addField('<:info:820704940682510449> Support Server', 'Need help with [wushi](https://www.youtube.com/watch?v=HjlrejIg4Vg)? Join our [support server](https://discord.gg/zjqeYbNU5F)!')
+      embed.addField(' ᅟᅟᅟᅟᅟᅟᅟᅟ', 'Need help with [wushi](https://www.youtube.com/watch?v=HjlrejIg4Vg)? Join our [support server](https://discord.gg/zjqeYbNU5F)!')
       return msg.reply(embed)
     } else {
       const embed = new MessageEmbed()

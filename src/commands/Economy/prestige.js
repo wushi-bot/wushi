@@ -31,7 +31,7 @@ class PrestigeCommand extends Command {
     const e = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .addField('<:check:820704989282172960> Success!', `Sucessfully prestiged to **Prestige ${romanizeNumber(prestige)}**!`)
-      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **1% Multiplier**\n+ **1 Luck Stat**`)
+      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **1% Multiplier**`)
     return msg.reply(e)
   }
 }

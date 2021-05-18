@@ -20,7 +20,7 @@ class LevelMessageCommand extends Command {
   async run (bot, msg, args) {
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
-    if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_SERVER')) {
+    if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
       return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
     }
     if (!cfg.get(`${msg.guild.id}.leveling`)) return this.client.emit('customError', '`Leveling` must be enabled for this action.', msg)

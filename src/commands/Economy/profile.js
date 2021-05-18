@@ -42,8 +42,11 @@ class ProfileCommand extends Command {
     if (!eco.get(`${user.user.id}.daily`)) embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
     else if (eco.get(`${user.user.id}.daily`) >= new Date().getTime()) embed.addField(':date: Daily', `<:cross:821028198330138644> (**${ms(eco.get(`${user.user.id}.daily`) - time, { long: true })}**)`, true)
     else embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
-    if (eco.get(`${msg.author.id}.voted`)) embed.addField(':up: Voted?', `<:check:820704989282172960>`, true)
-    else embed.addField(':up: Voted?', '<:cross:821028198330138644>', true)
+
+    if (eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
+    else if (eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
+    else if (!eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
+    else if (!eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
 
     return msg.reply(embed)
   }

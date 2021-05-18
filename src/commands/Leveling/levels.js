@@ -17,10 +17,10 @@ class LevelsCommand extends Command {
 
   async run (bot, msg, args) {
     let list = []
-    levels.all().forEach(async entry => {
+    levels.all().forEach(entry => {
       if (entry.ID === msg.guild.id) {
         for (var key in entry.data) {
-          const user = await this.client.users.fetch(key)
+          const user = this.client.users.cache.get(entry.ID)
           if (msg.guild.members.resolveID(user)) {
             list.push({ ID: key, totalExp: entry.data[key].totalExp })
           }
