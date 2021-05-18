@@ -18,14 +18,16 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.AUTHORIZATION) return res.status(401).end()
     const user = await bot.users.fetch(req.params.id)
+    console.log(user)
     if (!user) return res.status(404).end()
-    const ecoUser = eco.get(`${user}`)
+    const ecoUser = eco.get(`${user.id}`)
     return res.status(200).send({
       balance: ecoUser.balance,
       bank: ecoUser.bank,
       votedTop: ecoUser.votedTop,
       votedDBL: ecoUser.votedDBL,
       prestige: ecoUser.prestige,
+      multiplier: ecoUser.multiplier,
       weekly: ecoUser.weekly,
       daily: ecoUser.daily,
       items: ecoUser.items
