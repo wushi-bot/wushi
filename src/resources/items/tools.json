@@ -9,7 +9,7 @@
     "max": 1
   },
   {
-    "price": 10000,
+    "price": 550,
     "sell_price": 1250,
     "id": "decent_fishing_rod",
     "description": "Allows you to do `[PRE]fish` and make money from fishing. Slightly better fishing rod than the flimsy fishing rod.",
@@ -18,7 +18,7 @@
     "max": 1
   },
   {
-    "price": 35000,
+    "price": 750,
     "sell_price": 5000,
     "id": "great_fishing_rod",
     "description": "Allows you to do `[PRE]fish` and make money from fishing. Slightly better fishing rod than the decent fishing rod.",
@@ -27,7 +27,7 @@
     "max": 1
   },
   {
-    "price": 50000,
+    "price": 5000,
     "sell_price": 15000,
     "id": "flimsy_pickaxe",
     "description": "Allows you to do `[PRE]mine` and make money from mining.",
@@ -36,7 +36,7 @@
     "max": 1
   },
   {
-    "price": 75000,
+    "price": 7500,
     "sell_price": 20000,
     "id": "decent_pickaxe",
     "description": "Allows you to do `[PRE]mine` and make money from mining. Slightly better pickaxe than the flimsy pickaxe.",
@@ -45,7 +45,7 @@
     "max": 1
   },  
   {
-    "price": 95000,
+    "price": 8500,
     "sell_price": 30000,
     "id": "great_pickaxe",
     "description": "Allows you to do `[PRE]mine` and make money from mining. Slightly better pickaxe than the decent pickaxe.",
@@ -54,7 +54,7 @@
     "max": 1
   },
   {
-    "price": 175000,
+    "price": 15000,
     "sell_price": 50000,
     "id": "flimsy_hoe",
     "description": "Allows you to do `[PRE]farm` and make money from farming.",
@@ -63,7 +63,7 @@
     "max": 1
   }, 
   {
-    "price": 225000,
+    "price": 25000,
     "sell_price": 75000,
     "id": "decent_hoe",
     "description": "Allows you to do `[PRE]farm` and make money from farming. Slightly better than the flimsy hoe.",
@@ -72,7 +72,7 @@
     "max": 1
   },  
   {
-    "price": 325000,
+    "price": 32500,
     "sell_price": 125000,
     "id": "great_hoe",
     "description": "Allows you to do `[PRE]farm` and make money from farming. Slightly better than the decent hoe.",
@@ -81,7 +81,7 @@
     "max": 1
   },
   {
-    "price": 525000,
+    "price": 50000,
     "sell_price": 150000,
     "id": "flimsy_rifle",
     "description": "Allows you to do `[PRE]hunt` and make money from hunting.",
@@ -90,7 +90,7 @@
     "max": 1
   },
   {
-    "price": 725000,
+    "price": 72500,
     "sell_price": 175000,
     "id": "decent_rifle",
     "description": "Allows you to do `[PRE]hunt` and make money from hunting. Slightly better than the flimsy rifle.",
@@ -99,7 +99,7 @@
     "max": 1
   },  
   {
-    "price": 1000000,
+    "price": 100000,
     "sell_price": 200000,
     "id": "great_rifle",
     "description": "Allows you to do `[PRE]hunt` and make money from hunting. #BTE.",

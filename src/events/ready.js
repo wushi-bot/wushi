@@ -14,6 +14,24 @@ async function webServer(bot) {
   app.use(express.json()) 
   app.use(express.urlencoded({ extended: true }))
 
+  app.get('/eco/:id', async (req, res) => {
+    if (!req.get('Authorization')) return res.status(400).end()
+    if (req.get('Authorization') !== process.env.AUTHORIZATION) return res.status(401).end()
+    const user = await bot.users.fetch(req.params.id)
+    if (!user) return res.status(404).end()
+    const ecoUser = eco.get(`${user}`)
+    return res.status(200).send({
+      balance: ecoUser.balance,
+      bank: ecoUser.bank,
+      votedTop: ecoUser.votedTop,
+      votedDBL: ecoUser.votedDBL,
+      prestige: ecoUser.prestige,
+      weekly: ecoUser.weekly,
+      daily: ecoUser.daily,
+      items: ecoUser.items
+    })
+  })
+
   app.post('/dblHook', (req, res) => {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.DBL_AUTHORIZATION) return res.status(401).end()
@@ -24,14 +42,10 @@ async function webServer(bot) {
     if (req.body.isWeekend) {
       eco.add(`${user.id}.balance`, 1000)
       eco.add(`${user.id}.multiplier`, 2)
-      pets.add(`${user.id}.food`, 20)
-      pets.set(`${user.id}.energy`, 20)
       bonus = true
     } else {
       eco.add(`${user.id}.balance`, 750)
       eco.add(`${user.id}.multiplier`, 1)
-      pets.add(`${user.id}.food`, 10)
-      pets.set(`${user.id}.energy`, 10)
       bonus = false
     }
     eco.set(`${req.body.id}.votedTop`, true)
@@ -53,8 +67,6 @@ async function webServer(bot) {
     const embed = new MessageEmbed()
     eco.add(`${user.id}.balance`, 750)
     eco.add(`${user.id}.multiplier`, 1)
-    pets.add(`${user.id}.food`, 10)
-    pets.set(`${user.id}.energy`, 10)
     eco.set(`${req.body.id}.votedDBL`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
