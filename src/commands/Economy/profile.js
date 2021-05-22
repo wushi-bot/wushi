@@ -25,9 +25,7 @@ class ProfileCommand extends Command {
     const balance = eco.get(`${user.user.id}.balance`) || 0
     let prestige = eco.get(`${user.user.id}.prestige`) || 1
     let multiplier = eco.get(`${user.user.id}.multiplier`) || 1
-    let inventory = eco.get(`${user.user.id}.items`) || []
-    var count = 0
-    inventory.forEach(function () { count++ })
+    let inventory = Object.keys(eco.get(`${user.user.id}.items`)).length
     if (prestige === 0) prestige = 1
     if (multiplier === 0) multiplier = 1
 
@@ -37,11 +35,17 @@ class ProfileCommand extends Command {
       .addField(':bank: Banking', `Bank: :coin: **${utils.addCommas(bank)}**\nWallet: :coin: **${utils.addCommas(balance)}**`, true)
       .addField(':medal: Prestige', `Prestige Level: **${romanizeNumber(prestige)}**`, true)
       .addField(':crown: Multiplier', `Multiplier: **${multiplier}%**`, true)
-      .addField(':handbag: Inventory', `**${count} items** in Inventory`, true)
+      .addField(':handbag: Inventory', `**${inventory} items** in Inventory`, true)
     let time = new Date().getTime()
-    if (!eco.get(`${user.user.id}.daily`)) embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
-    else if (eco.get(`${user.user.id}.daily`) >= new Date().getTime()) embed.addField(':date: Daily', `<:cross:821028198330138644> (**${ms(eco.get(`${user.user.id}.daily`) - time, { long: true })}**)`, true)
-    else embed.addField(':date: Daily', `<:check:820704989282172960>`, true)
+    const d = eco.get(`${user.user.id}.daily`) || 0
+    const w = eco.get(`${user.user.id}.weekly`) || 0
+    let daily = d >= new Date().getTime()
+    let weekly = w >= new Date().getTime()
+
+    if (weekly && daily) embed.addField(':date: Cooldowns', `<:check:820704989282172960> Daily\n<:check:820704989282172960> Weekly`, true)
+    else if (!weekly && daily) embed.addField(':date: Cooldowns', `<:check:820704989282172960> Daily\n<:cross:821028198330138644> Weekly`, true)
+    else if (weekly && !daily) embed.addField(':date: Cooldowns', `<:cross:821028198330138644> Daily\n<:check:820704989282172960> Weekly`, true)
+    else if (!weekly && !daily) embed.addField(':date: Cooldowns', `<:cross:821028198330138644> Daily\n<:cross:821028198330138644> Weekly`, true)
 
     if (eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
     else if (eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)

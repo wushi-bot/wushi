@@ -22,11 +22,11 @@ class FarmCommand extends Command {
     if (!eco.get(`${msg.author.id}.started`)) {
       return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     }
-    const items = eco.get(`${msg.author.id}.items`) || []
+    const items = eco.get(`${msg.author.id}.items`) || {}
     if (
-      !items.includes('flimsy_hoe') && 
-      !items.includes('decent_hoe') && 
-      !items.includes('great_hoe')
+      !items['flimsy_hoe'] && 
+      !items['decent_hoe'] && 
+      !items['great_hoe']
     ) {
       return this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_hoe\`.`, msg)
     }
@@ -76,13 +76,13 @@ class FarmCommand extends Command {
           message.edit(quizResult)
         }
         let goldChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           goldChance = 2.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           goldChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           goldChance = 12
         }
         const odds = utils.getRandomInt(0, 100)
@@ -93,18 +93,18 @@ class FarmCommand extends Command {
           gold = false
         }
 
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           bonus = bonus + utils.getRandomInt(5, 10)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           bonus = bonus + utils.getRandomInt(12, 18)
         }
 
         let fertilizerBonus
-        if (eco.get(`${msg.author.id}.items`).includes('fertilizer')) {
+        if (items['fertilizer']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fertilizer')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -112,28 +112,28 @@ class FarmCommand extends Command {
         }
         const goldBonus = utils.getRandomInt(100, 400)
         let harvestHarvested
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           harvestHarvested = utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           harvestHarvested = utils.getRandomInt(10, 35)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           harvestHarvested = utils.getRandomInt(35, 45)
         }
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
 
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fertilizerBonus) {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (gold) {
@@ -153,13 +153,13 @@ class FarmCommand extends Command {
         }, 3000)
         let bonus = 0 
         let goldChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           goldChance = 2.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           goldChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           goldChance = 12
         }
         const odds = utils.getRandomInt(0, 100)
@@ -170,18 +170,18 @@ class FarmCommand extends Command {
           gold = false
         }
 
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           bonus = bonus + utils.getRandomInt(5, 10)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           bonus = bonus + utils.getRandomInt(12, 18)
         }
 
         let fertilizerBonus
-        if (eco.get(`${msg.author.id}.items`).includes('fertilizer')) {
+        if (items['fertilizer']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fertilizer')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -189,28 +189,28 @@ class FarmCommand extends Command {
         }
         const goldBonus = utils.getRandomInt(100, 400)
         let harvestHarvested
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_hoe')) {
+        if (items['flimsy_hoe']) {
           harvestHarvested = utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_hoe')) {
+        if (items['decent_hoe']) {
           harvestHarvested = utils.getRandomInt(10, 35)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_hoe')) {
+        if (items['great_hoe']) {
           harvestHarvested = utils.getRandomInt(35, 45)
         }
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
 
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fertilizerBonus) {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (gold) {

@@ -25,9 +25,9 @@ class HuntCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
-      !items.includes('flimsy_rifle') && 
-      !items.includes('decent_rifle') && 
-      !items.includes('great_rifle')
+      !items['flimsy_rifle'] && 
+      !items['decent_rifle'] && 
+      !items['great_rifle']
     ) {
       return this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
     }
@@ -77,13 +77,13 @@ class HuntCommand extends Command {
           message.edit(quizResult)
         }
         let goldenGooseChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           goldenGooseChance = 12.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           goldenGooseChance = 35.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           goldenGooseChance = 67
         }
         const odds = utils.getRandomInt(0, 100)
@@ -94,17 +94,17 @@ class HuntCommand extends Command {
           goldenGoose = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let trapBonus
-        if (eco.get(`${msg.author.id}.items`).includes('trap')) {
+        if (items['trap']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(9, 20)
@@ -112,19 +112,19 @@ class HuntCommand extends Command {
         }
         const goldenGooseBonus = utils.getRandomInt(80, 225)
         let animalsHunted
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           animalsHunted = utils.getRandomInt(5, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           animalsHunted = utils.getRandomInt(12, 30)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           animalsHunted = utils.getRandomInt(20, 50)
         }
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
         const embed = new MessageEmbed()
@@ -143,13 +143,13 @@ class HuntCommand extends Command {
       })
       .catch(() => {
         let goldenGooseChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           goldenGooseChance = 12.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           goldenGooseChance = 35.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           goldenGooseChance = 67
         }
         const odds = utils.getRandomInt(0, 100)
@@ -160,17 +160,17 @@ class HuntCommand extends Command {
           goldenGoose = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let trapBonus
-        if (eco.get(`${msg.author.id}.items`).includes('trap')) {
+        if (items['trap']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(9, 20)
@@ -178,19 +178,19 @@ class HuntCommand extends Command {
         }
         const goldenGooseBonus = utils.getRandomInt(80, 225)
         let animalsHunted
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           animalsHunted = utils.getRandomInt(5, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           animalsHunted = utils.getRandomInt(12, 30)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           animalsHunted = utils.getRandomInt(20, 50)
         }
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
         const embed = new MessageEmbed()

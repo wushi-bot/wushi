@@ -25,9 +25,9 @@ class FishCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
-      !items.includes('flimsy_fishing_rod') && 
-      !items.includes('decent_fishing_rod') && 
-      !items.includes('great_fishing_rod')
+      !items['flimsy_fishing_rod'] && 
+      !items['decent_fishing_rod'] && 
+      !items['great_fishing_rod']
     ) {
       return this.client.emit('customError', `You need a fishing rod to fish, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`, msg)
     }
@@ -77,13 +77,13 @@ class FishCommand extends Command {
           message.edit(quizResult)
         }
         let goldenReelingChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           goldenReelingChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           goldenReelingChance = 25.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           goldenReelingChance = 60
         }
         const odds = utils.getRandomInt(0, 100)
@@ -94,17 +94,17 @@ class FishCommand extends Command {
           goldenReeling = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let fishingBaitBonus
-        if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
+        if (items['fishing_bait']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -112,27 +112,27 @@ class FishCommand extends Command {
         }
         const goldenReelBonus = utils.getRandomInt(45, 175)
         let fishReeled
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           fishReeled = utils.getRandomInt(1, 12)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           fishReeled = utils.getRandomInt(7, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           fishReeled = utils.getRandomInt(9, 27)
         }
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fishingBaitBonus) {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (goldenReeling) {
@@ -152,13 +152,13 @@ class FishCommand extends Command {
         }, 3000)
         let bonus = 0
         let goldenReelingChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           goldenReelingChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           goldenReelingChance = 25.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           goldenReelingChance = 60
         }
         const odds = utils.getRandomInt(0, 100)
@@ -169,17 +169,17 @@ class FishCommand extends Command {
           goldenReeling = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let fishingBaitBonus
-        if (eco.get(`${msg.author.id}.items`).includes('fishing_bait')) {
+        if (items['fishing_bait']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -187,27 +187,27 @@ class FishCommand extends Command {
         }
         const goldenReelBonus = utils.getRandomInt(45, 175)
         let fishReeled
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_fishing_rod')) {
+        if (items['flimsy_fishing_rod']) {
           fishReeled = utils.getRandomInt(1, 12)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_fishing_rod')) {
+        if (items['decent_fishing_rod']) {
           fishReeled = utils.getRandomInt(7, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_fishing_rod')) {
+        if (items['great_fishing_rod']) {
           fishReeled = utils.getRandomInt(9, 27)
         }
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          eco.add(`${msg.author.id}.balance`, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount)
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fishingBaitBonus) {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
         } else {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
         }
         
         if (goldenReeling) {

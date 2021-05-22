@@ -18,7 +18,6 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.AUTHORIZATION) return res.status(401).end()
     const user = await bot.users.fetch(req.params.id)
-    console.log(user)
     if (!user) return res.status(404).end()
     const ecoUser = eco.get(`${user.id}`)
     return res.status(200).send({
@@ -32,6 +31,20 @@ async function webServer(bot) {
       daily: ecoUser.daily,
       items: ecoUser.items
     })
+  })
+
+  app.get('/commands', async (req, res) => {
+    if (!req.get('Authorization')) return res.status(400).end()
+    if (req.get('Authorization') !== process.env.AUTHORIZATION) return res.status(401).end()
+    const commands = []
+    bot.commands.array().forEach(command => commands.push({ name: command.conf.name, 
+      description: command.conf.description, 
+      category: command.conf.category,
+      usage: command.conf.usage,
+      aliases: command.conf.aliases,
+      cooldown: command.conf.cooldown
+     }))
+    return res.status(200).send({ commands })
   })
 
   app.post('/dblHook', (req, res) => {
