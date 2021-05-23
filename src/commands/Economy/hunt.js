@@ -124,7 +124,7 @@ class HuntCommand extends Command {
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.hunting.level`) * 0.1))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
@@ -139,6 +139,8 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'hunting')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         message.edit(embed)
       })
       .catch(() => {
@@ -190,9 +192,10 @@ class HuntCommand extends Command {
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.hunting.level`) * 0.1))
           profit = profit + amount
         }
+        const levelUp = ecoUtils.addExp(msg.author, 'hunting')
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
@@ -205,6 +208,8 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'hunting')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

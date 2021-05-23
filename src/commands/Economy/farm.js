@@ -124,7 +124,7 @@ class FarmCommand extends Command {
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount  + amount * (eco.get(`${msg.author.id}.skills.farming.level`) * 0.1))
           profit = profit + amount
         }
 
@@ -140,6 +140,8 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'farming')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
@@ -201,10 +203,9 @@ class FarmCommand extends Command {
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.farming.level`) * 0.1))
           profit = profit + amount
         }
-
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fertilizerBonus) {
@@ -217,6 +218,8 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'farming')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

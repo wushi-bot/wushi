@@ -1,3 +1,5 @@
+import { MessageEmbed } from 'discord.js-light'
+import romanizeNumber from 'romanize-number'
 import db from 'quick.db'
 import utils from './utils'
 const eco = new db.table('economy')
@@ -11,6 +13,22 @@ module.exports.addMoney = function (user, amount) {
   eco.add(`${user}.balance`, Math.floor(final))
   return final
 }
+
+module.exports.addExp = function (user, skill) {
+  let amount = utils.getRandomInt(2, 8)
+  eco.add(`${user.id}.skills.${skill}.exp`, amount)
+  if (eco.get(`${user.id}.skills.${skill}.exp`) > eco.get(`${user.id}.skills.${skill}.req`)) {
+    eco.subtract(`${user.id}.skills.${skill}.exp`, eco.get(`${user.id}.skills.${skill}.req`))
+    eco.add(`${user.id}.skills.${skill}.req`, eco.get(`${user.id}.skills.${skill}.req`) * 0.1)
+    eco.add(`${user.id}.skills.${skill}.level`, 1)
+    const embed = new MessageEmbed()
+      .setColor('#ff4747')
+      .addField(`:up: Level up!`, `Successfully leveled up in **${skill}**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+    user.send(embed)
+  }
+  return amount
+}
+
 
 module.exports.runPetChecks = async function (bot) {
   setInterval(() => {

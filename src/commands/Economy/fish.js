@@ -124,7 +124,7 @@ class FishCommand extends Command {
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.fishing.level`) * 0.1))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
@@ -139,6 +139,8 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'fishing')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
@@ -199,7 +201,7 @@ class FishCommand extends Command {
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.fishing.level`) * 0.1))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
@@ -214,6 +216,8 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'fishing')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

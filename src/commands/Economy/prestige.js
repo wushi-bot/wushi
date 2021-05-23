@@ -24,8 +24,7 @@ class PrestigeCommand extends Command {
     eco.set(`${msg.author.id}.bank`, 0)
     eco.set(`${msg.author.id}.balance`, 0)
     eco.add(`${msg.author.id}.prestige`, 1)
-    eco.delete(`${msg.author.id}.items`)
-    eco.add(`${msg.author.id}.luck`, 1)
+    eco.set(`${msg.author.id}.items`, {})
     eco.add(`${msg.author.id}.multiplier`, 1)
     eco.set(`${msg.author.id}.items.flimsy_fishing_rod`, 1)
     let prestige = eco.get(`${msg.author.id}.prestige`) || 1

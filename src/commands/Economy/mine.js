@@ -125,10 +125,10 @@ class MineCommand extends Command {
         let profit = 0
         for (let int = 0; int < mineralMined + bonus; int++) {
           let amount = utils.getRandomInt(10, 15)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.mining.level`) * 0.1))
           profit = profit + amount
         }
-
+        const levelUp = ecoUtils.addExp(msg.author, 'mining')
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!diviningRodBonus) {
@@ -141,6 +141,8 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'mining')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
@@ -200,7 +202,7 @@ class MineCommand extends Command {
         let profit = 0
         for (let int = 0; int < mineralMined + bonus; int++) {
           let amount = utils.getRandomInt(10, 15)
-          amount = ecoUtils.addMoney(msg.author.id, amount)
+          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.mining.level`) * 0.1))
           profit = profit + amount
         }
 
@@ -216,6 +218,8 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'mining')
+        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
