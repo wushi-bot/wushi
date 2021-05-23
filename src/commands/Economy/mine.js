@@ -143,7 +143,7 @@ class MineCommand extends Command {
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
         ecoUtils.addExp(msg.author, 'mining')
-        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
@@ -221,7 +221,7 @@ class MineCommand extends Command {
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
         ecoUtils.addExp(msg.author, 'mining')
-        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

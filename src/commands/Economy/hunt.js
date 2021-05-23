@@ -141,7 +141,7 @@ class HuntCommand extends Command {
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
         ecoUtils.addExp(msg.author, 'hunting')
-        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         message.edit(embed)
       })
       .catch(() => {
@@ -211,7 +211,7 @@ class HuntCommand extends Command {
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
         ecoUtils.addExp(msg.author, 'hunting')
-        embed.addField(':diamond_shape_with_a_dot_inside: EXP', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
