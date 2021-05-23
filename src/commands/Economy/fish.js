@@ -124,15 +124,16 @@ class FishCommand extends Command {
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.fishing.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.fishing.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fishingBaitBonus) {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (goldenReeling) {
@@ -201,15 +202,16 @@ class FishCommand extends Command {
         let profit = 0
         for (let int = 0; int < fishReeled + bonus; int++) {
           let amount = utils.getRandomInt(2, 8)
-          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.fishing.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.fishing.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fishingBaitBonus) {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.round(profit))}**!`)
         } else {
-          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and got :fish: ${fishReeled} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.round(profit))}**!`)
         }
         
         if (goldenReeling) {

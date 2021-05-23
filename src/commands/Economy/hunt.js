@@ -124,15 +124,16 @@ class HuntCommand extends Command {
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.hunting.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (goldenGoose) {
@@ -192,16 +193,17 @@ class HuntCommand extends Command {
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.hunting.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const levelUp = ecoUtils.addExp(msg.author, 'hunting')
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (goldenGoose) {

@@ -124,16 +124,16 @@ class FarmCommand extends Command {
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          amount = ecoUtils.addMoney(msg.author.id, amount  + amount * (eco.get(`${msg.author.id}.skills.farming.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.farming.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
-
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fertilizerBonus) {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (gold) {
@@ -203,15 +203,16 @@ class FarmCommand extends Command {
         let profit = 0
         for (let int = 0; int < harvestHarvested + bonus; int++) {
           let amount = utils.getRandomInt(25, 50)
-          amount = ecoUtils.addMoney(msg.author.id, amount + amount * (eco.get(`${msg.author.id}.skills.farming.level`) * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.farming.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!fertilizerBonus) {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (gold) {

@@ -16,6 +16,30 @@ module.exports.addMoney = function (user, amount) {
 
 module.exports.addExp = function (user, skill) {
   let amount = utils.getRandomInt(2, 8)
+  if (!eco.get(`${user.id}.skills`)) {
+    eco.set(`${user.id}.skills`, {
+      fishing: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }, 
+      hunting: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }, 
+      mining: {
+        exp: 0,
+        level: 1,
+        req: 100
+      },
+      farming: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }                
+    })
+  }
   eco.add(`${user.id}.skills.${skill}.exp`, amount)
   if (eco.get(`${user.id}.skills.${skill}.exp`) > eco.get(`${user.id}.skills.${skill}.req`)) {
     eco.subtract(`${user.id}.skills.${skill}.exp`, eco.get(`${user.id}.skills.${skill}.req`))
