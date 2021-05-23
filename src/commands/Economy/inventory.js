@@ -18,7 +18,7 @@ class InventoryCommand extends Command {
 
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    
+    if (eco.get(`${msg.author.id}.items`) === {}) return this.client.emit('customError', 'Your inventory is empty.', msg)
   }
 }
 

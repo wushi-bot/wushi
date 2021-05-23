@@ -21,7 +21,7 @@ class ConfigCommand extends Command {
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     
     const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
-    const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`)
+    const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
 
     const embed = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
