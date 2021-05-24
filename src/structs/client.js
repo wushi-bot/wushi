@@ -12,7 +12,7 @@ class Bot extends Client {
     this.commands = new Collection()
     this.aliases = new Collection()
     this.cooldowns = new Collection()
-    this.version = '2.1.0'
+    this.version = '2.2.0'
     this.owners = ['488786712206770196']
   }
 

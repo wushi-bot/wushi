@@ -11,7 +11,8 @@ class LevelsCommand extends Command {
       category: 'Leveling',
       aliases: [],
       usage: 'levels',
-      cooldown: 5
+      cooldown: 5,
+      enabled: false // Disable this for now. 
     })
   }
 
@@ -20,7 +21,7 @@ class LevelsCommand extends Command {
     levels.all().forEach(async entry => {
       if (entry.ID === msg.guild.id) {
         for (var key in entry.data) {
-          const user = await this.client.users.fetch(key)
+          const user = this.client.users.cache.get(key)
           if (msg.guild.members.resolveID(user)) {
             list.push({ ID: key, totalExp: entry.data[key].totalExp })
           }

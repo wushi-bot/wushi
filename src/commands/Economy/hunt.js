@@ -25,9 +25,9 @@ class HuntCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
-      !items.includes('flimsy_rifle') && 
-      !items.includes('decent_rifle') && 
-      !items.includes('great_rifle')
+      !items['flimsy_rifle'] && 
+      !items['decent_rifle'] && 
+      !items['great_rifle']
     ) {
       return this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
     }
@@ -77,13 +77,13 @@ class HuntCommand extends Command {
           message.edit(quizResult)
         }
         let goldenGooseChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           goldenGooseChance = 12.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           goldenGooseChance = 35.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           goldenGooseChance = 67
         }
         const odds = utils.getRandomInt(0, 100)
@@ -94,17 +94,17 @@ class HuntCommand extends Command {
           goldenGoose = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let trapBonus
-        if (eco.get(`${msg.author.id}.items`).includes('trap')) {
+        if (items['trap']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(9, 20)
@@ -112,44 +112,47 @@ class HuntCommand extends Command {
         }
         const goldenGooseBonus = utils.getRandomInt(80, 225)
         let animalsHunted
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           animalsHunted = utils.getRandomInt(5, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           animalsHunted = utils.getRandomInt(12, 30)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           animalsHunted = utils.getRandomInt(20, 50)
         }
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          eco.add(`${msg.author.id}.balance`, amount)
+          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (goldenGoose) {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'hunting')
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         message.edit(embed)
       })
       .catch(() => {
         let goldenGooseChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           goldenGooseChance = 12.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           goldenGooseChance = 35.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           goldenGooseChance = 67
         }
         const odds = utils.getRandomInt(0, 100)
@@ -160,17 +163,17 @@ class HuntCommand extends Command {
           goldenGoose = false
         }
     
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           bonus = bonus + utils.getRandomInt(7, 15)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           bonus = bonus + utils.getRandomInt(25, 35)
         }
         let trapBonus
-        if (eco.get(`${msg.author.id}.items`).includes('trap')) {
+        if (items['trap']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(9, 20)
@@ -178,33 +181,37 @@ class HuntCommand extends Command {
         }
         const goldenGooseBonus = utils.getRandomInt(80, 225)
         let animalsHunted
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_rifle')) {
+        if (items['flimsy_rifle']) {
           animalsHunted = utils.getRandomInt(5, 24)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_rifle')) {
+        if (items['decent_rifle']) {
           animalsHunted = utils.getRandomInt(12, 30)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_rifle')) {
+        if (items['great_rifle']) {
           animalsHunted = utils.getRandomInt(20, 50)
         }
         let profit = 0
         for (let int = 0; int < animalsHunted + bonus; int++) {
           let amount = utils.getRandomInt(50, 125)
-          eco.add(`${msg.author.id}.balance`, amount)
+          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
+        const levelUp = ecoUtils.addExp(msg.author, 'hunting')
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!trapBonus) {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(profit)}**!`)
+          embed.addField(':gun: Hunting', `You hunted for **${utils.getRandomInt(1, 10)} hours** and caught :rabbit: ${animalsHunted} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (goldenGoose) {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'hunting')
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

@@ -24,9 +24,9 @@ class MineCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
-      !items.includes('flimsy_pickaxe') && 
-      !items.includes('decent_pickaxe') && 
-      !items.includes('great_pickaxe')
+      !items['flimsy_pickaxe'] && 
+      !items['decent_pickaxe'] && 
+      !items['great_pickaxe']
     ) {
       return this.client.emit('customError', `You need a pickaxe to mine, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_pickaxe\`.`, msg)
     }
@@ -77,13 +77,13 @@ class MineCommand extends Command {
           message.edit(quizResult)
         }
         let goldChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           goldChance = 2.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           goldChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           goldChance = 12
         }
         const odds = utils.getRandomInt(0, 100)
@@ -94,18 +94,18 @@ class MineCommand extends Command {
           gold = false
         }
 
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           bonus = bonus + utils.getRandomInt(5, 10)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           bonus = bonus + utils.getRandomInt(12, 18)
         }
 
         let diviningRodBonus
-        if (eco.get(`${msg.author.id}.items`).includes('divining_rod')) {
+        if (items['divining_rod']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'divining_rod')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -113,34 +113,37 @@ class MineCommand extends Command {
         }
         const goldBonus = utils.getRandomInt(100, 400)
         let mineralMined
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           mineralMined = utils.getRandomInt(1, 12)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           mineralMined = utils.getRandomInt(9, 32)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           mineralMined = utils.getRandomInt(20, 38)
         }
         let profit = 0
         for (let int = 0; int < mineralMined + bonus; int++) {
           let amount = utils.getRandomInt(10, 15)
-          eco.add(`${msg.author.id}.balance`, amount)
+          let lvl = eco.get(`${msg.author.id}.skills.mining.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
-
+        const levelUp = ecoUtils.addExp(msg.author, 'mining')
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!diviningRodBonus) {
-          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (gold) {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'mining')
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
@@ -152,13 +155,13 @@ class MineCommand extends Command {
         message.edit(quizResult)
         let bonus = 0 
         let goldChance = 0
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           goldChance = 2.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           goldChance = 7.5
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           goldChance = 12
         }
         const odds = utils.getRandomInt(0, 100)
@@ -169,18 +172,18 @@ class MineCommand extends Command {
           gold = false
         }
 
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           bonus = bonus + 0
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           bonus = bonus + utils.getRandomInt(5, 10)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           bonus = bonus + utils.getRandomInt(12, 18)
         }
 
         let diviningRodBonus
-        if (eco.get(`${msg.author.id}.items`).includes('divining_rod')) {
+        if (items['divining_rod']) {
           let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'divining_rod')
           eco.set(`${msg.author.id}.items`, i)
           bonus = bonus + utils.getRandomInt(3, 10)
@@ -188,34 +191,37 @@ class MineCommand extends Command {
         }
         const goldBonus = utils.getRandomInt(100, 400)
         let mineralMined
-        if (eco.get(`${msg.author.id}.items`).includes('flimsy_pickaxe')) {
+        if (items['flimsy_pickaxe']) {
           mineralMined = utils.getRandomInt(1, 12)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('decent_pickaxe')) {
+        if (items['decent_pickaxe']) {
           mineralMined = utils.getRandomInt(9, 32)
         } 
-        if (eco.get(`${msg.author.id}.items`).includes('great_pickaxe')) {
+        if (items['great_pickaxe']) {
           mineralMined = utils.getRandomInt(20, 38)
         }
         let profit = 0
         for (let int = 0; int < mineralMined + bonus; int++) {
           let amount = utils.getRandomInt(10, 15)
-          eco.add(`${msg.author.id}.balance`, amount)
+          let lvl = eco.get(`${msg.author.id}.skills.mining.level`) || 0
+          amount = ecoUtils.addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           profit = profit + amount
         }
 
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
         if (!diviningRodBonus) {
-          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${profit}**!`)
+          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
-          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} ***(+${bonus})***, you made :coin: **${profit}**!`)
+          embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} ***(+${bonus})***, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         }
         
         if (gold) {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
+        ecoUtils.addExp(msg.author, 'mining')
+        embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)

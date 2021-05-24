@@ -9,7 +9,7 @@ A social discord bot with a unique economy system!
 
 </div>
 
-### Donations 
+### Donations 💸
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U54D4O8)
 

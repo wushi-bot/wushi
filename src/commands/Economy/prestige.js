@@ -20,18 +20,18 @@ class PrestigeCommand extends Command {
 
   async run (bot, msg, args) {
     if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    if (eco.get(`${msg.author.id}.balance`) < 100000) return this.client.emit('customError', 'You need :coin: **200,000** to prestige!', msg)
+    if (eco.get(`${msg.author.id}.balance`) < (200000 * eco.get(`${msg.author.id}.prestige`))) return this.client.emit('customError', `You need :coin: **${utils.addCommas((200000 * eco.get(`${msg.author.id}.prestige`)))}** to prestige!`, msg)
     eco.set(`${msg.author.id}.bank`, 0)
     eco.set(`${msg.author.id}.balance`, 0)
     eco.add(`${msg.author.id}.prestige`, 1)
-    eco.set(`${msg.author.id}.items`, [])
-    eco.add(`${msg.author.id}.luck`, 1)
+    eco.set(`${msg.author.id}.items`, {})
     eco.add(`${msg.author.id}.multiplier`, 1)
+    eco.set(`${msg.author.id}.items.flimsy_fishing_rod`, 1)
     let prestige = eco.get(`${msg.author.id}.prestige`) || 1
     const e = new MessageEmbed()
       .setColor(msg.member.roles.highest.color)
       .addField('<:check:820704989282172960> Success!', `Sucessfully prestiged to **Prestige ${romanizeNumber(prestige)}**!`)
-      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **1% Multiplier**\n+ **1 Luck Stat**`)
+      .addField(':medal: Rewards', `+ **1 Prestige Level**\n+ **1% Multiplier**`)
     return msg.reply(e)
   }
 }
