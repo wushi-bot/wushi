@@ -105,8 +105,8 @@ class FarmCommand extends Command {
 
         let fertilizerBonus
         if (items['fertilizer']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fertilizer')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.fertilizer`) === 0) eco.delete(`${msg.author.id}.items.fertilizer`) 
+          else eco.subtract(`${msg.author.id}.items.fertilizer`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           fertilizerBonus = true
         }
@@ -184,8 +184,8 @@ class FarmCommand extends Command {
 
         let fertilizerBonus
         if (items['fertilizer']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fertilizer')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.fertilizer`) === 0) eco.delete(`${msg.author.id}.items.fertilizer`) 
+          else eco.subtract(`${msg.author.id}.items.fertilizer`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           fertilizerBonus = true
         }

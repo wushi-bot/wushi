@@ -3,6 +3,7 @@ import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 import ecoUtils from '../../utils/economy'
 import utils from '../../utils/utils'
+import ms from 'ms'
 
 const eco = new db.table('economy')
 
