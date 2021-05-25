@@ -105,8 +105,8 @@ class HuntCommand extends Command {
         }
         let trapBonus
         if (items['trap']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.trap`) === 0) eco.delete(`${msg.author.id}.items.trap`) 
+          else eco.subtract(`${msg.author.id}.items.trap`, 1)
           bonus = bonus + utils.getRandomInt(9, 20)
           trapBonus = true
         }
@@ -174,8 +174,8 @@ class HuntCommand extends Command {
         }
         let trapBonus
         if (items['trap']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'trap')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.trap`) === 0) eco.delete(`${msg.author.id}.items.trap`) 
+          else eco.subtract(`${msg.author.id}.items.trap`, 1)
           bonus = bonus + utils.getRandomInt(9, 20)
           trapBonus = true
         }

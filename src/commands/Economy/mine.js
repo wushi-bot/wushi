@@ -106,8 +106,8 @@ class MineCommand extends Command {
 
         let diviningRodBonus
         if (items['divining_rod']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'divining_rod')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.divining_rod`) === 0) eco.delete(`${msg.author.id}.items.divining_rod`) 
+          else eco.subtract(`${msg.author.id}.items.divining_rod`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           diviningRodBonus = true
         }
@@ -184,8 +184,8 @@ class MineCommand extends Command {
 
         let diviningRodBonus
         if (items['divining_rod']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'divining_rod')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.divining_rod`) === 0) eco.delete(`${msg.author.id}.items.divining_rod`) 
+          else eco.subtract(`${msg.author.id}.items.divining_rod`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           diviningRodBonus = true
         }

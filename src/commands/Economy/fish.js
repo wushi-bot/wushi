@@ -105,8 +105,8 @@ class FishCommand extends Command {
         }
         let fishingBaitBonus
         if (items['fishing_bait']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.fishing_bait`) === 0) eco.delete(`${msg.author.id}.items.fishing_bait`) 
+          else eco.subtract(`${msg.author.id}.items.fishing_bait`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           fishingBaitBonus = true
         }
@@ -183,8 +183,8 @@ class FishCommand extends Command {
         }
         let fishingBaitBonus
         if (items['fishing_bait']) {
-          let i = utils.removeA(eco.get(`${msg.author.id}.items`), 'fishing_bait')
-          eco.set(`${msg.author.id}.items`, i)
+          if (eco.get(`${msg.author.id}.items.fishing_bait`) === 0) eco.delete(`${msg.author.id}.items.fishing_bait`) 
+          else eco.subtract(`${msg.author.id}.items.fishing_bait`, 1)
           bonus = bonus + utils.getRandomInt(3, 10)
           fishingBaitBonus = true
         }
