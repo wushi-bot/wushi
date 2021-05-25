@@ -94,30 +94,31 @@ class PetsCommand extends Command {
         .addField('<:check:820704989282172960> Success!', `Successfully set your active pet as ${pet.emoji} **${pet.display}**.`)
       msg.reply(embed)
     } else if (args[0] === 'redeem') {
-      const items = eco.get(`${msg.author.id}.items`) || []
-      if (!items.includes('food_bundle') && !items.includes('energy_drink')) return this.client.emit('customError', 'You do not have any food bundles or energy drink.', msg)
-      if (items.includes('food_bundle') && !items.includes('energy_drink')) {
-        const i = utils.removeA(items, 'food_bundle') 
-        eco.set(`${msg.author.id}.items`, i)
+      const items = eco.get(`${msg.author.id}.items`) || {}
+      if (!items['food_bundle'] && !items['energy_drink']) return this.client.emit('customError', 'You do not have any food bundles or energy drink.', msg)
+      if (items['food_bundle'] && !items['energy_drink']) {
+        if (eco.get(`${msg.author.id}.items.food_bundle`) === 0) eco.delete(`${msg.author.id}.items.food_bundle`) 
+        else eco.subtract(`${msg.author.id}.items.food_bundle`, 1)
         pets.add(`${msg.author.id}.food`, 10)
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField('<:check:820704989282172960> Success!', 'Successfully redeemed :meat_on_bone: **10** from your food bundle.')
         msg.reply(embed)
       }
-      if (!items.includes('food_bundle') && items.includes('energy_drink')) {
-        const i = utils.removeA(items, 'energy_drink') 
-        eco.set(`${msg.author.id}.items`, i)
+      if (!items['food_bundle'] && items['energy_drink']) {
+        if (eco.get(`${msg.author.id}.items.energy_drink`) === 0) eco.delete(`${msg.author.id}.items.energy_drink`) 
+        else eco.subtract(`${msg.author.id}.items.energy_drink`, 1)
         pets.set(`${msg.author.id}.energy`, 10)
         const embed = new MessageEmbed()
           .setColor(msg.member.roles.highest.color)
           .addField('<:check:820704989282172960> Success!', 'Successfully replenished :cloud_lightning: **10** from drinking energy drink.')
         msg.reply(embed)
       } 
-      if (items.includes('food_bundle') && items.includes('energy_drink')) {
-        let i = utils.removeA(items, 'energy_drink') 
-        i = utils.removeA(items, 'food_bundle') 
-        eco.set(`${msg.author.id}.items`, i)
+      if (items['food_bundle'] && items['energy_drink']) {
+        if (eco.get(`${msg.author.id}.items.energy_drink`) === 0) eco.delete(`${msg.author.id}.items.energy_drink`) 
+        else eco.subtract(`${msg.author.id}.items.energy_drink`, 1)
+        if (eco.get(`${msg.author.id}.items.food_bundle`) === 0) eco.delete(`${msg.author.id}.items.food_bundle`) 
+        else eco.subtract(`${msg.author.id}.items.food_bundle`, 1)
         pets.set(`${msg.author.id}.energy`, 10)
         pets.add(`${msg.author.id}.food`, 10)
         const embed = new MessageEmbed()

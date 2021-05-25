@@ -47,7 +47,20 @@ module.exports.addExp = function (user, skill) {
     eco.add(`${user.id}.skills.${skill}.level`, 1)
     const embed = new MessageEmbed()
       .setColor('#ff4747')
-      .addField(`:up: Level up!`, `Successfully leveled up in **${skill}**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+    switch (skill) {
+      case 'fishing': 
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :fishing_pole_and_fish: **Fishing**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        break
+      case 'hunting':
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :rabbit: **Hunting**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        break
+      case 'farming':
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :seedling: **Farming**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        break 
+      case 'mining':
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :pick: **Mining**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        break
+    }
     user.send(embed)
   }
   return amount
