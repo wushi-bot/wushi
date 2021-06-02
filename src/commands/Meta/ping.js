@@ -25,6 +25,7 @@ class PingCommand extends Command {
       .addField(`❤️ Heartbeat`, `${Math.round(this.client.ws.ping)}ms`)
     message.delete()
     msg.reply(embed)
+    return true
   }
 }
 

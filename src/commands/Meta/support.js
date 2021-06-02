@@ -22,6 +22,7 @@ class SupportCommand extends Command {
       .setTitle(`:sushi: Join wushi support`)
       .setDescription(`Join [wushi support](https://discord.gg/zjqeYbNU5F)`)
     msg.reply(embed)
+    return true
   }
 }
 

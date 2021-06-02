@@ -55,7 +55,8 @@ class HelpCommand extends Command {
         embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
       embed.addField(' ᅟᅟᅟᅟᅟᅟᅟᅟ', 'Need help with [wushi](https://www.youtube.com/watch?v=HjlrejIg4Vg)? Join our [support server](https://discord.gg/zjqeYbNU5F)!')
-      return msg.reply(embed)
+      msg.reply(embed)
+      return true
     } else {
       const embed = new MessageEmbed()
       let command = args[0]
@@ -77,8 +78,10 @@ class HelpCommand extends Command {
           .addField('Aliases', aliases)
         if (command.conf.cooldown !== false) embed.addField('Cooldown', `**${command.conf.cooldown}s** (**${command.conf.cooldown / 2}s** for Premium users)`)
         msg.reply(embed)
+        return true
       } else {
-        return this.client.emit('customError', 'The provided command must be valid command/alias.', msg)
+        this.client.emit('customError', 'The provided command must be valid command/alias.', msg)
+        return false
       }
     }
   }

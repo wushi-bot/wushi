@@ -23,6 +23,7 @@ class VoteCommand extends Command {
       .addField(':money_with_wings: Rewards', ':coin: **750**, **1%** while you have the bot upvoted, and access to various commands.')
       .setColor(color)
     msg.reply(e)
+    return true
   }
 }
 

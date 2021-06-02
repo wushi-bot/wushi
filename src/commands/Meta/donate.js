@@ -22,6 +22,7 @@ class DonateCommand extends Command {
       .addField(':money_with_wings: Donate', 'Help support wushi by donating via [this URL](https://ko-fi.com/minota).')
       .setColor(color)
     msg.reply(embed)
+    return true
   }
 }
 

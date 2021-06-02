@@ -26,6 +26,7 @@ class EmbedColorCommand extends Command {
       .setColor(color.toHex())
       .addField('<:check:820704989282172960> Success!', `Successfully set your embed color to **#${color.toHex()}**.`)
     msg.reply(embed)
+    return true
   }
 }
 

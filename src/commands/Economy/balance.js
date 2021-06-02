@@ -30,6 +30,7 @@ class BalanceCommand extends Command {
       .addField(':moneybag: Total', `:coin: **${utils.addCommas(wallet + bank)}**`)
       .setColor(color)
     msg.reply(embed)
+    return true
   }
 }
 

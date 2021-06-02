@@ -18,7 +18,8 @@ class AdminRoleCommand extends Command {
 
   async run (bot, msg, args) {
     if (!msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
-      return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      return false
     }
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!args[0]) {
@@ -39,12 +40,14 @@ class AdminRoleCommand extends Command {
       }
       embed.addField('<:role:821012711403683841> How to?', `Add an Admin via \`${utils.getPrefix(msg.guild.id)}adminrole @Admin\`.`)
       msg.reply(embed)
+      return true
     } else {
       if (!msg.mentions.roles.first()) {
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:role:821012711403683841> Role not found', 'You haven\'t inserted a valid role.')
         msg.reply(embed)
+        return false
       } else {
         const role = msg.mentions.roles.first()
         const admins = cfg.get(`${msg.guild.id}.admins`) || []
@@ -54,13 +57,15 @@ class AdminRoleCommand extends Command {
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully added <@&${role.id}> to the Admin Roles.`)
           msg.reply(embed)
+          return true
         } else {
           let i = utils.removeA(admins, role.id)
-          cfg.set(`${msg.guild.id}.admins`, admins)
+          cfg.set(`${msg.guild.id}.admins`, i)
           const embed = new MessageEmbed()
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully removed <@&${role.id}> from the Admin Roles.`)
           msg.reply(embed)
+          return true
         }
       }
     }
