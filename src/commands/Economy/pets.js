@@ -8,6 +8,7 @@ import db from 'quick.db'
 import petsList from '../../resources/items/pets.json'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 const pets = new db.table('pets')
 
 class PetsCommand extends Command {
@@ -24,9 +25,10 @@ class PetsCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!args[0]) {
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .setTitle(':bone: Pets - Main Menu')
       if (!pets.get(`${msg.author.id}.active`)) {
         embed.addField(':knot: Active pet', 'You don\'t have a pet active.')
@@ -58,7 +60,7 @@ class PetsCommand extends Command {
       return await msg.reply(embed)
     } else if (args[0] === 'shop') {
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .setTitle(':bone: Pets - Shop Catalog')
       petsList.forEach(pet => {
         embed.addField(`${pet.emoji} **${pet.display}**`, `ID: \`${pet.id}\` | Price: :coin: **${utils.addCommas(pet.price)}** | Income: :coin: **${utils.addCommas(pet.income)}** | Description: **${pet.description}**`)
@@ -80,7 +82,7 @@ class PetsCommand extends Command {
       pets.push(`${msg.author.id}.pets`, { pet: item.id, id: `${pets.get(`${msg.author.id}.count`)}`, level: 0, exp: 0, happiness: 100, ailments: [], hunger: 100, income: item.income })
       const embed = new MessageEmbed()
         .addField(`${item.emoji} Successfully purchased your very own **${item.display}**!`, `Balance: :coin: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** | Set the pet as your active pet using \`${utils.getPrefix(msg.guild.id)}pets set ${pets.get(`${msg.author.id}.count`)}\`. | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
 
     } else if (args[0] === 'set') {
@@ -90,7 +92,7 @@ class PetsCommand extends Command {
       pets.set(`${msg.author.id}.active`, result.id)
       const pet = utils.getPet(petsList, result.pet)
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .addField('<:check:820704989282172960> Success!', `Successfully set your active pet as ${pet.emoji} **${pet.display}**.`)
       msg.reply(embed)
     } else if (args[0] === 'redeem') {
@@ -101,7 +103,7 @@ class PetsCommand extends Command {
         else eco.subtract(`${msg.author.id}.items.food_bundle`, 1)
         pets.add(`${msg.author.id}.food`, 10)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully redeemed :meat_on_bone: **10** from your food bundle.')
         msg.reply(embed)
       }
@@ -110,7 +112,7 @@ class PetsCommand extends Command {
         else eco.subtract(`${msg.author.id}.items.energy_drink`, 1)
         pets.set(`${msg.author.id}.energy`, 10)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully replenished :cloud_lightning: **10** from drinking energy drink.')
         msg.reply(embed)
       } 
@@ -122,7 +124,7 @@ class PetsCommand extends Command {
         pets.set(`${msg.author.id}.energy`, 10)
         pets.add(`${msg.author.id}.food`, 10)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully replenished :cloud_lightning: **10** & redeemed :meat_on_bone: **10** from drinking energy drink & your food bundle.')
         msg.reply(embed)
       }
@@ -153,7 +155,7 @@ class PetsCommand extends Command {
       pets.set(`${msg.author.id}.pets`, list)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully fed your pet :meat_on_bone: **${addedHunger}**. (**${pet.hunger}/100**)`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       if (levelUp === true) {
         const display = utils.getPet(petsList, pet.pet)
         embed.addField(`:sparkles: Oh? Your ${display.emoji} ${display.display} leveled up!`, `Your ${display.emoji} **${display.display}** has leveled up to **Level ${pet.level}**, you earn **:coin: ${moreMoney}** more income!`)
@@ -186,7 +188,7 @@ class PetsCommand extends Command {
       pets.set(`${msg.author.id}.pets`, list)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully played with your pet :cloud_lightning: **${addedHappiness}**. (**${pet.happiness}/100**)`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       if (levelUp === true) {
         const display = utils.getPet(petsList, pet.pet)
         embed.addField(`:sparkles: Oh? Your ${display.emoji} ${display.display} leveled up!`, `Your ${display.emoji} **${display.display}** has leveled up to **Level ${pet.level}**, you earn **:coin: ${moreMoney}** more income!`)
@@ -198,13 +200,13 @@ class PetsCommand extends Command {
       pets.set(`${msg.author.id}.income`, 0)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully collected :coin: **${utils.addCommas(Math.floor(income))}** from your pet!`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
     } else if (args[0] === 'list') {
       const list = pets.get(`${msg.author.id}.pets`) || []
       if (list.length === 0) return this.client.emit('customError', 'You have no pets, buy some on the store!', msg)
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .setTitle(':bone: Pets - List')
       list.forEach(pet => {
         let gottenPet = utils.getPet(petsList, pet.pet) 

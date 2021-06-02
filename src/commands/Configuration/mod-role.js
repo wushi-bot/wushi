@@ -21,6 +21,7 @@ class ModRoleCommand extends Command {
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
       return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
     }
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!args[0]) {
       const mods = cfg.get(`${msg.guild.id}.mods`) || []
       const roles = []
@@ -29,7 +30,7 @@ class ModRoleCommand extends Command {
         roles.push(role.name)
       })
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       if (roles.length === 0) {
         embed.addField('<:info:820704940682510449> Mods', `\`\`\`None\`\`\``)
       } else {
@@ -40,7 +41,7 @@ class ModRoleCommand extends Command {
     } else {
       if (!msg.mentions.roles.first()) {
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:role:821012711403683841> Role not found', 'You haven\'t inserted a valid role.')
         msg.reply(embed)
       } else {
@@ -49,14 +50,14 @@ class ModRoleCommand extends Command {
         if (!mods.includes(role.id)) {
           cfg.push(`${msg.guild.id}.mods`, role.id)
           const embed = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color)
+            .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully added <@&${role.id}> to the Mod Roles.`)
           msg.reply(embed)
         } else {
           let i = utils.removeA(mods, role.id)
           cfg.set(`${msg.guild.id}.mods`, mods)
           const embed = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color)
+            .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully removed <@&${role.id}> from the Mod Roles.`)
           msg.reply(embed)
         }

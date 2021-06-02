@@ -2,6 +2,7 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 const levels = new db.table('leveling')
+const cfg = new db.table('config')
 
 class LevelsCommand extends Command {
   constructor (client) {
@@ -11,12 +12,12 @@ class LevelsCommand extends Command {
       category: 'Leveling',
       aliases: [],
       usage: 'levels',
-      cooldown: 5,
-      enabled: false // Disable this for now. 
+      cooldown: 5
     })
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     let list = []
     levels.all().forEach(async entry => {
       if (entry.ID === msg.guild.id) {
@@ -31,7 +32,7 @@ class LevelsCommand extends Command {
     list.sort(function (a, b) { return (b.totalExp) - (a.totalExp) })
     list = list.slice(0, 9)
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setFooter(`🏆 Top 10 EXP users in your server.`)
     let x = 1
     list.forEach(i => {

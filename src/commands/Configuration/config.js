@@ -23,8 +23,9 @@ class ConfigCommand extends Command {
     const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
     const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
 
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
       .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${utils.getPrefix(msg.guild.id)}\``)
 

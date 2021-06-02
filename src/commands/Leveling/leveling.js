@@ -17,6 +17,7 @@ class LevelingCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_SERVER')) {
@@ -26,13 +27,13 @@ class LevelingCommand extends Command {
       if (cfg.get(`${msg.guild.id}.leveling`)) {
         cfg.set(`${msg.guild.id}.leveling`, false)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **disabled** leveling in **${msg.guild.name}**!`)
         return msg.reply(embed)
       } else if (!cfg.get(`${msg.guild.id}.leveling`)) {
         cfg.set(`${msg.guild.id}.leveling`, true)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **enabled** leveling in **${msg.guild.name}**!`)
         return msg.reply(embed)
       } 
@@ -41,13 +42,13 @@ class LevelingCommand extends Command {
       if (args[0] === 'on') {
         cfg.set(`${msg.guild.id}.leveling`, true)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **enabled** leveling in **${msg.guild.name}**!`)
         return msg.reply(embed)
       } else if (args[0] === 'off') {
         cfg.set(`${msg.guild.id}.leveling`, false)
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **disabled** leveling in **${msg.guild.name}**!`)
         return msg.reply(embed)
       }

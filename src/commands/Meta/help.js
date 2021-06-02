@@ -19,9 +19,10 @@ class HelpCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!args[0]) {
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .setAuthor(`${this.client.user.username}'s Commands`, this.client.user.avatarURL())
       const commandsList = this.client.commands
       const categories = []
@@ -68,7 +69,7 @@ class HelpCommand extends Command {
         if (!aliases) aliases = 'None'
         else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
         embed
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('Command', `\`${command.conf.name}\``)
           .addField('Description', command.conf.description)
           .addField('Usage', `\`${utils.getPrefix(msg.guild.id)}${command.conf.usage}\``)

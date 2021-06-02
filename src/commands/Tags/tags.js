@@ -20,6 +20,7 @@ class TagsCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('BAN_MEMBERS')) {
@@ -29,7 +30,7 @@ class TagsCommand extends Command {
       const prefix = utils.getPrefix(msg.guild.id)
       const embed = new MessageEmbed() 
         .addField(':label: Tags Help', `\`${prefix}tags create <name> <content>\` - Creates a tag with a name and trigger.\n\`${prefix}tags edit <name> <new content>\` - Edits an already existing tag with new content.\n\`${prefix}tags delete <name>\` - Deletes an already existing tag.\n\`${prefix}tags list\` - Sends a list of tags.`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
     } else if (args[0] === 'create') {
       if (!args[1] || !args[2]) return this.client.emit('customError', 'You need to provide arguments.', msg)
@@ -41,11 +42,11 @@ class TagsCommand extends Command {
       tags.set(`${msg.guild.id}.${name}`, { content: content, author: msg.author.id })
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully created the tag **${name}** with content \`${content}\`. `)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
     } else if (args[0] === 'list') {
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       const tagsList = tags.get(`${msg.guild.id}`)
       if (tagsList === {}) {
         embed.addField(':label: No tags found', 'You do not have any tags!')
@@ -63,7 +64,7 @@ class TagsCommand extends Command {
       tags.set(`${msg.guild.id}.${args[1]}.content`, content)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully edited the tag **${args[1]}** with the new content: \`${content}\`. `)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
     } else if (args[0] === 'delete') {
       if (!args[1]) return this.client.emit('customError', 'You need to provide arguments.', msg)
@@ -71,7 +72,7 @@ class TagsCommand extends Command {
       tags.delete(`${msg.guild.id}.${args[1]}`)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully deleted the tag **${args[1]}**.`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
     }
   }

@@ -2,6 +2,9 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import utils from '../../utils/utils' 
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 class FlipCommand extends Command {
   constructor (client) {
     super(client, {
@@ -15,9 +18,10 @@ class FlipCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const result = utils.getRandomInt(1, 3)
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
     if (result === 2) { 
       embed.addField(':black_circle: Tails', 'The coin landed on tails.')
     } else if (result === 1) {

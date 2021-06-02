@@ -3,6 +3,7 @@ import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 import utils from '../../utils/utils'
 const eco = new db.table('economy') 
+const cfg = new db.table('config')
 
 class WithdrawCommand extends Command {
   constructor (client) {
@@ -17,6 +18,7 @@ class WithdrawCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     if (!args[0]) return this.client.emit('customError', 'You need to enter a valid number!', msg)
     if (eco.get(`${msg.author.id}.bank`) === 0) return this.client.emit('customError', 'You don\'t have any coins.', msg)
@@ -40,7 +42,7 @@ class WithdrawCommand extends Command {
     eco.subtract(`${msg.author.id}.bank`, amount)
     eco.add(`${msg.author.id}.balance`, amount)
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .addField('<:check:820704989282172960> Success!', `Successfully withdrew :coin: **${amount}** to your balance.`)
     msg.reply(embed)
   }

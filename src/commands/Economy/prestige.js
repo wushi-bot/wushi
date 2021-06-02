@@ -5,6 +5,7 @@ import romanizeNumber from 'romanize-number'
 import db from 'quick.db'
 import utils from '../../utils/utils'
 const eco = new db.table('economy') 
+const cfg = new db.table('config')
 
 class PrestigeCommand extends Command {
   constructor (client) {
@@ -19,6 +20,7 @@ class PrestigeCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     if (eco.get(`${msg.author.id}.balance`) < (200000 * eco.get(`${msg.author.id}.prestige`))) return this.client.emit('customError', `You need :coin: **${utils.addCommas((200000 * eco.get(`${msg.author.id}.prestige`)))}** to prestige!`, msg)
     eco.set(`${msg.author.id}.bank`, 0)

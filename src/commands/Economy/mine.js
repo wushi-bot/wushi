@@ -5,6 +5,7 @@ import ecoUtils from '../../utils/economy'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 
 class MineCommand extends Command {
   constructor (client) {
@@ -19,6 +20,7 @@ class MineCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
       return this.client.emit('customError', 'You don\'t have a bank account!', msg)
     }
@@ -45,7 +47,7 @@ class MineCommand extends Command {
       }
     }
     const chooserEmbed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setTitle(':pick: Mining')
       .setFooter('You have 8 seconds to pick a location.')
     if (profitablePlaces === 1) {
@@ -66,13 +68,13 @@ class MineCommand extends Command {
         if (choice.content.toLowerCase() === correctChoice) {
           bonus = utils.getRandomInt(2, 10)
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':pick: Mining', `**Correct choice!** You will get **+${bonus}** bonus minerals!`)
           message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':pick: Mining', `**Incorrect choice!** You will get no bonus minerals!`)
           message.edit(quizResult)
         }
@@ -131,7 +133,7 @@ class MineCommand extends Command {
         }
         const levelUp = ecoUtils.addExp(msg.author, 'mining')
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!diviningRodBonus) {
           embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
@@ -150,7 +152,7 @@ class MineCommand extends Command {
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField(':pick: Mining', '**Ran out of time!** You dropped your pickaxe and you won\'t get a bonus!')
         message.edit(quizResult)
         let bonus = 0 
@@ -209,7 +211,7 @@ class MineCommand extends Command {
         }
 
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!diviningRodBonus) {
           embed.addField(':pick: Mining', `You mined for **${utils.getRandomInt(1, 10)} hours** and got :rock: ${mineralMined} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {

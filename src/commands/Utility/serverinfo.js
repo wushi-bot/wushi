@@ -2,6 +2,9 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import moment from 'moment' 
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 class ServerInfoCommand extends Command {
   constructor (client) {
     super(client, {
@@ -15,6 +18,7 @@ class ServerInfoCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     let roles = msg.guild.roles.cache.array().length
     let channels = msg.guild.channels.cache.array().length
     let emojis = msg.guild.emojis.cache.array().length
@@ -22,7 +26,7 @@ class ServerInfoCommand extends Command {
     let createdAt = moment(msg.guild.createdAt).format('llll')
     const embed = new MessageEmbed()
       .setAuthor(`${msg.guild.name} (${msg.guild.id})`, msg.guild.iconURL())
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .addField(':bust_in_silhouette: Owner', `<@!${msg.guild.ownerID}> (${msg.guild.ownerID})`, true)
       .addField(':scroll: Roles', `**${roles}** roles`, true)
       .addField(':tv: Channels', `**${channels}** channels`, true)

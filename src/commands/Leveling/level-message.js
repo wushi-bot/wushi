@@ -18,6 +18,7 @@ class LevelMessageCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
@@ -36,14 +37,14 @@ class LevelMessageCommand extends Command {
       lvlMsg = lvlMsg.replace('{nextExp}', `${leveling.get(`${msg.guild.id}.${msg.author.id}.expNeeded`)}`)
       const embed = new MessageEmbed()
         .addField(':speech_left: Preview', `Preview: \`${lvlMsg}\`.`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       return msg.reply(embed)
     }
     const message = args.join(' ')
     cfg.set(`${msg.guild.id}.levelUpMessage`, message)
     const embed = new MessageEmbed()
       .addField('<:check:820704989282172960> Success!', `The **level up message** in this server has been set to:\n \`\`\`${message}\`\`\`\n`)
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
     msg.reply(embed)
   }
 }

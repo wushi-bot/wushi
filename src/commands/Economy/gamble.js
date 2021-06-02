@@ -5,6 +5,7 @@ import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 
 class GambleCommand extends Command {
   constructor (client) {
@@ -19,6 +20,7 @@ class GambleCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You do not have a bank account!', msg)
     const bet = utils.abbreviationToNumber(args[0]) || undefined
     if (isNaN(bet)) return this.client.emit('customError', 'Invalid bet!', msg)
@@ -27,7 +29,7 @@ class GambleCommand extends Command {
     const yourGamble = utils.getRandomInt(1, 12)
 
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
     let amount
     if (yourGamble > wushiGamble) {
       amount = ecoUtils.addMoney(msg.author.id, bet * 2)

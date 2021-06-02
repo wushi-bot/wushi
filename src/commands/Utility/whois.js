@@ -2,6 +2,9 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import moment from 'moment'
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 function getJoinRank (ID, guild) { // Call it with the ID of the user and the guild
   if (!guild.members.resolveID(ID)) return // It will return undefined if the ID is not valid
 
@@ -26,6 +29,7 @@ class WhoIsCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
     if (!user) return this.client.emit('customError', 'Please insert a valid user.', msg)
     const joinDiscord = moment(user.user.createdAt).format('llll')
@@ -51,7 +55,7 @@ class WhoIsCommand extends Command {
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())
       .setThumbnail(user.user.avatarURL())
-      .setColor(user.roles.highest.color)
+      .setColor(color)
       .addField(`Roles (${user.roles.cache.size})`, user.roles.cache.map(r => `${r}`).join(', '), true)
       .addField('Join Position', getJoinRank(user.id, msg.guild), true)
       .addField('Joined Discord at', joinDiscord, true)

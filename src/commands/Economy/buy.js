@@ -5,6 +5,7 @@ import db from 'quick.db'
 import utils from '../../utils/utils'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config') 
 
 class BuyCommand extends Command {
   constructor (client) {
@@ -19,6 +20,7 @@ class BuyCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const allItems = utils.allItems()
     const item = utils.getItem(allItems, args[0])
     if (!item) {
@@ -32,7 +34,7 @@ class BuyCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || {}
     if (item.max) {
-      if (eco.get(`${msg.author.id}.items.${item.id}`) >= item.max) {
+      if (items[item.id] >= item.max) {
         return this.client.emit('customError', `${item.emoji} Maximum amount of ${item.emoji} **${item.display}**! | Your inventory has too much ${item.emoji} **${item.display}** to be able to buy more.`, msg)
       }
     }
@@ -41,7 +43,7 @@ class BuyCommand extends Command {
     eco.set(`${msg.author.id}.items.${item.id}`, c + 1)
     const embed = new MessageEmbed()
       .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${utils.addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** | ${item.description.replace('[PRE]', utils.getPrefix(msg.guild.id))}`)
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
     msg.reply(embed)
   }
 }
