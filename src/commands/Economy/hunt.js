@@ -23,7 +23,8 @@ class HuntCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
@@ -31,7 +32,8 @@ class HuntCommand extends Command {
       !items['decent_rifle'] && 
       !items['great_rifle']
     ) {
-      return this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
+      this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
+      return false
     }
     const animalInSeason = utils.getRandomInt(1, 4)
     let correctChoice
@@ -142,9 +144,12 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'hunting')
+        ecoUtils.addExp(msg.author, 'hunting', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
-        message.edit(embed)
+        setTimeout(() => {
+          message.edit(embed)
+        }, 3000)
+        return true
       })
       .catch(() => {
         let goldenGooseChance = 0
@@ -212,11 +217,12 @@ class HuntCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenGooseBonus)
           embed.addField(':sparkles: Lucky!', `You also found a **golden goose**, they laid **${utils.getRandomInt(1, 10)} eggs** and you get :coin: **${goldenGooseBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'hunting')
+        ecoUtils.addExp(msg.author, 'hunting', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
 
   }

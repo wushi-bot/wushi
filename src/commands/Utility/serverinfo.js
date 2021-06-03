@@ -40,6 +40,7 @@ class ServerInfoCommand extends Command {
     if (msg.guild.premiumSubscriptionCount) embed.addField(':gem: Boosts', `**${msg.guild.premiumSubscriptionCount}** boosts`, true)
     if (msg.guild.bannerURL()) embed.setImage(msg.guild.bannerURL())
     msg.reply(embed)
+    return true
   }
 }
 

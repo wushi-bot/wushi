@@ -22,7 +22,8 @@ class MineCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
@@ -30,7 +31,8 @@ class MineCommand extends Command {
       !items['decent_pickaxe'] && 
       !items['great_pickaxe']
     ) {
-      return this.client.emit('customError', `You need a pickaxe to mine, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_pickaxe\`.`, msg)
+      this.client.emit('customError', `You need a pickaxe to mine, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_pickaxe\`.`, msg)
+      return false
     }
     const profitablePlaces = utils.getRandomInt(1, 4)
     let correctChoice
@@ -144,11 +146,12 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'mining')
+        ecoUtils.addExp(msg.author, 'mining', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
@@ -222,11 +225,12 @@ class MineCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'mining')
+        ecoUtils.addExp(msg.author, 'mining', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
   }
 }

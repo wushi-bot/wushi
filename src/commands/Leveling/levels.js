@@ -51,6 +51,7 @@ class LevelsCommand extends Command {
       x++
     })
     msg.reply(embed)
+    return true
   }
 }
 

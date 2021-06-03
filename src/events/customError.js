@@ -5,7 +5,7 @@ const cfg = new db.table('config')
 import utils from '../utils/utils'
 
 exports.run = async (bot, error, message) => {
-  const color = cfg.get(`${msg.author.id}.color`) || message.member.roles.highest.color
+  const color = cfg.get(`${message.author.id}.color`) || message.member.roles.highest.color
   const embed = new MessageEmbed()
     .setColor(color)
     .addField('<:cross:821028198330138644> Error!', error)

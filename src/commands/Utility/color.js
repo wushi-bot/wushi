@@ -44,7 +44,8 @@ class ColorCommand extends Command {
       .attachFiles(attachment)
       .setFooter('Credit goes to ravy (https://ravy.pink) from The Aero Team (https://aero.bot)')
       .setImage('attachment://color.png')
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

@@ -20,7 +20,8 @@ class StartCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You already have a bank account!', msg)
+      this.client.emit('customError', 'You already have a bank account!', msg)
+      return false
     }
     eco.set(`${msg.author.id}.started`, true)
     eco.set(`${msg.author.id}.balance`, 100)
@@ -32,6 +33,7 @@ class StartCommand extends Command {
       .setColor(color)
       .addField('<:check:820704989282172960> Success!', `Successfully created your bank account. You've also received a :fishing_pole_and_fish: **Flimsy Fishing Rod**, you may fish using \`${utils.getPrefix(msg.guild.id)}fish\`. See the help page for :bank: **Economy** to learn how to make money!`)
     msg.reply(e)
+    return true
   }
 }
 

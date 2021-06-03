@@ -31,7 +31,10 @@ class WhoIsCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    if (!user) return this.client.emit('customError', 'Please insert a valid user.', msg)
+    if (!user) {
+      this.client.emit('customError', 'Please insert a valid user.', msg)
+      return false
+    }
     const joinDiscord = moment(user.user.createdAt).format('llll')
     const joinServer = moment(user.joinedTimestamp).format('llll')
     let sf = ''
@@ -63,7 +66,8 @@ class WhoIsCommand extends Command {
       .addField('Status', statusFormat, true)
       .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
       .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`, true)
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

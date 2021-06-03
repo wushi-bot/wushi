@@ -90,6 +90,7 @@ class ShopCommand extends Command {
       })
       msg.reply(embed)
     }
+    return true
   }
 }
 

@@ -36,6 +36,7 @@ class RollCommand extends Command {
       embed.addField(':six: Six', 'The dice landed on its six side up.')
     }
     msg.reply(embed)
+    return true
   }
 }
 

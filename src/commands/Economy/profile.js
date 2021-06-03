@@ -22,7 +22,10 @@ class ProfileCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    if (!eco.get(`${user.user.id}.started`)) return this.client.emit('customError', 'That user does not have a bank account!', msg)
+    if (!eco.get(`${user.user.id}.started`)) {
+      this.client.emit('customError', 'That user does not have a bank account!', msg)
+      return false
+    }
     const bank = eco.get(`${user.user.id}.bank`) || 0
     const balance = eco.get(`${user.user.id}.balance`) || 0
     let prestige = eco.get(`${user.user.id}.prestige`) || 1
@@ -54,7 +57,8 @@ class ProfileCommand extends Command {
     else if (!eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
     else if (!eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`, true)
 
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

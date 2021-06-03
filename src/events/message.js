@@ -9,7 +9,7 @@ const leveling = new db.table('leveling')
 const tags = new db.table('tags')
 const expCooldowns = new Collection()
 
-exports.run = (bot, message) => {
+exports.run = async (bot, message) => {
   if (message.author.bot) return
   if (cfg.get(`${message.guild.id}.leveling`)) {
     if (cfg.get(`${message.guild.id}.leveling`)) {
@@ -106,7 +106,8 @@ exports.run = (bot, message) => {
           return
         }
       }      
-      const result = cmd.run(bot, message, args)
+      const result = await cmd.run(bot, message, args)
+      console.log(result)
       if (result && cooldown) timestamps.set(message.author.id, now)
       bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       if (cooldown) {

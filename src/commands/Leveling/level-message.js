@@ -22,10 +22,17 @@ class LevelMessageCommand extends Command {
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
-      return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      return false
     }
-    if (!cfg.get(`${msg.guild.id}.leveling`)) return this.client.emit('customError', '`Leveling` must be enabled for this action.', msg)
-    if (!args[0]) return this.client.emit('customError', 'You must insert a valid level up message.', msg)
+    if (!cfg.get(`${msg.guild.id}.leveling`)) {
+      this.client.emit('customError', '`Leveling` must be enabled for this action.', msg)
+      return false
+    }
+    if (!args[0]) {
+      this.client.emit('customError', 'You must insert a valid level up message.', msg)
+      return false
+    }
     if (args[0] === 'preview') {
       let lvlMsg = cfg.get(`${msg.guild.id}.levelUpMessage`)
       lvlMsg = lvlMsg || 'Congratulations, **{user.name}**, you\'ve leveled :up: to **Level {level}**!'
@@ -38,7 +45,8 @@ class LevelMessageCommand extends Command {
       const embed = new MessageEmbed()
         .addField(':speech_left: Preview', `Preview: \`${lvlMsg}\`.`)
         .setColor(color)
-      return msg.reply(embed)
+      msg.reply(embed)
+      return true
     }
     const message = args.join(' ')
     cfg.set(`${msg.guild.id}.levelUpMessage`, message)
@@ -46,6 +54,7 @@ class LevelMessageCommand extends Command {
       .addField('<:check:820704989282172960> Success!', `The **level up message** in this server has been set to:\n \`\`\`${message}\`\`\`\n`)
       .setColor(color)
     msg.reply(embed)
+    return true
   }
 }
 

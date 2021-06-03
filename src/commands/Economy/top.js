@@ -47,7 +47,8 @@ class TopCommand extends Command {
       }
       x++
     })
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

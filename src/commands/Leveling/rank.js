@@ -19,7 +19,10 @@ class RankCommand extends Command {
 
   async run (bot, msg, args) {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    if (user.user.bot) return this.client.emit('customError', 'You cannot see the rank of bots, because they cannot gain EXP.', msg)
+    if (user.user.bot) {
+      this.client.emit('customError', 'You cannot see the rank of bots, because they cannot gain EXP.', msg)
+      return false
+    }
     const avatarURL = user.user.avatarURL({ format: 'png' })
     const avatar = await req(avatarURL).raw()
     let level = leveling.get(`${msg.guild.id}.${user.user.id}.level`)
@@ -74,7 +77,8 @@ class RankCommand extends Command {
       //.stroke()
       //.closePath()
       .clip()
-    return msg.channel.send({ files: [{ attachment: canvas.toBuffer(), name: 'card.png' }] })
+    msg.channel.send({ files: [{ attachment: canvas.toBuffer(), name: 'card.png' }] })
+    return true
   }
 }
 

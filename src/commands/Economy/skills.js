@@ -21,7 +21,10 @@ class SkillsCommand extends Command {
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    if (!eco.get(`${user.user.id}.started`)) return this.client.emit('customError', `**${user.user.username}** doesn't have a bank account!`, msg)
+    if (!eco.get(`${user.user.id}.started`)) {
+      this.client.emit('customError', `**${user.user.username}** doesn't have a bank account!`, msg)
+      return false
+    }
     let embed
     let message
     if (!eco.get(`${user.user.id}.skills`) && user.user.id === msg.member.user.id) {
@@ -82,6 +85,7 @@ class SkillsCommand extends Command {
       .setColor(color)
     if (message) message.edit(embed)
     else msg.reply(embed)
+    return true
   }
 }
 

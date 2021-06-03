@@ -23,8 +23,14 @@ class WeeklyCommand extends Command {
 
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    if (!eco.get(`${msg.author.id}.votedTop`) && !eco.get(`${msg.author.id}.votedDBL`)) return this.client.emit('customError', 'You haven\'t upvoted the bot on a bot list, upvote the bot on these bot lists: \n\n• [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n• [top.gg](https://top.gg/bot/755526238466080830/vote)', msg)
+    if (!eco.get(`${msg.author.id}.started`)) {
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
+    }
+    if (!eco.get(`${msg.author.id}.votedTop`) && !eco.get(`${msg.author.id}.votedDBL`)) {
+      this.client.emit('customError', 'You haven\'t upvoted the bot on a bot list, upvote the bot on these bot lists: \n\n• [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n• [top.gg](https://top.gg/bot/755526238466080830/vote)', msg)
+      return false
+    }
     if (eco.get(`${msg.author.id}.weekly`)) {
       let time = new Date().getTime()
       if (eco.get(`${msg.author.id}.weekly`) >= time) return this.client.emit('customError', `You're still on cooldown for this command! Please wait **${ms(eco.get(`${msg.author.id}.weekly`) - time, { long: true })}**.`, msg)
@@ -42,6 +48,7 @@ class WeeklyCommand extends Command {
         .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${utils.addCommas(amount)}** for this week, you can claim this again in **7 days**.`)
       msg.reply(embed)
     }
+    return true
   }
 }
 

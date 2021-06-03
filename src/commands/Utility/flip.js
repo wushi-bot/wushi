@@ -28,6 +28,7 @@ class FlipCommand extends Command {
       embed.addField(':white_circle: Heads', 'The coin landed on heads.')
     }
     msg.reply(embed)
+    return true
   }
 }
 

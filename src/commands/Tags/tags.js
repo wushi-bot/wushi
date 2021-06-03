@@ -24,7 +24,8 @@ class TagsCommand extends Command {
     const admins = cfg.get(`${msg.guild.id}.admins`) || []
     const mods = cfg.get(`${msg.guild.id}.mods`) || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('BAN_MEMBERS')) {
-      return this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      return false
     }
     if (!args[0]) {
       const prefix = utils.getPrefix(msg.guild.id)
@@ -32,10 +33,20 @@ class TagsCommand extends Command {
         .addField(':label: Tags Help', `\`${prefix}tags create <name> <content>\` - Creates a tag with a name and trigger.\n\`${prefix}tags edit <name> <new content>\` - Edits an already existing tag with new content.\n\`${prefix}tags delete <name>\` - Deletes an already existing tag.\n\`${prefix}tags list\` - Sends a list of tags.`)
         .setColor(color)
       msg.reply(embed)
+      return true
     } else if (args[0] === 'create') {
-      if (!args[1] || !args[2]) return this.client.emit('customError', 'You need to provide arguments.', msg)
-      if (tags.get(`${msg.guild.id}.${args[1]}`)) return this.client.emit('customError', 'This tag already exists.', msg)
-      if (this.client.commands.has(args[1]) || this.client.aliases.has(args[1])) return this.client.emit('customError', 'This tag name is a pre-existing command on wushi, tags cannot be named after commands.', msg)
+      if (!args[1] || !args[2]) {
+        this.client.emit('customError', 'You need to provide arguments.', msg)
+        return false
+      }
+      if (tags.get(`${msg.guild.id}.${args[1]}`)) {
+        this.client.emit('customError', 'This tag already exists.', msg)
+        return false
+      }
+      if (this.client.commands.has(args[1]) || this.client.aliases.has(args[1])) {
+        this.client.emit('customError', 'This tag name is a pre-existing command on wushi, tags cannot be named after commands.', msg)
+        return false
+      }
       let content = args.slice(2)
       content = content.join(' ')
       const name = args[1].toLowerCase()
@@ -44,6 +55,7 @@ class TagsCommand extends Command {
         .addField('<:check:820704989282172960> Success!', `Successfully created the tag **${name}** with content \`${content}\`. `)
         .setColor(color)
       msg.reply(embed)
+      return true
     } else if (args[0] === 'list') {
       const embed = new MessageEmbed()
         .setColor(color)
@@ -56,9 +68,16 @@ class TagsCommand extends Command {
         }
       }
       msg.reply(embed)
+      return true
     } else if (args[0] === 'edit') {
-      if (!args[1] || !args[2]) return this.client.emit('customError', 'You need to provide arguments.', msg)
-      if (!tags.get(`${msg.guild.id}.${args[1]}`)) return this.client.emit('customError', 'This tag doesn\'t exist.', msg)
+      if (!args[1] || !args[2]) {
+        this.client.emit('customError', 'You need to provide arguments.', msg)
+        return false
+      }
+      if (!tags.get(`${msg.guild.id}.${args[1]}`)) {
+        this.client.emit('customError', 'This tag doesn\'t exist.', msg)
+        return false
+      }
       let content = args.slice(2)
       content = content.join(' ')
       tags.set(`${msg.guild.id}.${args[1]}.content`, content)
@@ -66,14 +85,22 @@ class TagsCommand extends Command {
         .addField('<:check:820704989282172960> Success!', `Successfully edited the tag **${args[1]}** with the new content: \`${content}\`. `)
         .setColor(color)
       msg.reply(embed)
+      return true
     } else if (args[0] === 'delete') {
-      if (!args[1]) return this.client.emit('customError', 'You need to provide arguments.', msg)
-      if (!tags.get(`${msg.guild.id}.${args[1]}`)) return this.client.emit('customError', 'This tag doesn\'t exist.', msg)
+      if (!args[1]) {
+        this.client.emit('customError', 'You need to provide arguments.', msg)
+        return false
+      }
+      if (!tags.get(`${msg.guild.id}.${args[1]}`)) {
+        this.client.emit('customError', 'This tag doesn\'t exist.', msg)
+        return false
+      }
       tags.delete(`${msg.guild.id}.${args[1]}`)
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully deleted the tag **${args[1]}**.`)
         .setColor(color)
       msg.reply(embed)
+      return true
     }
   }
 }

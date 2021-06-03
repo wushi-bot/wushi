@@ -19,7 +19,10 @@ class UrbanCommand extends Command {
 
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!args[0]) return this.client.emit('customError', 'You need a word to define.', msg)
+    if (!args[0]) {
+      this.client.emit('customError', 'You need a word to define.', msg)
+      return false
+    }
     const word = args.join(' ')
     ud.define(word).then((results) => {
       const embed = new MessageEmbed()
@@ -27,9 +30,11 @@ class UrbanCommand extends Command {
         .setFooter(`👍 ${results[0].thumbs_up} / 👎 ${results[0].thumbs_down}`)
         .setColor(color)
       msg.reply(embed)
+      return true
     })
     .catch(e => {
-      return this.client.emit('customError', `${e}`, msg)
+      this.client.emit('customError', `${e}`, msg)
+      return false
     })
   }
 }
