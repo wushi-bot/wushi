@@ -107,7 +107,6 @@ exports.run = async (bot, message) => {
         }
       }      
       const result = await cmd.run(bot, message, args)
-      console.log(result)
       if (result && cooldown) timestamps.set(message.author.id, now)
       bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       if (cooldown) {
