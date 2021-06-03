@@ -63,7 +63,7 @@ async function webServer(bot) {
       eco.add(`${user.id}.multiplier`, 1)
       bonus = false
     }
-    eco.set(`${user.user.id}.votedTop`, true)
+    eco.set(`${user.id}.votedTop`, true)
     eco.push('unvotes', { user: req.body.user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus, site: 'topgg' })
     try {
       if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **1,000**\n+ :crown: **2% Multiplier**')
@@ -82,7 +82,7 @@ async function webServer(bot) {
     const embed = new MessageEmbed()
     eco.add(`${user.id}.balance`, 750)
     eco.add(`${user.id}.multiplier`, 1)
-    eco.set(`${user.user.id}.votedDBL`, true)
+    eco.set(`${user.id}.votedDBL`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
       embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **750**\n+ :crown: **1% Multiplier**')

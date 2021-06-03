@@ -19,9 +19,10 @@ class HelpCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!args[0]) {
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
         .setAuthor(`${this.client.user.username}'s Commands`, this.client.user.avatarURL())
       const commandsList = this.client.commands
       const categories = []
@@ -54,7 +55,8 @@ class HelpCommand extends Command {
         embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${utils.getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${utils.getPrefix(msg.guild.id)}`)}\``)
       })
       embed.addField(' ᅟᅟᅟᅟᅟᅟᅟᅟ', 'Need help with [wushi](https://www.youtube.com/watch?v=HjlrejIg4Vg)? Join our [support server](https://discord.gg/zjqeYbNU5F)!')
-      return msg.reply(embed)
+      msg.reply(embed)
+      return true
     } else {
       const embed = new MessageEmbed()
       let command = args[0]
@@ -68,7 +70,7 @@ class HelpCommand extends Command {
         if (!aliases) aliases = 'None'
         else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
         embed
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField('Command', `\`${command.conf.name}\``)
           .addField('Description', command.conf.description)
           .addField('Usage', `\`${utils.getPrefix(msg.guild.id)}${command.conf.usage}\``)
@@ -76,8 +78,10 @@ class HelpCommand extends Command {
           .addField('Aliases', aliases)
         if (command.conf.cooldown !== false) embed.addField('Cooldown', `**${command.conf.cooldown}s** (**${command.conf.cooldown / 2}s** for Premium users)`)
         msg.reply(embed)
+        return true
       } else {
-        return this.client.emit('customError', 'The provided command must be valid command/alias.', msg)
+        this.client.emit('customError', 'The provided command must be valid command/alias.', msg)
+        return false
       }
     }
   }

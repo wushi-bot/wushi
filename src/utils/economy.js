@@ -14,7 +14,7 @@ module.exports.addMoney = function (user, amount) {
   return final
 }
 
-module.exports.addExp = function (user, skill) {
+module.exports.addExp = function (user, skill, msg) {
   let amount = utils.getRandomInt(2, 8)
   if (!eco.get(`${user.id}.skills`)) {
     eco.set(`${user.id}.skills`, {
@@ -61,7 +61,7 @@ module.exports.addExp = function (user, skill) {
         embed.addField(`:up: Level up!`, `Successfully leveled up in :pick: **Mining**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
         break
     }
-    user.send(embed)
+    msg.send(embed)
   }
   return amount
 }

@@ -5,6 +5,7 @@ import ecoUtils from '../../utils/economy'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 
 class FarmCommand extends Command {
   constructor (client) {
@@ -19,8 +20,10 @@ class FarmCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
     }
     const items = eco.get(`${msg.author.id}.items`) || {}
     if (
@@ -28,7 +31,8 @@ class FarmCommand extends Command {
       !items['decent_hoe'] && 
       !items['great_hoe']
     ) {
-      return this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_hoe\`.`, msg)
+      this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_hoe\`.`, msg)
+      return false
     }
     const harvestInSeason = utils.getRandomInt(1, 4)
     let correctChoice
@@ -45,7 +49,7 @@ class FarmCommand extends Command {
       }
     }
     const chooserEmbed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setTitle(':seedling: Farming')
       .setFooter('You have 8 seconds to pick a crop to harvest.')
     if (harvestInSeason === 1) {
@@ -65,13 +69,13 @@ class FarmCommand extends Command {
         if (choice.content.toLowerCase() === correctChoice) {
           bonus = utils.getRandomInt(2, 10)
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':seedling: Farming', `**Correct choice!** You will get **+${bonus}** bonus harvest!`)
           message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':seedling: Farming', `**Incorrect choice!** You will get no bonus harvest!`)
           message.edit(quizResult)
         }
@@ -129,7 +133,7 @@ class FarmCommand extends Command {
           profit = profit + amount
         }
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!fertilizerBonus) {
           embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
@@ -140,15 +144,16 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'farming')
+        ecoUtils.addExp(msg.author, 'farming', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField(':seedling: Farming', '**Ran out of time!** You dropped your hoe and you won\'t get a bonus for now!')
         setTimeout(() => {
           message.edit(quizResult)
@@ -208,7 +213,7 @@ class FarmCommand extends Command {
           profit = profit + amount
         }
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!fertilizerBonus) {
           embed.addField(':seedling: Farming', `You farmed for **${utils.getRandomInt(1, 320)} hours** and got :seedling: ${harvestHarvested} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
@@ -219,11 +224,12 @@ class FarmCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'farming')
+        ecoUtils.addExp(msg.author, 'farming', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
   }
 }

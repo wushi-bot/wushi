@@ -1,5 +1,4 @@
 import Bot from './structs/client'
-import moderationUtils from './utils/moderation'
 import economyUtils from './utils/economy'
 
 import 'dotenv/config'
@@ -18,9 +17,5 @@ self.loadEvents()
 
 economyUtils.runUnvoteChecks(self)
 economyUtils.runPetChecks(self)
-
-moderationUtils.runUnmuteChecks(self)
-moderationUtils.runUnlockChecks(self)
-moderationUtils.runUnbanChecks(self)
 
 self.login(process.env.TOKEN)

@@ -19,22 +19,28 @@ class ToggleCommand extends Command {
 
   async run (bot, msg, args) {
     if (!args[0]) return this.client.emit('customError', 'You need to provide arguments.', msg)
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const categories = utils.getCategories()
     const module = utils.toTitleCase(args[0].toLowerCase())
     if (categories.includes(module)) {
-      if (module === 'Meta' || module === 'Configuration' || module === 'Admin') return this.client.emit('customError', 'You cannot disable this module.', msg)
+      if (module === 'Meta' || module === 'Configuration' || module === 'Admin') {
+        this.client.emit('customError', 'You cannot disable this module.', msg)
+        return false 
+      }
       const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       if (!disabledModules.includes(module)) {
         cfg.push(`${msg.guild.id}.disabledModules`, module)
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully disabled **${module}**.`)
-        return msg.reply(embed)
+        msg.reply(embed)
+        return true
       } else {
         const newList = utils.removeA(disabledModules, module)
         cfg.set(`${msg.guild.id}.disabledModules`, newList)
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully enabled **${module}**.`)
-        return msg.reply(embed)
+        msg.reply(embed)
+        return true
       }
     } else if (this.client.commands.has(args[0]) || this.client.aliases.has(args[0])) {
       let command = this.client.commands.get(args[0])
@@ -46,21 +52,29 @@ class ToggleCommand extends Command {
         command.conf.category === 'Meta' || 
         command.conf.category === 'Configuration' || 
         command.conf.category === 'Admin'
-        ) return this.client.emit('customError', 'You cannot disable this command.', msg)
+        ) {
+          this.client.emit('customError', 'You cannot disable this command.', msg)
+          return false
+        }
       const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
       const embed = new MessageEmbed()
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       if (disabledCommands.includes(command.conf.name)) {
         const newList = utils.removeA(disabledCommands, command.conf.name)
         cfg.set(`${msg.guild.id}.disabledCommands`, newList)
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully enabled **${utils.getPrefix(msg.guild.id)}${command.conf.name}**.`)
-        return msg.reply(embed)
+        msg.reply(embed)
+        return true
       } else {
         cfg.push(`${msg.guild.id}.disabledCommands`, command.conf.name)
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully disabled **${utils.getPrefix(msg.guild.id)}${command.conf.name}**.`)
-        return msg.reply(embed)
+        msg.reply(embed)
+        return true
       }
-    } else return this.client.emit('customError', 'You must provide a valid category or command.', msg)
+    } else {
+      this.client.emit('customError', 'You must provide a valid category or command.', msg)
+      return false 
+    }
   }
 }
 

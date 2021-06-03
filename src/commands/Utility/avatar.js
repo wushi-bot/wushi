@@ -1,6 +1,9 @@
 import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 class AvatarCommand extends Command {
   constructor (client) {
     super(client, {
@@ -14,14 +17,19 @@ class AvatarCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
-    if (!user) return this.client.emit('customError', 'Please insert a valid user.', msg)
+    if (!user) {
+      this.client.emit('customError', 'Please insert a valid user.', msg)
+      return false
+    }
     const embed = new MessageEmbed()
-      .setColor(user.roles.highest.color)
+      .setColor(color)
       .setImage(`${user.user.avatarURL({ size: 2048, dynamic: true })}`)
       .setFooter(`Avatar ID: ${user.user.avatar}`)
       .setDescription(`[\`png\`](${user.user.avatarURL({ format: 'png', size: 2048 })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg', size: 2048 })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif', size: 2048 })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp', size: 2048 })})`, true)
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

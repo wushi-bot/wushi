@@ -3,6 +3,7 @@ import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 import utils from '../../utils/utils'
 const eco = new db.table('economy') 
+const cfg = new db.table('config') 
 
 class DepositCommand extends Command {
   constructor (client) {
@@ -17,14 +18,18 @@ class DepositCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
     }
     if (!args[0]) {
-      return this.client.emit('customError', 'You need to enter a valid number!', msg)
+      this.client.emit('customError', 'You need to enter a valid number!', msg)
+      return false
     }
     if (eco.get(`${msg.author.id}.balance`) === 0) {
-      return this.client.emit('customError', 'You don\'t have any coins.', msg)
+      this.client.emit('customError', 'You don\'t have any coins.', msg)
+      return false
     }
     let amount 
     if (args[0] === 'all') {
@@ -35,19 +40,22 @@ class DepositCommand extends Command {
       amount = utils.abbreviationToNumber(args[0])
     }
     if (amount > eco.get(`${msg.author.id}.balance`)) {
-      return this.client.emit('customError', 'The amount you inserted is more than you have!', msg)
+      this.client.emit('customError', 'The amount you inserted is more than you have!', msg)
+      return false
     }
     if (!amount) {
       if (isNaN(amount)) {
-        return this.client.emit('customError', 'You need to enter a valid number!', msg)
+        this.client.emit('customError', 'You need to enter a valid number!', msg)
+        return false
       } 
     }
     eco.subtract(`${msg.author.id}.balance`, amount)
     eco.add(`${msg.author.id}.bank`, amount)
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .addField('<:check:820704989282172960> Success!', `Successfully deposited :coin: **${amount}** to your bank.`)
     msg.reply(embed)
+    return true
   }
 }
 

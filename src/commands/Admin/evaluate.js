@@ -37,9 +37,11 @@ class EvalCommand extends Command {
         if (clean(evaled).length !== 0) {
           msg.channel.send(clean(evaled), { code: evaled.includes('Promise { <pending> }') ? 'js' : 'xl' })
         }
+        return true
       }
     } catch (err) {
       msg.channel.send(`\❌ \`\`\`js\n${clean(err)}\n\`\`\``)
+      return false
     }
   }
 }

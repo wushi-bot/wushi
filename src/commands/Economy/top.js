@@ -4,6 +4,7 @@ import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 
 class TopCommand extends Command {
   constructor (client) {
@@ -18,6 +19,7 @@ class TopCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     let list = []
     eco.all().forEach(entry => {
       const user = this.client.users.cache.get(entry.ID)
@@ -29,7 +31,7 @@ class TopCommand extends Command {
     list = list.slice(0, 9)
 
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setFooter('🏆 Richest poeple in your server.')
     let x = 1
     list.forEach(i => {
@@ -45,7 +47,8 @@ class TopCommand extends Command {
       }
       x++
     })
-    return msg.reply(embed)
+    msg.reply(embed)
+    return true
   }
 }
 

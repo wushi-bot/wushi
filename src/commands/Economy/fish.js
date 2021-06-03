@@ -6,6 +6,7 @@ import ecoUtils from '../../utils/economy'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
+const cfg = new db.table('config')
 
 class FishCommand extends Command {
   constructor (client) {
@@ -20,8 +21,10 @@ class FishCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     if (!eco.get(`${msg.author.id}.started`)) {
-      return this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+      return false
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
@@ -29,7 +32,8 @@ class FishCommand extends Command {
       !items['decent_fishing_rod'] && 
       !items['great_fishing_rod']
     ) {
-      return this.client.emit('customError', `You need a fishing rod to fish, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`, msg)
+      this.client.emit('customError', `You need a fishing rod to fish, purchase one on the store using \`${utils.getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`, msg)
+      return false
     }
     const season = utils.getRandomInt(1, 4)
     let correctChoice
@@ -46,7 +50,7 @@ class FishCommand extends Command {
       }
     }
     const chooserEmbed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setTitle(':fishing_pole_and_fish: Fishing')
       .setFooter('You have 8 seconds to pick a location.')
     if (season === 1) {
@@ -66,13 +70,13 @@ class FishCommand extends Command {
         if (choice.content.toLowerCase() === correctChoice) {
           bonus = utils.getRandomInt(2, 10)
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Correct choice!** You will get **+${bonus}** bonus fish!`)
           message.edit(quizResult)
         } else {
           bonus = 0
           const quizResult = new MessageEmbed()
-            .setColor(msg.member.roles.highest.color) 
+            .setColor(color) 
             .addField(':fishing_pole_and_fish: Fishing', `**Incorrect choice!** You will get no bonus fish!`)
           message.edit(quizResult)
         }
@@ -129,7 +133,7 @@ class FishCommand extends Command {
           profit = profit + amount
         }
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!fishingBaitBonus) {
           embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.floor(profit))}**!`)
         } else {
@@ -140,15 +144,16 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'fishing')
+        ecoUtils.addExp(msg.author, 'fishing', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
       .catch(() => {
         const quizResult = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
           .addField(':fishing_pole_and_fish: Fishing', '**Ran out of time!** You dropped your fishing pole and you won\'t get a bonus for now!')
         setTimeout(() => {
           message.edit(quizResult)
@@ -207,7 +212,7 @@ class FishCommand extends Command {
           profit = profit + amount
         }
         const embed = new MessageEmbed()
-          .setColor(msg.member.roles.highest.color)
+          .setColor(color)
         if (!fishingBaitBonus) {
           embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${utils.getRandomInt(1, 10)} hours** and reeled in :fish: ${fishReeled} **(+${bonus})**, you made :coin: **${utils.addCommas(Math.round(profit))}**!`)
         } else {
@@ -218,11 +223,12 @@ class FishCommand extends Command {
           ecoUtils.addMoney(msg.author.id, goldenReelBonus)
           embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
         }
-        ecoUtils.addExp(msg.author, 'fishing')
+        ecoUtils.addExp(msg.author, 'fishing', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`)}**`)
         setTimeout(() => {
           message.edit(embed)
         }, 3000)
+        return true
       })
 
   }

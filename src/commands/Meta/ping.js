@@ -1,6 +1,8 @@
 import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
- 
+import db from 'quick.db'
+const cfg = new db.table('config') 
+
 class PingCommand extends Command {
   constructor (client) {
     super(client, {
@@ -14,13 +16,16 @@ class PingCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const message = await msg.reply('🏓 Pinging...')
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
       .setTitle(':ping_pong: Pong!')
       .addField('🕐 Roundtrip took', `${message.createdTimestamp - msg.createdTimestamp}ms`)
       .addField(`❤️ Heartbeat`, `${Math.round(this.client.ws.ping)}ms`)
-    message.edit(embed)
+    message.delete()
+    msg.reply(embed)
+    return true
   }
 }
 

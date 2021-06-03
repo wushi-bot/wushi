@@ -2,6 +2,8 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
  
 import ud from 'urban-dictionary'
+import db from 'quick.db'
+const cfg = new db.table('config')
 
 class UrbanCommand extends Command {
   constructor (client) {
@@ -16,17 +18,23 @@ class UrbanCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!args[0]) return this.client.emit('customError', 'You need a word to define.', msg)
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    if (!args[0]) {
+      this.client.emit('customError', 'You need a word to define.', msg)
+      return false
+    }
     const word = args.join(' ')
     ud.define(word).then((results) => {
       const embed = new MessageEmbed()
         .addField(`Defining ${results[0].word}`, `**Definition:** ${results[0].definition}\n**Example:** ${results[0].example}`)
         .setFooter(`👍 ${results[0].thumbs_up} / 👎 ${results[0].thumbs_down}`)
-        .setColor(msg.member.roles.highest.color)
+        .setColor(color)
       msg.reply(embed)
+      return true
     })
     .catch(e => {
-      return this.client.emit('customError', `${e}`, msg)
+      this.client.emit('customError', `${e}`, msg)
+      return false
     })
   }
 }

@@ -2,6 +2,9 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import utils from '../../utils/utils' 
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 class RollCommand extends Command {
   constructor (client) {
     super(client, {
@@ -15,9 +18,10 @@ class RollCommand extends Command {
   }
 
   async run (bot, msg, args) {
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
     const result = utils.getRandomInt(1, 7)
     const embed = new MessageEmbed()
-      .setColor(msg.member.roles.highest.color)
+      .setColor(color)
     if (result === 1) { 
       embed.addField(':one: One', 'The dice landed on its one side up.')
     } else if (result === 2) {
@@ -32,6 +36,7 @@ class RollCommand extends Command {
       embed.addField(':six: Six', 'The dice landed on its six side up.')
     }
     msg.reply(embed)
+    return true
   }
 }
 
