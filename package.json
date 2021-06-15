@@ -36,7 +36,6 @@
     "canvas-constructor": "^3.2.0",
     "chalk": "^4.1.0",
     "dblapi.js": "^2.4.1",
-    "discord-buttons": "^3.2.1",
     "discord.js-light": "github:timotejroiko/discord.js-light",
     "dotenv": "^8.2.0",
     "erlpack": "github:discord/erlpack",
