@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js-light'
 import romanizeNumber from 'romanize-number'
 import utils from '../../utils/utils'
 import db from 'quick.db'
-import ms from 'ms'
+
 const eco = new db.table('economy')
 const cfg = new db.table('config')
 

@@ -2,6 +2,8 @@ import Command from '../../structs/command'
 import { MessageEmbed } from 'discord.js-light'
 import db from 'quick.db'
 import utils from '../../utils/utils'
+import romanizeNumber from 'romanize-number'
+
 const eco = new db.table('economy') 
 const cfg = new db.table('config') 
 
@@ -23,11 +25,13 @@ class BalanceCommand extends Command {
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
     const bank = eco.get(`${user.user.id}.bank`) || 0
     const wallet = eco.get(`${user.user.id}.balance`) || 0
+    const prestige = romanizeNumber(eco.get(`${user.user.id}.prestige`) || 1)
     const embed = new MessageEmbed()
       .setAuthor(`${user.user.username}'s Balance`, user.user.avatarURL()) 
       .addField(':bank: Bank', `:coin: **${utils.addCommas(bank)}**`)
       .addField(':purse: Wallet', `:coin: **${utils.addCommas(wallet)}**`)
       .addField(':moneybag: Total', `:coin: **${utils.addCommas(wallet + bank)}**`)
+      .setFooter(`Prestige: ${prestige}`)
       .setColor(color)
     msg.reply(embed)
     return true
