@@ -1,5 +1,5 @@
 import Command from '../../classes/Command'
-import { MessageEmbed } from 'discord.js-light'
+import { MessageEmbed } from 'discord.js'
 
 class PingCommand extends Command {
   constructor (client) {
@@ -21,7 +21,7 @@ class PingCommand extends Command {
       .addField('🕐 Roundtrip took', `${message.createdTimestamp - msg.createdTimestamp}ms`)
       .addField(`❤️ Heartbeat`, `${Math.round(this.client.ws.ping)}ms`)
     message.delete()
-    msg.reply(embed)
+    msg.reply({ embeds: [embed] })
     return true
   }
 }

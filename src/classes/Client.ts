@@ -1,5 +1,5 @@
-import { Client, Collection } from 'discord.js-light'
-import { readdirSync } from 'fs'
+import { Client, Collection } from 'discord.js'
+import { readdirSync, readdir } from 'fs'
 import path from 'path'
 
 export default class Bot extends Client {
@@ -36,10 +36,22 @@ export default class Bot extends Client {
           command.conf.aliases.forEach(alias => {
             this.aliases.set(alias, command.conf.name)
           })
+          console.log(`Registered command ${cmd}`)
         } catch (e) {
           console.error(e)
         }
       }
     }
+    readdir(path.join(__dirname, '..', '/events/'), (err, files) => {
+      if (err) return console.error(err)
+      files.forEach(file => {
+        if (file.endsWith('.js')) {
+          const event = require(path.join(__dirname, '..', `/events/${file}`))
+          const eventName = file.split('.')[0]
+          console.log(`Added event: ${eventName}`)
+          super.on(eventName, (...args) => event.run(this, ...args))
+        }
+      })
+    })
   }
 }

@@ -1,5 +1,4 @@
 import Client from './classes/Client'
-import Database from './database'
 import 'dotenv/config'
 
 const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
@@ -11,6 +10,4 @@ const self = new Client({
 })
 
 self.load()
-new Database()
-
 self.start(process.env.TOKEN!!)

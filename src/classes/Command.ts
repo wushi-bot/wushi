@@ -1,4 +1,4 @@
-import { Client } from "discord.js-light"
+import { Client } from "discord.js"
 
 export default class Command {
   conf: any

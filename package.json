@@ -9,7 +9,8 @@
   "private": false,
   "dependencies": {
     "@types/ws": "^7.4.4",
-    "discord.js-light": "^3.5.11",
+    "chalk": "^4.1.1",
+    "discord.js": "^13.0.0-dev.807ea2d3c197c7c6556bd1c894114932f6657d49",
     "dotenv": "^10.0.0",
     "path": "^0.12.7",
     "quick.db": "^7.1.3"
