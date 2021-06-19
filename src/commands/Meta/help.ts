@@ -67,7 +67,11 @@ class HelpCommand extends Command {
         new MessageButton()
           .setLabel('Commands')
           .setURL('https://wushibot.xyz/commands')
-          .setStyle('LINK'),          
+          .setStyle('LINK'), 
+        new MessageButton()
+          .setLabel('Donate')
+          .setURL('https://ko-fi.com/minota')
+          .setStyle('LINK'),                    
       )
       msg.reply({ embeds: [embed], components: [row] })
       return true
