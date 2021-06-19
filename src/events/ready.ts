@@ -37,7 +37,8 @@ async function webServer(bot) {
     if (!req.get('Authorization')) return res.status(400).end()
     if (req.get('Authorization') !== process.env.AUTHORIZATION) return res.status(401).end()
     const commands = []
-    bot.commands.array().forEach(command => commands.push({ name: command.conf.name, 
+    bot.commands.array().forEach(command => commands.push({ 
+      name: command.conf.name, 
       description: command.conf.description, 
       category: command.conf.category,
       usage: command.conf.usage,

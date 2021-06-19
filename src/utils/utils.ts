@@ -10,6 +10,14 @@ import tools from '../resources/items/tools.json'
 import upgrades from '../resources/items/upgrades.json'
 import petstuff from '../resources/items/petstuff.json'
 
-module.exports.updateStats = function (guildCount) {
+export const updateStats = function (guildCount) {
   return dbl.postStats(guildCount)
+}
+
+export const getPrefix = function (id) {
+  if (!cfg.get(`${id}.prefix`)) {
+    return '.'
+  } else {
+    return cfg.get(`${id}.prefix`)
+  }
 }

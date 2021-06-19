@@ -5,7 +5,8 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
+    "strict": false,
+    "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "typeRoots": [

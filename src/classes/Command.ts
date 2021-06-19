@@ -1,4 +1,4 @@
-import { Client } from "discord.js"
+import Client from "../classes/Client"
 
 export default class Command {
   conf: any
