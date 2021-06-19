@@ -32,7 +32,7 @@ class VoteCommand extends Command {
     const e = new MessageEmbed() 
       .addField(':money_with_wings: Rewards', '+ :coin: **750**\n+ **1%** while you have the bot upvoted\n+ ...and access to various commands.')
       .setColor(color)
-    msg.reply({ embeds: [e], components: [row], ephemeral: true })
+    msg.reply({ embeds: [e], components: [row] })
     return true
   }
 }

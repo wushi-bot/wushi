@@ -1,0 +1,34 @@
+[
+  {
+    "price": 7500,
+    "description": "Not to be confused with a wasp, a honey-producing bee!",
+    "income": 150,
+    "emoji": ":bee:",
+    "display": "Bee",
+    "id": "bee"
+  },
+  {
+    "price": 50000,
+    "description": "A friendlier version of a rat, a very cute mousey fellow!",
+    "income": 500,
+    "emoji": ":mouse:",
+    "display": "Mouse", 
+    "id": "mouse"
+  }, 
+  {
+    "price": 100000,
+    "description": "A beautiful sassy kitten, purrs when it likes you! :)",
+    "income": 1250,
+    "emoji": ":cat:",
+    "display": "Cat",
+    "id": "cat"
+  },
+  {
+    "price": 200000,
+    "description": "A mighty canine, made to be your best friend!",
+    "income": 5250,
+    "emoji": ":dog:",
+    "display": "Dog",
+    "id": "dog"
+  }
+]
