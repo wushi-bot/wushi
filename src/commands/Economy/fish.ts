@@ -156,8 +156,27 @@ class FishCommand extends Command {
         }
         addExp(msg.author, 'fishing', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`)}**`)
-        setTimeout(async () => {
-          await message.edit({ embeds: [embed], components: [] })
+        const filter2 = i => i.customID === 'fish' && i.user.id === msg.author.id
+        const row2 = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setLabel('Fish')
+              .setCustomID('fish')
+              .setEmoji('🎣')
+              .setStyle('SECONDARY'),   
+        )
+        interaction.update({ components: [] })
+        setTimeout(() => {
+          message.edit({ embeds: [embed], components: [row2] })
+          message.awaitMessageComponentInteraction(filter2, { time: 15000 })
+          .then(async i => {
+            const cmd = this.client.commands.get('fish')
+            await i.update({ components: [] })
+            await cmd.run(this.client, msg, args)
+          })
+          .catch(() => {
+            message.edit({ embeds: [embed], components: [] })
+          })
         }, 3000)
         return true
       })
@@ -235,8 +254,26 @@ class FishCommand extends Command {
         }
         addExp(msg.author, 'fishing', msg)
         embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`))}**`)
+        const filter2 = i => i.customID === 'fish' && i.user.id === msg.author.id
+        const row2 = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setLabel('Fish')
+              .setCustomID('fish')
+              .setEmoji('🎣')
+              .setStyle('SECONDARY'),   
+        )
         setTimeout(() => {
-          message.edit({ embeds: [embed] })
+          message.edit({ embeds: [embed], components: [row2] })
+          message.awaitMessageComponentInteraction(filter2, { time: 15000 })
+          .then(async i => {
+            const cmd = this.client.commands.get('fish')
+            await i.update({ components: [] })
+            await cmd.run(this.client, msg, args)
+          })
+          .catch(() => {
+            message.edit({ embeds: [embed], components: [] })
+          })
         }, 3000)
         return true
       })

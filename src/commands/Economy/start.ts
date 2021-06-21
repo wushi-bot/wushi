@@ -19,10 +19,10 @@ class StartCommand extends Command {
 
   async run (bot, msg, args) {
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    //if (eco.get(`${msg.author.id}.started`)) {
-    //  this.client.emit('customError', 'You already have a bank account!', msg)
-    //  return false
-    //}
+    if (eco.get(`${msg.author.id}.started`)) {
+      this.client.emit('customError', 'You already have a bank account!', msg)
+      return false
+    }
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
