@@ -9,14 +9,14 @@
   "private": false,
   "dependencies": {
     "@aero/centra": "^1.0.6",
-    "@types/ws": "^7.4.4",
+    "@types/ws": "^7.4.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "canvas": "^2.8.0",
     "canvas-constructor": "3.2.0",
     "chalk": "^4.1.1",
     "dblapi.js": "^2.4.1",
-    "discord.js": "^13.0.0-dev.807ea2d3c197c7c6556bd1c894114932f6657d49",
+    "discord.js": "^13.0.0-dev.03d3a5cdde5492433d27bbfe46afe0ebf2de5904",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "moment": "^2.29.1",
@@ -28,8 +28,8 @@
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
-    "@types/node": "^15.12.2",
-    "mongoose": "^5.12.13",
-    "typescript": "^4.3.2"
+    "@types/node": "^15.12.5",
+    "mongoose": "^5.12.15",
+    "typescript": "^4.3.4"
   }
 }

@@ -7,6 +7,7 @@ const cfg = new db.table('config')
 import tools from '../../resources/items/tools.json'
 import upgrades from '../../resources/items/upgrades.json'
 import petstuff from '../../resources/items/petstuff.json'
+import fishing from '../../resources/items/fishing.json'
 import { addCommas, getPrefix } from '../../utils/utils'
 
 class ShopCommand extends Command {
@@ -87,6 +88,15 @@ class ShopCommand extends Command {
         .setDescription(`The pet stuff catalog, buy stuff for your pets using \`${getPrefix(msg.guild.id)}buy <id>\`.`)
         petstuff.forEach(stuff => {
         embed.addField(`${stuff.emoji} ${stuff.display}`, `ID: \`${stuff.id}\` | Price: **:coin: ${addCommas(stuff.price)}** | ${stuff.description.replace('[PRE]', getPrefix(msg.guild.id))}`)
+      })
+      msg.reply({ embeds: [embed] })
+    } else if (args[0].toLowerCase() === 'fishing') {
+      const embed = new MessageEmbed()
+        .setColor(color)
+        .setTitle(':fishing_pole_and_fish: **Fishing**')
+        .setDescription(`The fishing catalog, buy stuff you get from fishing using \`${getPrefix(msg.guild.id)}buy <id>\`.`)
+        fishing.forEach(stuff => {
+          embed.addField(`${stuff.emoji} ${stuff.display}`, `ID: \`${stuff.id}\` | Price: **:coin: ${addCommas(stuff.price)}** | ${stuff.description.replace('[PRE]', getPrefix(msg.guild.id))}`)
       })
       msg.reply({ embeds: [embed] })
     }

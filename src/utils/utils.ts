@@ -8,6 +8,7 @@ const leveling = new db.table('leveling')
 import keys from '../resources/key.json'
 import tools from '../resources/items/tools.json'
 import upgrades from '../resources/items/upgrades.json'
+import fishing from '../resources/items/fishing.json'
 import petstuff from '../resources/items/petstuff.json'
 
 export const updateStats = function (guildCount) {
@@ -119,6 +120,9 @@ export const allItems = function () {
   for (const item in petstuff) {
     allItems.push(petstuff[item])
   }    
+  for (const item in fishing) {
+    allItems.push(fishing[item])
+  }      
   return allItems
 }
 

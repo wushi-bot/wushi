@@ -1,0 +1,47 @@
+[
+    {
+        "price": 15,
+        "sell_price": 8,
+        "id": "fish", 
+        "description": "A fish that can be commonly found by fishing.",
+        "display": "Fish",
+        "emoji": ":fish:",
+        "type": "sack"
+    },
+    {
+        "price": 35,
+        "sell_price": 12,
+        "id": "snowflake",
+        "description": "Snowflakes are commonly found raining from the heavens.",
+        "display": "Snowflake",
+        "emoji": ":snowflake:",
+        "type": "sack"
+    }, 
+    {
+        "price": 10,
+        "sell_price": 5,
+        "id": "six_pack_ring",
+        "description": "An item found through fishing via pollution.",
+        "display": "Six Pack Ring",
+        "emoji": ":tropical_drink:",
+        "type": "sack"
+    },
+    {
+        "price": 50,
+        "sell_price": 25,
+        "id": "boot",
+        "description": "A boot, must I say more?",
+        "display": "Boot",
+        "emoji": ":boot:",
+        "type": "sack"
+    },
+    {
+        "price": 60,
+        "sell_price": 30,
+        "id": "hunk_of_ice",
+        "description": "A clumped ball of ice.",
+        "display": "Hunk of Ice",
+        "emoji": ":ice_cube:",
+        "type": "sack"
+    }
+]
