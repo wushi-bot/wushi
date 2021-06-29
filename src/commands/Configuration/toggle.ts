@@ -25,6 +25,11 @@ class ToggleCommand extends Command {
   async run (bot, msg, args) {
     if (!args[0]) return this.client.emit('customError', 'You need to provide arguments.', msg)
     const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const admins = cfg.get(`${msg.guild.id}.admins`) || []
+    if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
+      this.client.emit('customError', 'You do not have permission to execute this command.', msg)
+      return false
+    }
     const categories = getCategories()
     const module = toTitleCase(args[0].toLowerCase())
     if (categories.includes(module)) {

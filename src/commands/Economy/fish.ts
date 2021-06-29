@@ -1,7 +1,7 @@
 
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
-import { getRandomInt, getPrefix, addCommas } from '../../utils/utils'
+import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
 import db from 'quick.db'
 
@@ -9,14 +9,34 @@ const eco = new db.table('economy')
 const cfg = new db.table('config')
 
 async function getLoot(place: string) {
-  const odds = getRandomInt(1, 100)
+  let odds = getRandomInt(1, 100)
+  let list = []
   if (place === 'ice_pond') {
-    
+    if (odds > 40) list.push('snowflake')
+    odds = getRandomInt(1, 100)
+    if (odds > 60) list.push('hunk_of_ice')
+    odds = getRandomInt(1, 100)
+    if (odds > 85) list.push('divining_rod')
   } else if (place === 'lake') {
-    
+    if (odds > 20) list.push('boot')
+    odds = getRandomInt(1, 100)
+    if (odds > 10) list.push('trap')
+    odds = getRandomInt(1, 100)
+    if (odds > 60) list.push('fertilizer')
+    odds = getRandomInt(1, 100)
+    if (odds > 70) list.push('string')
+    odds = getRandomInt(1, 100)
+    if (odds > 90) list.push('stick')    
   } else if (place === 'ocean') {
-
+    if (odds > 20) list.push('six_pack_ring')
+    odds = getRandomInt(1, 100)
+    if (odds > 10) list.push('seaweed')
+    odds = getRandomInt(1, 100)
+    if (odds > 60) list.push('fishing_bait')
+    odds = getRandomInt(1, 100)
+    if (odds > 70) list.push('metal')
   }
+  return list
 }
 
 class FishCommand extends Command {
@@ -104,8 +124,9 @@ class FishCommand extends Command {
           .setColor(color) 
           .addField(':fishing_pole_and_fish: Fishing', `Fishing at the **${choice}**... please wait...`)
         await interaction.update({ embeds: [followUpEmbed], components: [] })
-        setTimeout(() => {
+        setTimeout(async () => {
           let fishingBaitBonus
+          let loot = await getLoot(interaction.customID)
           if (items['fishing_bait']) {
             if (eco.get(`${msg.author.id}.items.fishing_bait`) === 0) eco.delete(`${msg.author.id}.items.fishing_bait`) 
             else eco.subtract(`${msg.author.id}.items.fishing_bait`, 1)
@@ -119,12 +140,23 @@ class FishCommand extends Command {
           amount = addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           const embed = new MessageEmbed()
             .setColor(color)
+          let lootDisplay = []
+          loot.forEach(item => {
+            let i = getItem(allItems(), item)
+            if (eco.get(`${msg.author.id}.items.${i.id}`)) eco.add(`${msg.author.id}.items.${i.id}`, 1)
+            else eco.set(`${msg.author.id}.items.${i.id}`, 1)
+            lootDisplay.push(`${i.emoji} **${i.display}**`)
+          })
+          if (eco.get(`${msg.author.id}.items.fish`)) eco.add(`${msg.author.id}.items.fish`, fishGained)
+          else eco.set(`${msg.author.id}.items.fish`, fishGained)
           if (!fishingBaitBonus) {
             embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${getRandomInt(1, 10)} hours**, here's what you fished up!`)
-            embed.addField(':tada: Rewards', `+ :fish: ${fishGained} **(+${bonus})**`)
+            lootDisplay.push(`${fishGained} :fish: **Fish** **(+${bonus})**`)
+            embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           } else {
             embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${getRandomInt(1, 10)} hours**, here's what you fished up!`)
-            embed.addField(':tada: Rewards', `+ :fish: ${fishGained} ***(+${bonus})***`)
+            lootDisplay.push(`${fishGained} :fish: **Fish** ***(+${bonus})***`)
+            embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           }
           if (goldenReeling) {
             addMoney(msg.author.id, goldenReelBonus)

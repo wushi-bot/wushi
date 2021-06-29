@@ -1,4 +1,5 @@
 import { Client, Collection } from 'discord.js'
+import TwitchMonitor from './TwitchMonitor'
 import { readdirSync, readdir } from 'fs'
 import path from 'path'
 
@@ -21,6 +22,8 @@ export default class Bot extends Client {
 
   start (token: string) {
     super.login(token)
+    const Twitch = new TwitchMonitor(this)
+    Twitch.start()
     return this
   }
 

@@ -5,8 +5,7 @@
         "id": "fish", 
         "description": "A fish that can be commonly found by fishing.",
         "display": "Fish",
-        "emoji": ":fish:",
-        "type": "sack"
+        "emoji": ":fish:"
     },
     {
         "price": 35,
@@ -14,8 +13,7 @@
         "id": "snowflake",
         "description": "Snowflakes are commonly found raining from the heavens.",
         "display": "Snowflake",
-        "emoji": ":snowflake:",
-        "type": "sack"
+        "emoji": ":snowflake:"
     }, 
     {
         "price": 10,
@@ -23,8 +21,7 @@
         "id": "six_pack_ring",
         "description": "An item found through fishing via pollution.",
         "display": "Six Pack Ring",
-        "emoji": ":tropical_drink:",
-        "type": "sack"
+        "emoji": ":tropical_drink:"
     },
     {
         "price": 50,
@@ -32,8 +29,7 @@
         "id": "boot",
         "description": "A boot, must I say more?",
         "display": "Boot",
-        "emoji": ":boot:",
-        "type": "sack"
+        "emoji": ":boot:"
     },
     {
         "price": 60,
@@ -41,7 +37,22 @@
         "id": "hunk_of_ice",
         "description": "A clumped ball of ice.",
         "display": "Hunk of Ice",
-        "emoji": ":ice_cube:",
-        "type": "sack"
+        "emoji": ":ice_cube:"
+    },
+    {
+        "price": 15, 
+        "sell_price": 10,
+        "id": "seaweed",
+        "description": "A plant underwater.",
+        "display": "Seaweed",
+        "emoji": ":potted_plant:"
+    },
+    {
+        "price": 45,
+        "sell_price": 35,
+        "id": "metal",
+        "description": "A clump of metal.",
+        "display": "Metal",
+        "emoji": ":gear:"
     }
 ]
