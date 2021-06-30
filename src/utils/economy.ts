@@ -61,7 +61,7 @@ export const addExp = function (user, skill, msg) {
         embed.addField(`:up: Level up!`, `Successfully leveled up in :pick: **Mining**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
         break
     }
-    msg.send({ embeds: [embed] })
+    msg.reply({ embeds: [embed] })
   }
   return amount
 }

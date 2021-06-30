@@ -54,5 +54,21 @@
         "description": "A clump of metal.",
         "display": "Metal",
         "emoji": ":gear:"
+    }, 
+    {
+        "price": 5,
+        "sell_price": 3,
+        "id": "string",
+        "description": "A piece of string.",
+        "display": "String",
+        "emoji": ":yarn:"
+    },
+    {
+        "price": 9,
+        "sell_price": "5",
+        "id": "stick", 
+        "description": "A stick, like a branch or something...",
+        "display": "Stick",
+        "emoji": ":chopsticks:"
     }
 ]

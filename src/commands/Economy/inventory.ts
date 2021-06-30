@@ -37,7 +37,7 @@ class InventoryCommand extends Command {
     const keys = Object.keys(items)
     keys.forEach(item => {
         const i = getItem(allItems(), item)
-        embed.addField(`${i.emoji} ${i.display} — ${items[item]}`, `Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(msg.guild.id)), 50, '...')}`, true)
+        embed.addField(`${i.emoji} ${i.display} — ${items[item]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(msg.guild.id)), 50, '...')}`, true)
     })
     msg.reply({ embeds: [embed] })
     return true
