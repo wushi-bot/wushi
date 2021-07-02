@@ -54,7 +54,7 @@ class SellCommand extends Command {
     const profit = Math.floor(desiredAmount * item.sell_price)
     eco.add(`${msg.author.id}.balance`, profit)
     eco.subtract(`${msg.author.id}.items.${item.id}`, desiredAmount)
-    if (eco.get(`${msg.author.id}.items.${item.id}`) === 0) eco.set(`${msg.author.id}.items.${item.id}`, 0)
+    if (eco.get(`${msg.author.id}.items.${item.id}`) === 0) eco.delete(`${msg.author.id}.items.${item.id}`)
     const embed = new MessageEmbed()
       .addField('<:check:820704989282172960> Success!', `Successfully sold ${desiredAmount} **${item.emoji} ${item.display}** and made :coin: **${addCommas(profit)}** as profit.`)
       .setColor(color)
