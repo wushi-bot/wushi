@@ -46,5 +46,13 @@
         "description": "A bug found from a plant.",
         "display": "Bug",
         "emoji": ":lady_beetle:"
+    },
+    {
+        "price": 15,
+        "sell_price": 10,
+        "id": "gem",
+        "description": "A gem you can find from mining.",
+        "display": "Gem",
+        "emoji": ":gem:"
     }
 ]

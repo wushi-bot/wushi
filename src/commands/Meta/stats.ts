@@ -29,7 +29,7 @@ class StatsCommand extends Command {
         .addField(':brain: Memory' ,`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`)
         .addField(':clock1: Uptime', duration)
         .addField(':eyes: Cached', `**${this.client.users.cache.size.toLocaleString()}** users, **${this.client.guilds.cache.size.toLocaleString()}** guilds, **${this.client.channels.cache.size.toLocaleString()}** channels.`)
-        .addField(':robot: Version', `wushi **v${this.client.version}** (\`${com}\`/main) is running on **Node.js ${process.version}** & **Discord.js v${version}**`)
+        .addField(':robot: Version', `wushi **v${this.client.version}** (\`${com}\`/\`main\`) is running on **Node.js ${process.version}** & **Discord.js v${version}**`)
         .addField(':speech_left: Commands', `The bot has **${this.client.commands.array().length.toLocaleString()} commands**.`)
       msg.reply({ embeds: [embed] })
       return true

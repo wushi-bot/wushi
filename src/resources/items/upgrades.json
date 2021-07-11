@@ -1,31 +1,31 @@
 [
   {
-    "price": 150,
-    "sell_price": 50,
+    "price": 50,
+    "sell_price": 25,
     "id": "fishing_bait",
     "description": "Increases the bonus fish you get when fishing, regardless of fishing rod. Automatically gets consumed when you fish via `[PRE]fish`.",
     "display": "Fishing Bait",
     "emoji": ":fish_cake:"
   },
   {
-    "price": 1000,
-    "sell_price": 150,
+    "price": 100,
+    "sell_price": 50,
     "id": "divining_rod",
     "description": "Increases the bonus mine you get when mining, regardless of pickaxe. Automatically gets consumed when you mine via `[PRE]mine`.",
     "display": "Divining Rod",
     "emoji": ":chopsticks:"
   },
   {
-    "price": 2500,
-    "sell_price": 500,
+    "price": 250,
+    "sell_price": 75,
     "id": "fertilizer",
     "description":"Increases the bonus crops you get when farming, regardless of hoe. Automatically gets consumed when you farm via `[PRE]farm`.",
     "display": "Fertilizer",
     "emoji": ":cow:"
   },
   {
-    "price": 5000,
-    "sell_price": 1250,
+    "price": 500,
+    "sell_price": 100,
     "id": "trap",
     "description": "Increases the bonus game you get when hunting, regardless of rifle. Automatically gets consumed when you hunt via `[PRE]hunt`.",
     "display": "Trap",
