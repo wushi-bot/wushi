@@ -30,7 +30,17 @@ class InventoryCommand extends Command {
     const color = cfg.get(`${user.user.id}.color`) || user.roles.highest.color
     const items = eco.get(`${user.user.id}.items`) || {}
     const keys = Object.keys(items)
-    console.log('----------')
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setStyle('SECONDARY')
+          .setEmoji('⬅️')
+          .setCustomID('previous'),
+        new MessageButton()
+          .setStyle('SECONDARY')
+          .setEmoji('➡️')
+          .setCustomID('next')
+      )
     message.awaitMessageComponentInteraction(filter, { time: 30000 })
       .then(async i => {
         if (i.customID === 'previous') {
@@ -41,11 +51,10 @@ class InventoryCommand extends Command {
               .setAuthor(`${user.user.username}'s Inventory`, user.user.avatarURL())
               .setFooter(`Page ${page} of ${maxPages}`)
             for (let n = 0; n < 9; n++) {
-              console.log(keys[n + (9 * (page - 1))])
               const i = getItem(allItems(), keys[n + (9 * (page - 1))])
-              embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
+              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
             }
-            i.update({ embeds: [embed] })
+            i.update({ embeds: [embed], components: [row] })
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
           } else {
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
@@ -58,18 +67,18 @@ class InventoryCommand extends Command {
               .setAuthor(`${user.user.username}'s Inventory`, user.user.avatarURL())
               .setFooter(`Page ${page} of ${maxPages}`)
             for (let n = 0; n < 9; n++) {
-              console.log(keys[n + (9 * (page - 1))])
               const i = getItem(allItems(), keys[n + (9 * (page - 1))])
-              embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
+              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
             }
-            i.update({ embeds: [embed] })
+            i.update({ embeds: [embed], components: [row] })
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
           } else {
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
           }
         }
       })
-      .catch(() => {
+      .catch(error => {
+        console.error(error)
         message.edit({ embeds: [embed], components: [] })
       })
   }  
