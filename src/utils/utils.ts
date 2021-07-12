@@ -10,6 +10,7 @@ import tools from '../resources/items/tools.json'
 import upgrades from '../resources/items/upgrades.json'
 import fishing from '../resources/items/fishing.json'
 import mining from '../resources/items/mining.json'
+import farming from '../resources/items/farming.json'
 import petstuff from '../resources/items/petstuff.json'
 
 export const updateStats = function (guildCount) {
@@ -127,6 +128,9 @@ export const allItems = function () {
   for (const item in mining) {
     allItems.push(mining[item])
   }   
+  for (const item in farming) {
+    allItems.push(farming[item])
+  }
   return allItems
 }
 

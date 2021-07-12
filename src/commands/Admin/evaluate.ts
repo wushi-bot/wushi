@@ -12,9 +12,9 @@ class EvalCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'evaluate',
-      description: '...',
+      description: 'Evaluate a JavaScript statement',
       category: 'Admin',
-      aliases: ['eval', 'e'],
+      aliases: ['eval', 'e', 'ev'],
       usage: 'eval <statement>',
       cooldown: 1
     })

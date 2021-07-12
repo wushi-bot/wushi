@@ -1,0 +1,50 @@
+[
+    {
+        "price": 5,
+        "sell_price": 2,
+        "id": "dirt",
+        "description": "Literally just dirt.",
+        "display": "Dirt",
+        "emoji": ":island:"
+    },
+    {
+        "price": 35,
+        "sell_price": 15,
+        "id": "tomato",
+        "description": "A tomato, found from farming!",
+        "display": "Tomato",
+        "emoji": ":tomato:"
+    },
+    {
+        "price": 35,
+        "sell_price": 15,
+        "id": "corn",
+        "description": "A cob of corn, found from farming!",
+        "display": "Corn",
+        "emoji": ":corn:"
+    },
+    {
+        "price": 35,
+        "sell_price": 15,
+        "id": "carrot",
+        "description": "A carrot root, found from farming!",
+        "display": "Carrot",
+        "emoji": ":carrot:"
+    },
+    {
+        "price": 10,
+        "sell_price": 8,
+        "id": "leave",
+        "description": "A leaf.",
+        "display": "Leave",
+        "emoji": ":leaves:"
+    }, 
+    {
+        "price": 50,
+        "sell_price": 25,
+        "id": "worm",
+        "description": "A worm.",
+        "display": "Worm",
+        "emoji": ":worm:"      
+    }
+]

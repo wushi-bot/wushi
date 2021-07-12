@@ -86,14 +86,14 @@ class HelpCommand extends Command {
         }
         let aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
         if (!aliases) aliases = 'None'
-        else aliases = command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, ', ')
+        else aliases = `\`${command.conf.aliases.toString().replace(/[|]/gi, ' ').replace(/,/gi, '`, `')}\``
         embed
           .setColor(color)
           .addField('Command', `\`${command.conf.name}\``)
           .addField('Description', command.conf.description)
           .addField('Usage', `\`${getPrefix(msg.guild.id)}${command.conf.usage}\``)
           .addField('Category', `${key[command.conf.category]} **${command.conf.category}**`)
-          .addField('Aliases', aliases)
+          .addField('Aliases',  aliases)
         if (command.conf.cooldown !== false) embed.addField('Cooldown', `**${command.conf.cooldown}s** (**${command.conf.cooldown / 2}s** for Premium users)`)
         msg.reply({ embeds: [embed] })
         return true

@@ -25,7 +25,8 @@
     "path": "^0.12.7",
     "quick.db": "^7.1.3",
     "romanize-number": "^1.0.1",
-    "tinycolor2": "^1.4.2"
+    "tinycolor2": "^1.4.2",
+    "urban-dictionary": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^15.12.5",

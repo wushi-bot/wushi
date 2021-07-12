@@ -77,8 +77,7 @@ class InventoryCommand extends Command {
           }
         }
       })
-      .catch(error => {
-        console.error(error)
+      .catch(() => {
         message.edit({ embeds: [embed], components: [] })
       })
   }  

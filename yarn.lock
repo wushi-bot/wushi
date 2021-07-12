@@ -1327,6 +1327,11 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
 
+urban-dictionary@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/urban-dictionary/-/urban-dictionary-3.0.1.tgz#37ac49af76c71fefa38caa3f4e53b152fc5f0b08"
+  integrity sha512-69p3tBrhcwhai/07ki83nncKhdBcYJLnLlfPheZl0XAA/Og+icJGoFBEseee19x6omIUJqd5pUzV/+yVrocRcg==
+
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
