@@ -56,7 +56,8 @@ class VoteCommand extends Command {
     const row = new MessageActionRow()
       .addComponents(topGgButton, dblButton)
     const e = new MessageEmbed() 
-      .setDescription(`:ballot_box: **Voting**\nHelp support :sushi: [wushi](https://wushibot.xyz) by voting the bot today on the provided bot list.\n\n:money_with_wings: **Rewards**\n+ :coin: **${addCommas(Math.floor(750 + (750 * (eco.get(`${msg.author.id}.multiplier`) * 0.1)) * eco.get(`${msg.author.id}.prestige`)))}**\n+ :crown: **1%** Multiplier`)
+      .addField(':ballot_box: Voting', 'Help support :sushi: [wushi](https://wushibot.xyz) by voting the bot today on the provided bot list.')
+      .addField(':money_with_wings: **Rewards**', `+ :coin: **${addCommas(Math.floor(750 + (750 * (eco.get(`${msg.author.id}.multiplier`) * 0.1)) * eco.get(`${msg.author.id}.prestige`)))}**\n+ :crown: **1%** Multiplier`)
       .setColor(color)
     msg.reply({ embeds: [e], components: [row] })
     return true

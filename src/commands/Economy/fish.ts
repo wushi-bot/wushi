@@ -73,7 +73,6 @@ class FishCommand extends Command {
     }
     let correctChoice = getRandomInt(1, 4)
     let correctDisplay 
-    let season
     if (correctChoice === 1) {
       correctChoice = 'ocean'
       correctDisplay = '🌊 Ocean'
@@ -99,7 +98,7 @@ class FishCommand extends Command {
       .setColor(color)
       .setFooter('You have 8 seconds to pick a location.')
       .setTitle(':fishing_pole_and_fish: Fishing')
-      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to fish at. \n\n:question: **How to fish**\nPlease choose a location to fish at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:fishing_pole_and_fish: Fishing[ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.fishing.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.fishing.exp`) / eco.get(`${msg.author.id}.skills.fishing.req`) * 100)}**%)`)
+      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to fish at. \n\n:question: **How to fish**\nPlease choose a location to fish at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:fishing_pole_and_fish: Fishing [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.fishing.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.fishing.exp`) / eco.get(`${msg.author.id}.skills.fishing.req`) * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
@@ -143,9 +142,16 @@ class FishCommand extends Command {
           goldenReeling = false
         }
         let choice = interaction.customID
+
         if (choice === 'lake') choice = '🏞️ Lake'
         else if (choice === 'ice_pond') choice = '❄️ Ice Pond'
         else if (choice === 'ocean') choice = '🌊 Ocean'
+        if (correctDisplay !== choice) {
+          const embed = new MessageEmbed()
+            .addField(':fishing_pole_and_fish: Fishing', 'Incorrect choice! You will not get any **fishing loot / EXP**!')
+            .setColor(color)
+          return msg.reply({ embeds: [embed] })
+        }
         const followUpEmbed = new MessageEmbed()
           .setColor(color) 
           .addField(':fishing_pole_and_fish: Fishing', `Fishing at the **${choice}**... please wait...`)

@@ -3,6 +3,7 @@ import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
 import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
+import romanizeNumber from 'romanize-number'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
@@ -62,12 +63,36 @@ class MineCommand extends Command {
     }
     const filter = i => {
       if (i.user.id !== msg.author.id) return false
-      if (i.customID === 'mountains' || i.customID === 'caverns' || i.customID === 'river') return true
+      if (i.customID === 'river' || i.customID === 'mountains' || i.customID === 'caverns') return true
+    }
+    let correctChoice = getRandomInt(1, 4)
+    let correctDisplay 
+    if (correctChoice === 1) {
+      correctChoice = 'river'
+      correctDisplay = '🌊 River'
+    } else if (correctChoice === 2) {
+      correctChoice = 'mountains'
+      correctDisplay = '🏔️ Mountains'
+    } else if (correctChoice === 3) {
+      correctChoice = 'caverns'
+      correctDisplay = '🪨 Caverns'
+
+    }
+    const exp = eco.get(`${msg.author.id}.skills.mining.exp`)
+    let bar
+    let barItem
+    if (eco.get(`${msg.author.id}.skills.mining.exp`) !== 0) {
+      bar = Math.ceil(exp / 10)
+      barItem = '▇'
+    } else {
+      bar = 1
+      barItem = '**🗙**'
     }
     const chooserEmbed = new MessageEmbed()
       .setColor(color)
       .setFooter('You have 8 seconds to pick a location.')
-      .addField(':pick: Mining', 'Please choose a location to mine at from the corresponding bottom locations.')
+      .setTitle(':pick: Mining')
+      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to mine at. \n\n:question: **How to mine**\nPlease choose a location to mine at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:pick: Mining [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.mining.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.mining.exp`) / eco.get(`${msg.author.id}.skills.mining.req`) * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
@@ -78,7 +103,7 @@ class MineCommand extends Command {
           new MessageButton()
             .setLabel('Mountains')
             .setCustomID('mountains')
-            .setEmoji('🗻')
+            .setEmoji('🏔️')
             .setStyle('SECONDARY'),   
           new MessageButton()
             .setLabel('Caverns')
@@ -90,44 +115,51 @@ class MineCommand extends Command {
     await message.awaitMessageComponentInteraction(filter, { max: 1, time: 8000, errors: ['time'] })
       .then(async interaction => {
         let bonus = 0
-        let goldChance = 0
+        let goldenReelingChance = 0
         if (items['flimsy_pickaxe']) {
-          goldChance = 7.5
+          goldenReelingChance = 7.5
           bonus = bonus + 0
         } 
         if (items['decent_pickaxe']) {
-          goldChance = 25.5
+          goldenReelingChance = 25.5
           bonus = bonus + getRandomInt(7, 15)
         } 
         if (items['great_pickaxe']) {
-          goldChance = 60
+          goldenReelingChance = 60
           bonus = bonus + getRandomInt(25, 35)
         }
         const odds = getRandomInt(0, 100)
-        let gold = false
-        if (odds < goldChance) {
-          gold = true
+        let goldenReeling = false
+        if (odds < goldenReelingChance) {
+          goldenReeling = true
         } else {
-          gold = false
+          goldenReeling = false
         }
         let choice = interaction.customID
-        if (choice === 'caverns') choice = '🪨 Caverns'
-        else if (choice === 'mountains') choice = '🗻 Mountains'
-        else if (choice === 'river') choice = '🌊 River'
+
+        if (choice === 'river') choice = '🌊 River'
+        else if (choice === 'mountains') choice = '🏔️ Mountains'
+        else if (choice === 'caverns') choice = '🪨 Caverns'
+        if (correctDisplay !== choice) {
+          const embed = new MessageEmbed()
+            .addField(':pick: Mining', 'Incorrect choice! You will not get any **mining loot / EXP**!')
+            .setColor(color)
+          return msg.reply({ embeds: [embed] })
+        }
         const followUpEmbed = new MessageEmbed()
           .setColor(color) 
           .addField(':pick: Mining', `Mining at the **${choice}**... please wait...`)
         await interaction.update({ embeds: [followUpEmbed], components: [] })
         setTimeout(async () => {
-          let divinigRodBonus
+          let diviningRodBonus
           let loot = await getLoot(interaction.customID)
           if (items['divining_rod']) {
             if (eco.get(`${msg.author.id}.items.divining_rod`) === 0) eco.delete(`${msg.author.id}.items.divining_rod`) 
             else eco.subtract(`${msg.author.id}.items.divining_rod`, 1)
             bonus = bonus + getRandomInt(3, 10)
-            divinigRodBonus = true
+            diviningRodBonus = true
           }
-          const goldBonus = getRandomInt(45, 175)
+          const goldenReelBonus = getRandomInt(45, 175)
           let amount = getRandomInt(2, 8)
           let lvl = eco.get(`${msg.author.id}.skills.mining.level`) || 0
           let gemsMined = Math.floor(amount + amount * (lvl * 0.1))
@@ -143,18 +175,18 @@ class MineCommand extends Command {
           })
           if (eco.get(`${msg.author.id}.items.gem`)) eco.add(`${msg.author.id}.items.gem`, gemsMined)
           else eco.set(`${msg.author.id}.items.gem`, gemsMined)
-          if (!divinigRodBonus) {
+          if (!diviningRodBonus) {
             embed.addField(':pick: Mining', `You mined for **${getRandomInt(1, 10)} hours**, here's what you mined up!`)
-            lootDisplay.push(`${gemsMined} :gem: **Gems** **(+${bonus})**`)
+            lootDisplay.push(`${gemsMined} :gem: **Gem** **(+${bonus})**`)
             embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           } else {
             embed.addField(':pick: Mining', `You mined for **${getRandomInt(1, 10)} hours**, here's what you mined up!`)
-            lootDisplay.push(`${gemsMined} :gem: **Gems** ***(+${bonus})***`)
+            lootDisplay.push(`${gemsMined} :gem: **Gem** ***(+${bonus})***`)
             embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           }
-          if (gold) {
-            addMoney(msg.author.id, goldBonus)
-            embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldBonus}** as a bonus.`)
+          if (goldenReeling) {
+            addMoney(msg.author.id, goldenReelBonus)
+            embed.addField(':sparkles: Lucky!', `You also struck gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
           }
           addExp(msg.author, 'mining', msg)
           embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.mining.req`) - eco.get(`${msg.author.id}.skills.mining.exp`))}**`)
