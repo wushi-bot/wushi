@@ -4,6 +4,7 @@ import db from 'quick.db'
 import { getRandomInt } from './utils'
 const eco = new db.table('economy')
 const pets = new db.table('pets')
+const cfg = new db.table('config')
 
 export const addMoney = function (user, amount) {
   let multiplier = eco.get(`${user}.multiplier`) || 1
@@ -45,8 +46,9 @@ export const addExp = function (user, skill, msg) {
     eco.subtract(`${user.id}.skills.${skill}.exp`, eco.get(`${user.id}.skills.${skill}.req`))
     eco.add(`${user.id}.skills.${skill}.req`, eco.get(`${user.id}.skills.${skill}.req`) * 0.1)
     eco.add(`${user.id}.skills.${skill}.level`, 1)
+    const color = cfg.get(`${user.id}.color`) || '#ff4747'
     const embed = new MessageEmbed()
-      .setColor('#ff4747')
+      .setColor(color)
     switch (skill) {
       case 'fishing': 
         embed.addField(`:up: Level up!`, `Successfully leveled up in :fishing_pole_and_fish: **Fishing**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)

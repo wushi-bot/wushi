@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import express from 'express'
 import bodyParser from 'body-parser'
 import { MessageEmbed } from 'discord.js'
-import { updateStats } from '../utils/utils'
+import { updateStats, addCommas } from '../utils/utils'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
@@ -56,19 +56,20 @@ async function webServer(bot) {
     const embed = new MessageEmbed()
     let bonus
     if (req.body.isWeekend) {
-      eco.add(`${user.id}.balance`, 1000)
+      eco.add(`${user.id}.balance`, 1000 + (1000 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`))
       eco.add(`${user.id}.multiplier`, 2)
       bonus = true
     } else {
-      eco.add(`${user.id}.balance`, 750)
+      eco.add(`${user.id}.balance`, 750 + (750 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`))
       eco.add(`${user.id}.multiplier`, 1)
       bonus = false
     }
     eco.set(`${user.id}.votedTop`, true)
     eco.push('unvotes', { user: req.body.user, unvoteAt: new Date().getTime() + 43200000, bonus: bonus, site: 'topgg' })
     try {
-      if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **1,000**\n+ :crown: **2% Multiplier**')
-      else embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **750**\n+ :crown: **1% Multiplier**')
+      if (bonus) embed.addField('<:check:820704989282172960> Thanks for voting!', `You receive the following perks while you have the voting perk: \n+ :coin: **${addCommas(Math.floor(1000 + (1000 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`)))}**\n+ :crown: **2% Multiplier**`)
+      else embed.addField('<:check:820704989282172960> Thanks for voting!', `You receive the following perks while you have the voting perk: \n+ :coin: **${addCommas(Math.floor(750 + (750 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`)))}**\n+ :crown: **1% Multiplier**`)
+      embed.addField(':question: Expiry', `These perks will expire at <t:${new Date().getTime() + 43200000}:R>`)
       embed.setFooter('These perks will expire when your vote renews again.')
       embed.setColor('#ff4747')
       user.send(embed)
@@ -81,13 +82,14 @@ async function webServer(bot) {
     res.status(200).end()
     const user = bot.users.cache.get(req.body.id)
     const embed = new MessageEmbed()
-    eco.add(`${user.id}.balance`, 750)
+    eco.add(`${user.id}.balance`, 750 + (750 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`))
     eco.add(`${user.id}.multiplier`, 1)
     eco.set(`${user.id}.votedDBL`, true)
     eco.push('unvotes', { user: req.body.id, unvoteAt: new Date().getTime() + 43200000, site: 'discordbotlistcom' })
     try {
-      embed.addField('<:check:820704989282172960> Thanks for voting!', 'You receive the following perks while you have the voting perk: \n+ :coin: **750**\n+ :crown: **1% Multiplier**')
+      embed.addField('<:check:820704989282172960> Thanks for voting!', `You receive the following perks while you have the voting perk: \n+ :coin: **${addCommas(Math.floor(750 + (750 * (eco.get(`${user.id}.multiplier`) * 0.1)) * eco.get(`${user.id}.prestige`)))}**\n+ :crown: **1% Multiplier**`)
       embed.setFooter('These perks will expire when your vote renews again.')
+      embed.addField(':question: Expiry', `These perks will expire at <t:${new Date().getTime() + 43200000}:R>`)
       embed.setColor('#ff4747')
       user.send(embed)
     } catch {}  

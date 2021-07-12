@@ -3,6 +3,7 @@ import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
 import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
+import romanizeNumber from 'romanize-number'
 import db from 'quick.db'
 
 const eco = new db.table('economy')
@@ -70,10 +71,35 @@ class FishCommand extends Command {
       if (i.user.id !== msg.author.id) return false
       if (i.customID === 'ocean' || i.customID === 'ice_pond' || i.customID === 'lake') return true
     }
+    let correctChoice = getRandomInt(1, 4)
+    let correctDisplay 
+    let season
+    if (correctChoice === 1) {
+      correctChoice = 'ocean'
+      correctDisplay = '🌊 Ocean'
+    } else if (correctChoice === 2) {
+      correctChoice = 'ice_pond'
+      correctDisplay = '❄️ Ice Pond'
+    } else if (correctChoice === 3) {
+      correctChoice = 'lake'
+      correctDisplay = '🏞️ Lake'
+
+    }
+    const exp = eco.get(`${msg.author.id}.skills.fishing.exp`)
+    let bar
+    let barItem
+    if (eco.get(`${msg.author.id}.skills.fishing.exp`) !== 0) {
+      bar = Math.ceil(exp / 10)
+      barItem = '▇'
+    } else {
+      bar = 1
+      barItem = '**🗙**'
+    }
     const chooserEmbed = new MessageEmbed()
       .setColor(color)
       .setFooter('You have 8 seconds to pick a location.')
-      .addField(':fishing_pole_and_fish: Fishing', 'Please choose a location to fish at from the corresponding bottom locations.')
+      .setTitle(':fishing_pole_and_fish: Fishing')
+      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to fish at. \n\n:question: **How to fish**\nPlease choose a location to fish at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:fishing_pole_and_fish: Fishing[ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.fishing.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.fishing.exp`) / eco.get(`${msg.author.id}.skills.fishing.req`) * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
