@@ -13,8 +13,8 @@ class SellCommand extends Command {
       description: 'Sell items in your inventory for cash.',
       category: 'Economy',
       aliases: ['se'],
-      usage: 'sell <item> [amount/all/half]',
-      cooldown: 3
+      usage: 'sell <item> <amount/all/half>',
+      cooldown: 2.5
     })
   }
 

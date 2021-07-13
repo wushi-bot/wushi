@@ -46,5 +46,13 @@
         "description": "A worm.",
         "display": "Worm",
         "emoji": ":worm:"      
+    },
+    {
+        "price": 10,
+        "sell_price": 5,
+        "id": "seeds",
+        "description": "A bundle of seeds.",
+        "display": "Seeds",
+        "emoji": ":cherry_blossom:"
     }
 ]

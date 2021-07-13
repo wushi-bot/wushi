@@ -12,14 +12,14 @@ const cfg = new db.table('config')
 async function getLoot(crop: string) {
   let odds = getRandomInt(1, 100)
   let list = []
-  if (crop === 'carrot') {
-    if (odds > 40) list.push('dirt')
+  if (crop === 'rabbit') {
+    if (odds > 40) list.push('trap')
     odds = getRandomInt(1, 100)
     if (odds > 60) list.push('leave')
     odds = getRandomInt(1, 100)
-    if (odds > 85) list.push('worm')
-  } else if (crop === 'tomato') {
-    if (odds > 20) list.push('dirt')
+    if (odds > 85) list.push('carrot')
+  } else if (crop === 'pig') {
+    if (odds > 20) list.push('trap')
     odds = getRandomInt(1, 100)
     if (odds > 10) list.push('leave')
     odds = getRandomInt(1, 100)
@@ -27,27 +27,28 @@ async function getLoot(crop: string) {
     odds = getRandomInt(1, 100)
     if (odds > 70) list.push('string')
     odds = getRandomInt(1, 100)
-    if (odds > 90) list.push('fertilizer')    
-  } else if (crop === 'corn') {
-    if (odds > 20) list.push('weeds')
+    if (odds > 90) list.push('fishing_bait')    
+  } else if (crop === 'deer') {
+    if (odds > 20) list.push('trap')
     odds = getRandomInt(1, 100)
     if (odds > 10) list.push('string')
     odds = getRandomInt(1, 100)
     if (odds > 60) list.push('leave')
     odds = getRandomInt(1, 100)
     if (odds > 70) list.push('dirt')
+    if (odds > 20) list.push('seeds')
   }
   return list
 }
 
-class FarmCommand extends Command {
+class HuntCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'farm',
-      description: 'Farm to get stuff!',
+      name: 'hunt',
+      description: 'Hunt to get stuff!',
       category: 'Economy',
-      aliases: ['till'],
-      usage: 'farm',
+      aliases: ['shoot'],
+      usage: 'hunt',
       cooldown: 12.5
     })
   }
@@ -60,34 +61,34 @@ class FarmCommand extends Command {
     }
     const items = eco.get(`${msg.author.id}.items`) || []
     if (
-      !items['flimsy_hoe'] && 
-      !items['decent_hoe'] && 
-      !items['great_hoe']
+      !items['flimsy_rifle'] && 
+      !items['decent_rifle'] && 
+      !items['great_rifle']
     ) {
-      this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${getPrefix(msg.guild.id)}buy flimsy_hoe\`.`, msg)
+      this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
       return false
     }
     const filter = i => {
       if (i.user.id !== msg.author.id) return false
-      if (i.customID === 'carrot' || i.customID === 'corn' || i.customID === 'tomato') return true
+      if (i.customID === 'pig' || i.customID === 'deer' || i.customID === 'rabbit') return true
     }
     let correctChoice = getRandomInt(1, 4)
     let correctDisplay 
     if (correctChoice === 1) {
-      correctChoice = 'carrot'
-      correctDisplay = '🥕 Carrot'
+      correctChoice = 'pig'
+      correctDisplay = '🐷 Pig'
     } else if (correctChoice === 2) {
-      correctChoice = 'corn'
-      correctDisplay = '🌽 Corn'
+      correctChoice = 'rabbit'
+      correctDisplay = '🐰 Rabbit'
     } else if (correctChoice === 3) {
-      correctChoice = 'tomato'
-      correctDisplay = '🍅 Tomato'
+      correctChoice = 'deer'
+      correctDisplay = '🦌 Deer'
 
     }
-    const exp = eco.get(`${msg.author.id}.skills.farming.exp`)
+    const exp = eco.get(`${msg.author.id}.skills.hunting.exp`)
     let bar
     let barItem
-    if (eco.get(`${msg.author.id}.skills.farming.exp`) !== 0) {
+    if (eco.get(`${msg.author.id}.skills.hunting.exp`) !== 0) {
       bar = Math.ceil(exp / 10)
       barItem = '▇'
     } else {
@@ -96,25 +97,25 @@ class FarmCommand extends Command {
     }
     const chooserEmbed = new MessageEmbed()
       .setColor(color)
-      .setFooter('You have 8 seconds to pick a crop to harvest.')
-      .setTitle(':seedling: Farming')
-      .setDescription(`**:map: Crop in Season**\n The **${correctDisplay}** is the correct crop to harvest. \n\n:question: **How to farm**\nPlease choose a location to farm at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:seedling: Farming [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.farming.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.farming.exp`) / eco.get(`${msg.author.id}.skills.farming.req`) * 100)}**%)`)
+      .setFooter('You have 8 seconds to pick an animal to hunt.')
+      .setTitle('🐇 Hunting')
+      .setDescription(`**:map: Available animals**\n The **${correctDisplay}** is the only available animal to hunt. \n\n:question: **How to hunt**\nPlease choose a location to hunt at from the corresponding bottom animals.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:rabbit2: Hunting [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.hunting.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.hunting.exp`) / eco.get(`${msg.author.id}.skills.hunting.req`) * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
-            .setLabel('Tomato')
-            .setCustomID('tomato')
-            .setEmoji('🍅')
+            .setLabel('Rabbit')
+            .setCustomID('rabbit')
+            .setEmoji('🐰')
             .setStyle('SECONDARY'),
           new MessageButton()
-            .setLabel('Corn')
-            .setCustomID('corn')
-            .setEmoji('🌽')
+            .setLabel('Pig')
+            .setCustomID('pig')
+            .setEmoji('🐷')
             .setStyle('SECONDARY'),   
           new MessageButton()
-            .setLabel('Carrot')
-            .setCustomID('carrot')
-            .setEmoji('🥕')
+            .setLabel('Deer')
+            .setCustomID('deer')
+            .setEmoji('🦌')
             .setStyle('SECONDARY'),  
     )
     const message = await msg.reply({ embeds: [chooserEmbed], components: [row] })
@@ -122,15 +123,15 @@ class FarmCommand extends Command {
       .then(async interaction => {
         let bonus = 0
         let goldEggChance = 0
-        if (items['flimsy_hoe']) {
+        if (items['flimsy_rifle']) {
           goldEggChance = 7.5
           bonus = bonus + 0
         } 
-        if (items['decent_hoe']) {
+        if (items['decent_rifle']) {
           goldEggChance = 25.5
           bonus = bonus + getRandomInt(7, 15)
         } 
-        if (items['great_hoe']) {
+        if (items['great_rifle']) {
           goldEggChance = 60
           bonus = bonus + getRandomInt(25, 35)
         }
@@ -143,32 +144,32 @@ class FarmCommand extends Command {
         }
         let choice = interaction.customID
 
-        if (choice === 'tomato') choice = '🍅 Tomato'
-        else if (choice === 'corn') choice = '🌽 Corn'
-        else if (choice === 'carrot') choice = '🥕 Carrot'
+        if (choice === 'pig') choice = '🐷 Pig'
+        else if (choice === 'deer') choice = '🦌 Deer'
+        else if (choice === 'rabbit') choice = '🐰 Rabbit'
         if (correctDisplay !== choice) {
           const embed = new MessageEmbed()
-            .addField(':seedling: Farming', 'Incorrect choice! You will not get any **farming loot / EXP**!')
+            .addField(':rabbit2: Hunting', 'Incorrect choice! You will not get any **hunting loot / EXP**!')
             .setColor(color)
           return msg.reply({ embeds: [embed] })
         }
         const followUpEmbed = new MessageEmbed()
           .setColor(color) 
-          .addField(':seedling: Farming', `Harvesting **${choice}**... please wait...`)
+          .addField(':rabbit2: Hunting', `Hunting for **${choice}**... please wait...`)
         await interaction.update({ embeds: [followUpEmbed], components: [] })
         setTimeout(async () => {
-          let fertilizerBonus
+          let trapBonus
           let loot = await getLoot(interaction.customID)
-          if (items['fertilizer']) {
-            if (eco.get(`${msg.author.id}.items.fertilizer`) === 0) eco.delete(`${msg.author.id}.items.fertilizer`) 
-            else eco.subtract(`${msg.author.id}.items.fertilizer`, 1)
+          if (items['trap']) {
+            if (eco.get(`${msg.author.id}.items.trap`) === 0) eco.delete(`${msg.author.id}.items.trap`) 
+            else eco.subtract(`${msg.author.id}.items.trap`, 1)
             bonus = bonus + getRandomInt(3, 10)
-            fertilizerBonus = true
+            trapBonus = true
           }
           const goldEggBonus = getRandomInt(45, 175)
           let amount = getRandomInt(2, 8)
-          let lvl = eco.get(`${msg.author.id}.skills.farming.level`) || 0
-          let cropsGained = Math.floor(amount + amount * (lvl * 0.1))
+          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          let animalsHunted = Math.floor(amount + amount * (lvl * 0.1))
           amount = addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           const embed = new MessageEmbed()
             .setColor(color)
@@ -179,36 +180,36 @@ class FarmCommand extends Command {
             else eco.set(`${msg.author.id}.items.${i.id}`, 1)
             lootDisplay.push(`${i.emoji} **${i.display}**`)
           })
-          if (eco.get(`${msg.author.id}.items.${interaction.customID}`)) eco.add(`${msg.author.id}.items.${interaction.customID}`, cropsGained)
-          else eco.set(`${msg.author.id}.items.${interaction.customID}`, cropsGained)
+          if (eco.get(`${msg.author.id}.items.${interaction.customID}`)) eco.add(`${msg.author.id}.items.${interaction.customID}`, animalsHunted)
+          else eco.set(`${msg.author.id}.items.${interaction.customID}`, animalsHunted)
           if (!goldEggBonus) {
-            embed.addField(':seedling: Farming', `You farmed for **${getRandomInt(1, 10)} hours**, here's what you harvested!`)
-            lootDisplay.push(`${cropsGained} ${correctDisplay} **(+${bonus})**`)
+            embed.addField(':rabbit2: Hunting', `You hunted for **${getRandomInt(1, 10)} hours**, here's what you got for game!`)
+            lootDisplay.push(`${animalsHunted} ${correctDisplay} **(+${bonus})**`)
             embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           } else {
-            embed.addField(':seedling: Farming', `You farmed for **${getRandomInt(1, 10)} hours**, here's what you harvested!`)
-            lootDisplay.push(`${cropsGained} ${correctDisplay} ***(+${bonus})***`)
+            embed.addField(':rabbit2: Hunting', `You hunted for **${getRandomInt(1, 10)} hours**, here's what you got for game!`)
+            lootDisplay.push(`${animalsHunted} ${correctDisplay} ***(+${bonus})***`)
             embed.addField(':tada: Rewards', `+ ` + lootDisplay.join('\n+ '))
           }
           if (goldEgg) {
             addMoney(msg.author.id, goldEggBonus)
             embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldEggBonus}** as a bonus.`)
           }
-          addExp(msg.author, 'farming', msg)
-          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`))}**`)
-          const filter2 = i => i.customID === 'farm' && i.user.id === msg.author.id
+          addExp(msg.author, 'hunting', msg)
+          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`))}**`)
+          const filter2 = i => i.customID === 'hunt' && i.user.id === msg.author.id
           const row2 = new MessageActionRow()
             .addComponents(
               new MessageButton()
-                .setLabel('Farm again?')
-                .setCustomID('farm')
-                .setEmoji('🌱')
+                .setLabel('Hunt again?')
+                .setCustomID('hunt')
+                .setEmoji('🐇')
                 .setStyle('SECONDARY'),   
           )
           message.edit({ embeds: [embed], components: [row2] })
           message.awaitMessageComponentInteraction(filter2, { time: 15000 })
           .then(async i => {
-            const cmd = this.client.commands.get('farm')
+            const cmd = this.client.commands.get('hunt')
             await i.update({ components: [] })
             await cmd.run(this.client, msg, args)
           })
@@ -224,4 +225,4 @@ class FarmCommand extends Command {
   }
 }
 
-module.exports = FarmCommand
+module.exports = HuntCommand

@@ -1,4 +1,4 @@
-import db from 'quick.db'
+import db, { all } from 'quick.db'
 import DBL from 'dblapi.js'
 
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 6000, webhookAuth: '123' })
@@ -11,6 +11,7 @@ import upgrades from '../resources/items/upgrades.json'
 import fishing from '../resources/items/fishing.json'
 import mining from '../resources/items/mining.json'
 import farming from '../resources/items/farming.json'
+import hunting from '../resources/items/hunting.json'
 import petstuff from '../resources/items/petstuff.json'
 
 export const updateStats = function (guildCount) {
@@ -130,6 +131,9 @@ export const allItems = function () {
   }   
   for (const item in farming) {
     allItems.push(farming[item])
+  }
+  for (const item in hunting) {
+    allItems.push(hunting[item])
   }
   return allItems
 }

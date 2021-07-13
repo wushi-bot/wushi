@@ -1,0 +1,26 @@
+[
+    {
+        "price": 75,
+        "sell_price": 35,
+        "description": "A pig, boar, whatever.",
+        "id": "pig",
+        "display": "Pig",
+        "emoji": ":pig:"
+    },
+    {
+        "price": 75,
+        "sell_price": 35,
+        "description": "A rabbit, bunny, whatever!",
+        "id": "rabbit",
+        "display": "Rabbit",
+        "emoji": ":rabbit:"
+    },
+    {
+        "price": 75,
+        "sell_price": 35,
+        "description": "A deer, doe, etc.",
+        "id": "deer",
+        "display": "Deer",
+        "emoji": ":deer:"
+    }
+]
