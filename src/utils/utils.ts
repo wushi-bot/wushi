@@ -1,9 +1,5 @@
-import db, { all } from 'quick.db'
 import DBL from 'dblapi.js'
-
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 6000, webhookAuth: '123' })
-const cfg = new db.table('config')
-const leveling = new db.table('leveling')
 
 import keys from '../resources/key.json'
 import tools from '../resources/items/tools.json'
@@ -14,15 +10,36 @@ import farming from '../resources/items/farming.json'
 import hunting from '../resources/items/hunting.json'
 import petstuff from '../resources/items/petstuff.json'
 
+import Guild from '../models/Guild'
+import Member from '../models/Member'
+import User from '../models/User'
+import { checkUser } from './database'
+
 export const updateStats = function (guildCount) {
   return dbl.postStats(guildCount)
 }
 
-export const getPrefix = function (id) {
-  if (!cfg.get(`${id}.prefix`)) {
-    return '.'
+export const getPrefix = async function (guildId) {
+  const guilds = await Guild.find({
+    id: guildId
+  }).exec()
+  if (guilds.length > 0) {
+    return guilds[0].prefix
   } else {
-    return cfg.get(`${id}.prefix`)
+    return '.'
+  }
+}
+
+export const getColor = async function (bot, member) {
+  const users = await User.find({
+    id: member.user.id
+  }).exec()
+  if (users.length > 0) {
+    const color = users[0].embedColor || member.roles.highest.color
+    return color
+  } else {
+    checkUser(bot, member.user.id)
+    return member.roles.highest.color
   }
 }
 
@@ -34,18 +51,23 @@ export const getCategories = function () {
   return categories
 }
 
-export const checkLevel = function (id, serverId) {
-  if (!leveling.get(`${serverId}.${id}.expNeeded`)) {
-    leveling.set(`${serverId}.${id}.expNeeded`, 100)
-  }
-  if (!leveling.get(`${serverId}.${id}.level`)) {
-    leveling.set(`${serverId}.${id}.level`, 0)
-  }
-  if (!leveling.get(`${serverId}.${id}.exp`)) {
-    leveling.set(`${serverId}.${id}.exp`, 0)
-  }
-  if (!leveling.get(`${serverId}.${id}.totalExp`)) {
-    leveling.set(`${serverId}.${id}.totalExp`, 0)
+export const checkLevel = async function (id, serverId) {
+  const members = await Member.find({
+    guildId: serverId,
+    userId: id
+  }).exec()
+  if (members.length > 0) {
+    return 
+  } else {
+    const newMember = new Member({
+      guildId: serverId,
+      userId: id,
+      level: 0,
+      exp: 0,
+      expNeeded: 100,
+      totalExp: 0
+    })
+    newMember.save()
   }
 }
 

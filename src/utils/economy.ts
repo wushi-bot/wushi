@@ -93,7 +93,7 @@ export const runPetChecks = async function (bot) {
         pets.set(`${user.ID}.pets`, list)
       }
     })
-    console.log('Updated pets, next one in 30 minutes.')
+    bot.logger.log('info', 'Updated pets. (Next one in 30 minutes.)')
   }, 1800000)
 }
 

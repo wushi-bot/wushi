@@ -1,8 +1,10 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
-import { getPrefix, removeA } from '../../utils/utils'
-import db from 'quick.db'
-const cfg = new db.table('config') 
+import { getPrefix, removeA, getColor } from '../../utils/utils'
+
+import Guild from '../../models/Guild'
+import User from '../../models/User'
+import { checkGuild } from '../../utils/database'
 
 class AdminRoleCommand extends Command {
   constructor (client) {
@@ -21,9 +23,13 @@ class AdminRoleCommand extends Command {
       this.client.emit('customError', 'You do not have permission to execute this command.', msg)
       return false
     }
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    checkGuild(bot, msg.guild.id)
+    const guilds = await Guild.find({
+      id: msg.guild.id
+    }).exec()
     if (!args[0]) {
-      const admins = cfg.get(`${msg.guild.id}.admins`) || []
+      const admins = guilds[0].admins || []
       const roles = []
       if (admins.length !== 0) {
         admins.forEach(admin => {
@@ -50,9 +56,10 @@ class AdminRoleCommand extends Command {
         return false
       } else {
         const role = msg.mentions.roles.first()
-        const admins = cfg.get(`${msg.guild.id}.admins`) || []
+        const admins = guilds[0].admins || []
         if (!admins.includes(role.id)) {
-          cfg.push(`${msg.guild.id}.admins`, role.id)
+          guilds[0].admins.push(role.id)
+          guilds[0].save()
           const embed = new MessageEmbed()
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully added <@&${role.id}> to the Admin Roles.`)
@@ -60,7 +67,8 @@ class AdminRoleCommand extends Command {
           return true
         } else { // @ts-ignore
           let i = removeA(admins, role.id) 
-          cfg.set(`${msg.guild.id}.admins`, i)
+          guilds[0].admins = i
+          guilds[0].save()
           const embed = new MessageEmbed()
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully removed <@&${role.id}> from the Admin Roles.`)
