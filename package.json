@@ -1,7 +1,7 @@
 {
   "name": "wushi",
   "scripts": {
-    "start": "npx ts-node src/bot.js"
+    "start": "npx ts-node src/bot.ts"
   },
   "version": "3.0.0",
   "description": "wushi is a social bot written in TypeScript.",
