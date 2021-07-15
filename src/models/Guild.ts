@@ -1,20 +1,16 @@
 import mongoose, { Schema } from 'mongoose'
 
-const MemberSchema: Schema = new Schema({ 
-    userId: {
-        type: String,
-        required: true,
-        unique: true
-    },
+const GuildSchema: Schema = new Schema({ 
     guildId: {
         type: String,
         required: true,
         unique: true
     },
-    expNeeded: Number,
-    exp: Number,
-    level: Number,
-    totalExp: Number
+    prefix: String,
+    leveling: Boolean,
+    admins: Array,
+    disabledCommands: Array,
+    disabledModules: Array
 })
 
-export default mongoose.model('member', MemberSchema)
+export default mongoose.model('guild', GuildSchema)

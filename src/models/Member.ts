@@ -3,13 +3,11 @@ import mongoose, { Schema } from 'mongoose'
 const MemberSchema: Schema = new Schema({ 
     userId: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     guildId: {
         type: String,
         required: true,
-        unique: true
     },
     expNeeded: Number,
     exp: Number,

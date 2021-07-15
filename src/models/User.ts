@@ -11,7 +11,8 @@ const UserSchema: Schema = new Schema({
     multiplier: Number,
     prestige: Number,
     items: Object,
-    skills: Object
+    skills: Object,
+    embedColor: String
 })
 
 export default mongoose.model('user', UserSchema)
