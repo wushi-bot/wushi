@@ -1,15 +1,16 @@
 import Client from './classes/Client'
+import Database from './database'
 import 'dotenv/config'
 import { runPetChecks, runUnvoteChecks } from './utils/economy'
 
 const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
 
 const self = new Client({
-  cacheMembers: true,
-  cacheRoles: true,
-  cacheChannels: true,
+  fetchAllMembers: true,
   intents: intents
 })
+
+new Database()
 
 runPetChecks(self)
 runUnvoteChecks(self)

@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^15.12.5",
-    "mongoose": "^5.12.15",
+    "mongoose": "^5.13.2",
     "typescript": "^4.3.4"
   }
 }
