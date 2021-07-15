@@ -12,7 +12,8 @@ const UserSchema: Schema = new Schema({
     prestige: Number,
     items: Object,
     skills: Object,
-    embedColor: String
+    embedColor: String,
+    rankCardColor: String
 })
 
 export default mongoose.model('user', UserSchema)

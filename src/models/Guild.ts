@@ -7,10 +7,11 @@ const GuildSchema: Schema = new Schema({
         unique: true
     },
     prefix: String,
-    leveling: Boolean,
     admins: Array,
     disabledCommands: Array,
-    disabledModules: Array
+    disabledModules: Array,
+    leveling: Boolean,
+    levelUpMessage: String
 })
 
 export default mongoose.model('guild', GuildSchema)
