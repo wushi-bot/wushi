@@ -73,6 +73,7 @@ exports.run = async (bot, message) => {
       .setThumbnail(bot.user.avatarURL())
       .setDescription(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${getPrefix(message.guild.id)}\` in this server, do \`${getPrefix(message.guild.id)}help\` to see a list of my commands!`)
     return message.channel.send({ embeds: [embed], components: [row] })
+    
   }
   const prefix = getPrefix(message.guild.id)
   if (!message.content.startsWith(prefix)) return
@@ -102,7 +103,7 @@ exports.run = async (bot, message) => {
           const embed = new MessageEmbed()
             .setColor(message.member.roles.highest.color)
             .addField(':watch: On cooldown!' ,`You're still on cooldown for \`${timeLeft.toFixed(1)}\` more second(s)!`)
-          console.log(`${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id})`)} but was on cooldown for ${timeLeft.toFixed(1)} more seconds.`)
+            bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id})`)} but was on cooldown for ${timeLeft.toFixed(1)} more seconds.`)
           return message.reply({ embeds: [embed] })
         }
       }
@@ -120,7 +121,7 @@ exports.run = async (bot, message) => {
       }      
       const result = await cmd.run(bot, message, args)
       if (result && cooldown) timestamps.set(message.author.id, now)
-      console.log(`${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       if (cooldown) {
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
       }

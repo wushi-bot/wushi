@@ -130,14 +130,14 @@ function changeStatus (bot) {
 }
 
 module.exports.run = async (bot) => {
-  console.log(`Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
+  bot.logger.log('info', `Ready! Logged in as ${bot.user.username}#${bot.user.discriminator}`)
   console.log(chalk.black('────────────────────────────────────────────────────────────'))
   await webServer(bot)
   setInterval(() => changeStatus(bot), 60000)
   setInterval(async () => {
     if (bot.user.id === '755526238466080830') {
       await updateStats(bot.guilds.cache.size)
-      console.log('Updated guild stats on top.gg')
+      bot.logger.log('runner', 'Updated guild stats on top.gg (next one in 1 hour)')
     }
   }, 3600000)
 }
