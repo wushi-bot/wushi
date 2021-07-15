@@ -104,17 +104,17 @@ class HuntCommand extends Command {
         .addComponents(
           new MessageButton()
             .setLabel('Rabbit')
-            .setCustomID('rabbit')
+            .setCustomId('rabbit')
             .setEmoji('🐰')
             .setStyle('SECONDARY'),
           new MessageButton()
             .setLabel('Pig')
-            .setCustomID('pig')
+            .setCustomId('pig')
             .setEmoji('🐷')
             .setStyle('SECONDARY'),   
           new MessageButton()
             .setLabel('Deer')
-            .setCustomID('deer')
+            .setCustomId('deer')
             .setEmoji('🦌')
             .setStyle('SECONDARY'),  
     )
@@ -202,7 +202,7 @@ class HuntCommand extends Command {
             .addComponents(
               new MessageButton()
                 .setLabel('Hunt again?')
-                .setCustomID('hunt')
+                .setCustomId('hunt')
                 .setEmoji('🐇')
                 .setStyle('SECONDARY'),   
           )

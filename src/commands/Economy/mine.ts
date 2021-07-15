@@ -97,17 +97,17 @@ class MineCommand extends Command {
         .addComponents(
           new MessageButton()
             .setLabel('River')
-            .setCustomID('river')
+            .setCustomId('river')
             .setEmoji('🌊')
             .setStyle('SECONDARY'),
           new MessageButton()
             .setLabel('Mountains')
-            .setCustomID('mountains')
+            .setCustomId('mountains')
             .setEmoji('🏔️')
             .setStyle('SECONDARY'),   
           new MessageButton()
             .setLabel('Caverns')
-            .setCustomID('caverns')
+            .setCustomId('caverns')
             .setEmoji('🪨')
             .setStyle('SECONDARY'),  
     )
@@ -195,7 +195,7 @@ class MineCommand extends Command {
             .addComponents(
               new MessageButton()
                 .setLabel('Mine again?')
-                .setCustomID('mine')
+                .setCustomId('mine')
                 .setEmoji('⛏️')
                 .setStyle('SECONDARY'),   
           )

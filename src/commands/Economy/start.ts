@@ -27,7 +27,7 @@ class StartCommand extends Command {
       .addComponents(
         new MessageButton()
           .setLabel('Fish')
-          .setCustomID('fish')
+          .setCustomId('fish')
           .setEmoji('🎣')
           .setStyle('SECONDARY'),   
     )

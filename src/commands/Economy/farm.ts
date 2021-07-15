@@ -103,17 +103,17 @@ class FarmCommand extends Command {
         .addComponents(
           new MessageButton()
             .setLabel('Tomato')
-            .setCustomID('tomato')
+            .setCustomId('tomato')
             .setEmoji('🍅')
             .setStyle('SECONDARY'),
           new MessageButton()
             .setLabel('Corn')
-            .setCustomID('corn')
+            .setCustomId('corn')
             .setEmoji('🌽')
             .setStyle('SECONDARY'),   
           new MessageButton()
             .setLabel('Carrot')
-            .setCustomID('carrot')
+            .setCustomId('carrot')
             .setEmoji('🥕')
             .setStyle('SECONDARY'),  
     )
@@ -201,7 +201,7 @@ class FarmCommand extends Command {
             .addComponents(
               new MessageButton()
                 .setLabel('Farm again?')
-                .setCustomID('farm')
+                .setCustomId('farm')
                 .setEmoji('🌱')
                 .setStyle('SECONDARY'),   
           )

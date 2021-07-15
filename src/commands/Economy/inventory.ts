@@ -35,11 +35,11 @@ class InventoryCommand extends Command {
         new MessageButton()
           .setStyle('SECONDARY')
           .setEmoji('⬅️')
-          .setCustomID('previous'),
+          .setCustomId('previous'),
         new MessageButton()
           .setStyle('SECONDARY')
           .setEmoji('➡️')
-          .setCustomID('next')
+          .setCustomId('next')
       )
     message.awaitMessageComponentInteraction(filter, { time: 30000 })
       .then(async i => {
@@ -107,11 +107,11 @@ class InventoryCommand extends Command {
         new MessageButton()
           .setStyle('SECONDARY')
           .setEmoji('⬅️')
-          .setCustomID('previous'),
+          .setCustomId('previous'),
         new MessageButton()
           .setStyle('SECONDARY')
           .setEmoji('➡️')
-          .setCustomID('next')
+          .setCustomId('next')
       )
     const message = await msg.reply({ embeds: [embed], components: [row] })
     const filter = i => {

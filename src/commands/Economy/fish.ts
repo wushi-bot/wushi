@@ -103,17 +103,17 @@ class FishCommand extends Command {
         .addComponents(
           new MessageButton()
             .setLabel('Ocean')
-            .setCustomID('ocean')
+            .setCustomId('ocean')
             .setEmoji('🌊')
             .setStyle('SECONDARY'),
           new MessageButton()
             .setLabel('Lake')
-            .setCustomID('lake')
+            .setCustomId('lake')
             .setEmoji('🏞️')
             .setStyle('SECONDARY'),   
           new MessageButton()
             .setLabel('Ice Pond')
-            .setCustomID('ice_pond')
+            .setCustomId('ice_pond')
             .setEmoji('❄️')
             .setStyle('SECONDARY'),  
     )
@@ -201,7 +201,7 @@ class FishCommand extends Command {
             .addComponents(
               new MessageButton()
                 .setLabel('Fish again?')
-                .setCustomID('fish')
+                .setCustomId('fish')
                 .setEmoji('🎣')
                 .setStyle('SECONDARY'),   
           )
