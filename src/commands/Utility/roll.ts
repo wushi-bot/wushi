@@ -5,9 +5,6 @@ import { getRandomInt } from '../../utils/utils'
 import db from 'quick.db'
 const cfg = new db.table('config')
 
-import db from 'quick.db'
-const cfg = new db.table('config')
-
 class RollCommand extends Command {
   constructor (client) {
     super(client, {

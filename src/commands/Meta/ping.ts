@@ -1,6 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 
+import db from 'quick.db'
+const cfg = new db.table('config')
+
 class PingCommand extends Command {
   constructor (client) {
     super(client, {

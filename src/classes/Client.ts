@@ -6,7 +6,7 @@ import path from 'path'
 
 export default class Bot extends Client {
 
-  owners: array
+  owners: Array<String>
   commands: any
   aliases: any
   cooldowns: any

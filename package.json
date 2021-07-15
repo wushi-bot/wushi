@@ -1,8 +1,12 @@
 {
   "name": "wushi",
+  "scripts": {
+    "start": "npx tsc & node .",
+    "dev": "npx tsc -w & npx nodemon"
+  },
   "version": "3.0.0",
   "description": "wushi is a social bot written in TypeScript.",
-  "main": "src/bot.js",
+  "main": "dist/bot.js",
   "repository": "https://github.com/wushi-bot/wushi",
   "author": "Minota <juanpichardo456@icloud.com>",
   "license": "GPL-3.0",

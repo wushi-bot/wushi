@@ -20,7 +20,7 @@ class StatsCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color // @ts-ignore
     const duration = moment.duration(this.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]')
     axios.get('https://api.github.com/repos/xMinota/wushi/commits').then(res => {
       const com = res.data[0].sha.slice(0, 6)

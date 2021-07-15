@@ -26,9 +26,9 @@ function getTimestamp () {
 export default class Logger {
   async log (type, string) {
     if (type === 'info') {
-      console.log(`[${chalk.gray(getTimestamp())}] ${chalk.green('[INFO]')} ${chalk.yellow('-')} ${string}`)
+      console.info(`[${chalk.gray(getTimestamp())}] ${chalk.green('[INFO]')} ${chalk.yellow('-')} ${string}`)
     } else if (type === 'error') {
-      console.log(`[${chalk.gray(getTimestamp())}] ${chalk.red('[ERROR]')} ${chalk.yellow('-')} ${string}`)
+      console.error(`[${chalk.gray(getTimestamp())}] ${chalk.red('[ERROR]')} ${chalk.yellow('-')} ${string}`)
     } else if (type === 'runner') {
       console.log(`[${chalk.gray(getTimestamp())}] ${chalk.magenta('[RUNNING]')} ${chalk.yellow('-')} ${string}`)
     }
