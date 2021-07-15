@@ -1,8 +1,9 @@
 import { MessageEmbed } from 'discord.js'
 import Command from '../../classes/Command'
-import { getPrefix } from '../../utils/utils'
-import db from 'quick.db'
-const cfg = new db.table('config')
+import { getPrefix, getColor } from '../../utils/utils'
+import { checkGuild } from '../../utils/database'
+
+import Guild from '../../models/Guild'
 
 class ConfigCommand extends Command {
   constructor(client) {
@@ -17,12 +18,17 @@ class ConfigCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const admins = cfg.get(`${msg.guild.id}.admins`) || []
-    
-    const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
-    const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
 
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    checkGuild(bot, msg.guild.id)
+    const guilds = await Guild.find({
+      id: msg.guild.id
+    }).exec()
+
+    const admins = guilds[0].admins || []
+    const disabledCommands = guilds[0].disabledCommands || []
+    const disabledModules = guilds[0].disabledModules || []
+
     const embed = new MessageEmbed()
       .setColor(color)
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
@@ -31,13 +37,13 @@ class ConfigCommand extends Command {
     if (disabledModules.length === 0) {
       embed.addField(':newspaper: Disabled Modules', `\`\`\`None\`\`\``)
     } else {
-      embed.addField(':newspaper: Disabled Modules', `\`\`\`${cfg.get(`${msg.guild.id}.disabledModules`).join(', ')}\`\`\``)
+      embed.addField(':newspaper: Disabled Modules', `\`\`\`${disabledModules.join(', ')}\`\`\``)
     }
 
     if (disabledCommands.length === 0) {
       embed.addField(':newspaper: Disabled Commands', `\`\`\`None\`\`\``)
     } else {
-      embed.addField(':newspaper: Disabled Commands', `\`\`\`${cfg.get(`${msg.guild.id}.disabledCommands`).join(', ')}\`\`\``)
+      embed.addField(':newspaper: Disabled Commands', `\`\`\`${disabledCommands.join(', ')}\`\`\``)
     }
     
       

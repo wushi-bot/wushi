@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
 const GuildSchema: Schema = new Schema({ 
-    guildId: {
+    id: {
         type: String,
         required: true,
         unique: true

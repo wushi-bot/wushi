@@ -52,7 +52,7 @@ export default class Bot extends Client {
     this.logger.log('info', 'Beginning to check for events...')
     readdir(path.join(__dirname, '..', '/events/'), (err, files) => {
       files.forEach(file => {
-        if (file.endsWith('.js')) {
+        if (file.endsWith('.js') || file.endsWith('.ts')) {
           const event = require(path.join(__dirname, '..', `/events/${file}`))
           const eventName = file.split('.')[0]
           super.on(eventName, (...args) => event.run(this, ...args))

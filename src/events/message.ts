@@ -1,37 +1,46 @@
 import { MessageEmbed, Collection, MessageActionRow, MessageButton } from 'discord.js'
 import { checkLevel, getPrefix, getRandomInt } from '../utils/utils' 
+import { checkMember, checkGuild } from '../utils/database'
 import chalk from 'chalk'
 import db from 'quick.db'
 
-const cfg = new db.table('config')
-const leveling = new db.table('leveling')
+import Guild from '../models/Guild'
+import Member from '../models/Member'
+
 const tags = new db.table('tags')
 const expCooldowns = new Collection()
 
 exports.run = async (bot, message) => {
   if (message.author.bot) return
-  if (cfg.get(`${message.guild.id}.leveling`)) {
-    if (cfg.get(`${message.guild.id}.leveling`)) {
+  let guilds = await Guild.find({
+    id: message.guild.id
+  }).exec()
+  if (guilds.length > 0) {
+    if (guilds[0].leveling) {
       checkLevel(message.author.id, message.guild.id)
       if (!message.content.startsWith(getPrefix(message.guild.id))) {
         if (!expCooldowns.has(message.author.id)) {
           const exp = getRandomInt(5, 15)
-          leveling.add(`${message.guild.id}.${message.author.id}.exp`, exp)
-          leveling.add(`${message.guild.id}.${message.author.id}.totalExp`, exp)
-          if (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) <= leveling.get(`${message.guild.id}.${message.author.id}.exp`)) {
-            leveling.add(`${message.guild.id}.${message.author.id}.level`, 1)
-            leveling.subtract(`${message.guild.id}.${message.author.id}.exp`, leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`))
-            leveling.set(`${message.guild.id}.${message.author.id}.expNeeded`, Math.floor(leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) + (leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`) * 0.1)))
-            if (!cfg.get(`${message.guild.id}.levelUpMessage`)) { // Fallback to default thingy
-              message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${leveling.get(`${message.guild.id}.${message.author.id}.level`)}**!`)
+          const members = await Member.find({
+            guildId: message.guild.id,
+            userId: message.author.id
+          }).exec()
+          members[0].exp += exp
+          members[0].totalExp += exp
+          if (members[0].expNeeded <= members[0].exp) {
+            members[0].level += 1
+            members[0].exp -= members[0].expNeeded
+            members[0].expNeeded = Math.floor(members[0].expNeeded + (members[0].expNeeded * 0.1))
+            if (guilds[0].levelUpMessage) { // Fallback to default thingy
+              message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${members[0].level}**!`)
             } else {
-              let lvlMsg = cfg.get(`${message.guild.id}.levelUpMessage`)
-              lvlMsg = lvlMsg.replace('{level}', `${leveling.get(`${message.guild.id}.${message.author.id}.level`)}`)
+              let lvlMsg = guilds[0].levelUpmessage
+              lvlMsg = lvlMsg.replace('{level}', members[0].level)
               lvlMsg = lvlMsg.replace('{user.name}', `${message.author.username}`)
               lvlMsg = lvlMsg.replace('{user.mention}', `<@!${message.author.id}>`)
               lvlMsg = lvlMsg.replace('{user.id}', `${message.author.id}`)
               lvlMsg = lvlMsg.replace('{user.discrim}', `${message.author.discriminator}`)
-              lvlMsg = lvlMsg.replace('{nextExp}', `${leveling.get(`${message.guild.id}.${message.author.id}.expNeeded`)}`)
+              lvlMsg = lvlMsg.replace('{nextExp}', members[0].expNeeded)
               message.channel.send(lvlMsg)
             }
           }
@@ -42,12 +51,15 @@ exports.run = async (bot, message) => {
         }
       }
     }
+  } else {
+    checkGuild(bot, message.guild.id)
   }
-  if (message.content.startsWith(getPrefix(message.guild.id))) {
-    const tag = message.content.toLowerCase().split(' ')[0].slice(getPrefix(message.guild.id).length)
+  const prefix = getPrefix(message.guild.id)
+  if (message.content.startsWith(getPrefix(message.guild.id))) { // @ts-ignore
+    const tag = message.content.toLowerCase().split(' ')[0].slice(prefix.length)
     if (tags.get(`${message.guild.id}.${tag}`)) {
       const { content } = tags.get(`${message.guild.id}.${tag}`)
-      console.log(`${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + tag)} (tag) in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + tag)} (tag) in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       return message.channel.send(content)
     }
   }
@@ -75,8 +87,7 @@ exports.run = async (bot, message) => {
     return message.channel.send({ embeds: [embed], components: [row] })
     
   }
-  const prefix = getPrefix(message.guild.id)
-  if (!message.content.startsWith(prefix)) return
+  if (!message.content.startsWith(prefix)) return // @ts-ignore
   const command = message.content.toLowerCase().split(' ')[0].slice(prefix.length)
   const args = message.content.split(' ').slice(1)
   let cmd
@@ -109,13 +120,13 @@ exports.run = async (bot, message) => {
       }
     }
     try {
-      if (cfg.get(`${message.guild.id}.disabledModules`)) {
-        if (cfg.get(`${message.guild.id}.disabledModules`).includes(cmd.conf.category)) {
+      if (guilds[0].disabledModules) {
+        if (guilds[0].disabledModules.includes(cmd.conf.category)) {
           return
         }
       }
-      if (cfg.get(`${message.guild.id}.disabledCommands`)) {
-        if (cfg.get(`${message.guild.id}.disabledCommands`).includes(cmd.conf.name)) {
+      if (guilds[0].disabledCommands) {
+        if (guilds[0].disabledCommands.includes(cmd.conf.name)) {
           return
         }
       }      
