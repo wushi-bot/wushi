@@ -13,7 +13,9 @@ const UserSchema: Schema = new Schema({
     items: Object,
     skills: Object,
     embedColor: String,
-    rankCardColor: String
+    rankCardColor: String,
+    votedTop: Boolean,
+    votedDBL: Boolean
 })
 
 export default mongoose.model('user', UserSchema)

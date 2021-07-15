@@ -1,10 +1,9 @@
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
 import Command from '../../classes/Command'
+import Guild from '../../models/Guild'
 import key from '../../resources/key.json'
-import { getPrefix } from '../../utils/utils'
-import db from 'quick.db'
-
-const cfg = new db.table('config')
+import { getColor, getPrefix } from '../../utils/utils'
+import { checkGuild } from '../../utils/database'
 
 class HelpCommand extends Command {
   constructor (client) {
@@ -19,7 +18,12 @@ class HelpCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    checkGuild(bot, msg.guild.id)
+    const guilds = await Guild.find({
+      id: msg.guild.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
     if (!args[0]) {
       const embed = new MessageEmbed()
         .setColor(color) // @ts-ignore: Object is possibly 'null'.
@@ -30,7 +34,7 @@ class HelpCommand extends Command {
       commandsList.forEach(command => {
         const category = command.conf.category
         if (!categories.includes(category)) {
-          const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
+          const disabledModules = guilds[0].disabledModules || []
           let check
           if (category === 'Admin' && msg.author.id !== '488786712206770196') check = false
           else check = true
@@ -41,7 +45,7 @@ class HelpCommand extends Command {
         if (commandsInCategory[command.conf.category] === undefined) {
           commandsInCategory[command.conf.category] = []
         }
-        const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
+        const disabledCommands = guilds[0].disabledCommands || []
         if (command.conf.enabled === true && !disabledCommands.includes(command.conf.name)) {
           if (command.conf.subcommands) {
             command.conf.subcommands.forEach(subcommand => {
@@ -52,7 +56,7 @@ class HelpCommand extends Command {
         }
       })
       categories.forEach(category => {
-        embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${getPrefix(msg.guild.id)}${commandsInCategory[category].join(`\`, \`${getPrefix(msg.guild.id)}`)}\``)
+        embed.addField(`${key[category]} ${category} (${commandsInCategory[category].length})`, `\`${prefix}${commandsInCategory[category].join(`\`, \`${prefix}`)}\``)
       })
       const row = new MessageActionRow()
       .addComponents(
@@ -91,7 +95,7 @@ class HelpCommand extends Command {
           .setColor(color)
           .addField('Command', `\`${command.conf.name}\``)
           .addField('Description', command.conf.description)
-          .addField('Usage', `\`${getPrefix(msg.guild.id)}${command.conf.usage}\``)
+          .addField('Usage', `\`${prefix}${command.conf.usage}\``)
           .addField('Category', `${key[command.conf.category]} **${command.conf.category}**`)
           .addField('Aliases',  aliases)
         if (command.conf.cooldown !== false) embed.addField('Cooldown', `**${command.conf.cooldown}s** (**${command.conf.cooldown / 2}s** for Premium users)`)

@@ -1,10 +1,9 @@
 import Command from '../../classes/Command'
 import col from 'tinycolor2'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
+import User from '../../models/User'
+import { checkUser } from '../../utils/database'
 
-const cfg = new db.table('config')
- 
 class EmbedColorCommand extends Command {
   constructor (client) {
     super(client, {
@@ -21,7 +20,20 @@ class EmbedColorCommand extends Command {
     let color
     if (args[0]) color = col(args[0])
     else color = col.random()
-    cfg.set(`${msg.author.id}.color`, color.toHex())
+    let users = await User.find({ 
+      id: msg.author.id
+    }).exec()
+    if (users.length > 0) {
+      users[0].embedColor = color.toHex()
+      await users[0].save()
+    } else {
+      checkUser(bot, msg.author.id)
+      users = await User.find({ 
+        id: msg.author.id
+      }).exec()
+      users[0].embedColor = color.toHex()
+      await users[0].save()
+    }
     const embed = new MessageEmbed()
       .setColor(color.toHex())
       .addField('<:check:820704989282172960> Success!', `Successfully set your embed color to **#${color.toHex()}**.`)

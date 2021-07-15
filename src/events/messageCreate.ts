@@ -15,10 +15,11 @@ exports.run = async (bot, message) => {
   let guilds = await Guild.find({
     id: message.guild.id
   }).exec()
+  const prefix = await getPrefix(message.guild.id)
   if (guilds.length > 0) {
     if (guilds[0].leveling) {
       checkLevel(message.author.id, message.guild.id)
-      if (!message.content.startsWith(getPrefix(message.guild.id))) {
+      if (!message.content.startsWith(prefix)) {
         if (!expCooldowns.has(message.author.id)) {
           const exp = getRandomInt(5, 15)
           const members = await Member.find({
@@ -54,12 +55,11 @@ exports.run = async (bot, message) => {
   } else {
     checkGuild(bot, message.guild.id)
   }
-  const prefix = getPrefix(message.guild.id)
-  if (message.content.startsWith(getPrefix(message.guild.id))) { // @ts-ignore
+  if (message.content.startsWith(prefix)) { // @ts-ignore
     const tag = message.content.toLowerCase().split(' ')[0].slice(prefix.length)
     if (tags.get(`${message.guild.id}.${tag}`)) {
       const { content } = tags.get(`${message.guild.id}.${tag}`)
-      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + tag)} (tag) in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(prefix + tag)} (tag) in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       return message.channel.send(content)
     }
   }
@@ -83,7 +83,7 @@ exports.run = async (bot, message) => {
       .setColor('#0099ff')
       .setAuthor(message.author.tag, message.author.avatarURL())
       .setThumbnail(bot.user.avatarURL())
-      .setDescription(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${getPrefix(message.guild.id)}\` in this server, do \`${getPrefix(message.guild.id)}help\` to see a list of my commands!`)
+      .setDescription(`Howdy, I'm <@!${bot.user.id}>! My prefix is \`${prefix}\` in this server, do \`${prefix}help\` to see a list of my commands!`)
     return message.channel.send({ embeds: [embed], components: [row] })
     
   }
@@ -114,7 +114,7 @@ exports.run = async (bot, message) => {
           const embed = new MessageEmbed()
             .setColor(message.member.roles.highest.color)
             .addField(':watch: On cooldown!' ,`You're still on cooldown for \`${timeLeft.toFixed(1)}\` more second(s)!`)
-            bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id})`)} but was on cooldown for ${timeLeft.toFixed(1)} more seconds.`)
+            bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(prefix + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id})`)} but was on cooldown for ${timeLeft.toFixed(1)} more seconds.`)
           return message.reply({ embeds: [embed] })
         }
       }
@@ -132,7 +132,7 @@ exports.run = async (bot, message) => {
       }      
       const result = await cmd.run(bot, message, args)
       if (result && cooldown) timestamps.set(message.author.id, now)
-      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(getPrefix(message.guild.id) + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
+      bot.logger.log('info', `${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} just ran ${chalk.green(prefix + cmd.conf.name)} in ${chalk.green(message.guild.name + ` (${message.guild.id}).`)}`)
       if (cooldown) {
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
       }
