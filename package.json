@@ -1,55 +1,36 @@
 {
-  "name": "@minota/wushi",
-  "version": "2.2.0",
-  "description": "wushi is a social discord bot which helps spice up communities.",
+  "name": "wushi",
+  "version": "3.0.0",
+  "description": "wushi is a social bot written in TypeScript.",
   "main": "src/bot.js",
-  "scripts": {
-    "start": "npx nodemon --exec babel-node src/bot.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xMinota/wushi.git"
-  },
-  "keywords": [
-    "wushi",
-    "discord",
-    "typescript",
-    "chatbot",
-    "chat",
-    "bot"
-  ],
-  "author": "Minota",
+  "repository": "https://github.com/wushi-bot/wushi",
+  "author": "Minota <juanpichardo456@icloud.com>",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/xMinota/wushi/issues"
-  },
-  "homepage": "https://github.com/xMinota/wushi#readme",
+  "private": false,
   "dependencies": {
     "@aero/centra": "^1.0.6",
-    "@babel/core": "^7.11.6",
-    "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.11.5",
+    "@types/ws": "^7.4.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
-    "bufferutil": "^4.0.3",
-    "canvas": "^2.6.1",
-    "canvas-constructor": "^3.2.0",
-    "chalk": "^4.1.0",
+    "canvas": "^2.8.0",
+    "canvas-constructor": "3.2.0",
+    "chalk": "^4.1.1",
     "dblapi.js": "^2.4.1",
-    "discord.js-light": "github:timotejroiko/discord.js-light",
-    "dotenv": "^8.2.0",
-    "erlpack": "github:discord/erlpack",
+    "discord.js": "^13.0.0-dev.03d3a5cdde5492433d27bbfe46afe0ebf2de5904",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.3",
+    "path": "^0.12.7",
     "quick.db": "^7.1.3",
     "romanize-number": "^1.0.1",
-    "sodium": "^3.0.2",
-    "timeago.js": "^4.0.2",
     "tinycolor2": "^1.4.2",
-    "urban-dictionary": "^3.0.0",
-    "utf-8-validate": "^5.0.4",
-    "zlib-sync": "^0.1.7"
+    "urban-dictionary": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.5",
+    "mongoose": "^5.13.2",
+    "typescript": "^4.3.4"
   }
 }

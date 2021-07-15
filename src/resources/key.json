@@ -1,11 +1,14 @@
 {
   "Meta": ":jigsaw:",
   "Configuration": ":card_box:",
-  "Moderation": ":helmet_with_cross:",
   "Economy": ":bank:",
   "Utility": ":wrench:",
   "Admin": ":man_technologist:",
   "Leveling": ":sparkles:",
   "Tags": ":label:",
-  "Pets": ":bone:"
+  "Pets": ":bone:",
+  "Twitch": ":movie_camera:",
+  "Birthdays": ":birthday:",
+  "Temporary Voice Channels": ":calling:",
+  "Games": ":video_game:"
 }
