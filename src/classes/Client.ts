@@ -6,7 +6,7 @@ import path from 'path'
 
 export default class Bot extends Client {
 
-  owners: Array<String>
+  owners: any
   commands: any
   aliases: any
   cooldowns: any
@@ -25,7 +25,6 @@ export default class Bot extends Client {
 
   start (token: string) {
     super.login(token)
-    this.logger.log('info', 'Logged into the bot.')
     //const Twitch = new TwitchMonitor(this)
     //Twitch.start()
     return this
@@ -52,16 +51,15 @@ export default class Bot extends Client {
     }
     this.logger.log('info', 'Beginning to check for events...')
     readdir(path.join(__dirname, '..', '/events/'), (err, files) => {
-      if (err) return console.error(err)
       files.forEach(file => {
         if (file.endsWith('.js')) {
           const event = require(path.join(__dirname, '..', `/events/${file}`))
           const eventName = file.split('.')[0]
-          this.logger.log('info', `Added event: ${eventName}`)
           super.on(eventName, (...args) => event.run(this, ...args))
+          this.logger.log('info', `Added event: ${eventName}`)
         }
       })
+      if (err) return console.error(err)
     })
-    this.logger.log('info', 'All possible events & commands have been added.')
   }
 }
