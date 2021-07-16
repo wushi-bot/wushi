@@ -118,13 +118,23 @@ const statuses = [
   {
     type: 'LISTENING',
     name: '.support | Did you join the support server?'
+  },
+  {
+    type: 'PLAYING',
+    name: '.donate | Donate to support the bot!'
+  },
+  {
+    type: 'WATCHING',
+    name: '{servers} servers | {users} users'
   }
 ]
 
 function changeStatus (bot) {
   const status = statuses[~~(Math.random() * statuses.length)]
   let type = status.type
-  bot.user.setActivity(status.name, {
+  let name = status.name.replace('{servers}', bot.guilds.cache.array().length)
+  name = name.replace('{users}', bot.users.cache.array().length)
+  bot.user.setActivity(name, {
     type: type
   })
 }

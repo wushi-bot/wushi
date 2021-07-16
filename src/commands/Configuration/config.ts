@@ -32,7 +32,7 @@ class ConfigCommand extends Command {
     const embed = new MessageEmbed()
       .setColor(color)
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
-      .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${getPrefix(msg.guild.id)}\``)
+      .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${guilds[0].prefix}\``)
 
     if (disabledModules.length === 0) {
       embed.addField(':newspaper: Disabled Modules', `\`\`\`None\`\`\``)

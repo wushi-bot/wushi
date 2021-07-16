@@ -119,7 +119,7 @@ class HuntCommand extends Command {
             .setStyle('SECONDARY'),  
     )
     const message = await msg.reply({ embeds: [chooserEmbed], components: [row] })
-    await message.awaitMessageComponentInteraction(filter, { max: 1, time: 8000, errors: ['time'] })
+    await message.awaitMessageComponent({ filter, max: 1, time: 8000, errors: ['time'] })
       .then(async interaction => {
         let bonus = 0
         let goldEggChance = 0
@@ -207,7 +207,7 @@ class HuntCommand extends Command {
                 .setStyle('SECONDARY'),   
           )
           message.edit({ embeds: [embed], components: [row2] })
-          message.awaitMessageComponentInteraction(filter2, { time: 15000 })
+          message.awaitMessageComponent({ filter2,  time: 15000 })
           .then(async i => {
             const cmd = this.client.commands.get('hunt')
             await i.update({ components: [] })
