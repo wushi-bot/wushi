@@ -23,7 +23,7 @@ class BalanceCommand extends Command {
       id: msg.author.id
     }).exec()
     const prefix = await getPrefix(msg.guild.id)
-    if (!user || !user.started) return this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
+    if (!user || !user.started) return this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
     const color = await getColor(bot, msg.member)
     const member = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
     const bank = user.bank || 0

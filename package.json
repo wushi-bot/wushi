@@ -12,6 +12,7 @@
   "private": false,
   "dependencies": {
     "@aero/centra": "^1.0.6",
+    "@types/mongoose": "^5.11.97",
     "@types/ws": "^7.4.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",

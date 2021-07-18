@@ -24,7 +24,7 @@ class DailyCommand extends Command {
     }).exec()
     const prefix = await getPrefix(msg.guild.id)
     if (!user || !user.started) {
-      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
     let time = new Date().getTime()

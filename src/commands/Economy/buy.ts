@@ -32,7 +32,7 @@ class BuyCommand extends Command {
     }).exec()
 
     if (!user || !user.started) {
-      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
     if (users[0].balance < item.price) {

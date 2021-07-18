@@ -20,7 +20,7 @@ export const addMoney = async function (user, amount) {
   return final
 }
 
-export const addExp = async function (bot, user, skill, msg) {
+export const addExp = async function (user, skill, msg, bot = null) {
   let amount = getRandomInt(2, 8)
   const users = await User.find({
     id: user.id

@@ -1,13 +1,12 @@
 
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
-import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
+import { getRandomInt, getPrefix, getColor, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
+import { checkUser } from '../../utils/database'
 import romanizeNumber from 'romanize-number'
-import db from 'quick.db'
 
-const eco = new db.table('economy')
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 async function getLoot(crop: string) {
   let odds = getRandomInt(1, 100)
@@ -53,18 +52,22 @@ class FarmCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
-    const items = eco.get(`${msg.author.id}.items`) || []
+    const items = user.items || []
     if (
       !items['flimsy_hoe'] && 
       !items['decent_hoe'] && 
       !items['great_hoe']
     ) {
-      this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${getPrefix(msg.guild.id)}buy flimsy_hoe\`.`, msg)
+      this.client.emit('customError', `You need a hoe to farm, purchase one on the store using \`${prefix}buy flimsy_hoe\`.`, msg)
       return false
     }
     const filter = i => {
@@ -84,10 +87,12 @@ class FarmCommand extends Command {
       correctDisplay = '🍅 Tomato'
 
     }
-    const exp = eco.get(`${msg.author.id}.skills.farming.exp`)
+    const exp = user.skills.farming.exp || 0
+    const level = user.skills.farming.level || 1
+    const req = user.skills.farming.req || 100
     let bar
     let barItem
-    if (eco.get(`${msg.author.id}.skills.farming.exp`) !== 0) {
+    if (exp !== 0) {
       bar = Math.ceil(exp / 10)
       barItem = '▇'
     } else {
@@ -98,7 +103,7 @@ class FarmCommand extends Command {
       .setColor(color)
       .setFooter('You have 8 seconds to pick a crop to harvest.')
       .setTitle(':seedling: Farming')
-      .setDescription(`**:map: Crop in Season**\n The **${correctDisplay}** is the correct crop to harvest. \n\n:question: **How to farm**\nPlease choose a location to farm at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:seedling: Farming [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.farming.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.farming.exp`) / eco.get(`${msg.author.id}.skills.farming.req`) * 100)}**%)`)
+      .setDescription(`**:map: Crop in Season**\n The **${correctDisplay}** is the correct crop to harvest. \n\n:question: **How to farm**\nPlease choose a location to farm at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:seedling: Farming [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(level)}**) (**${Math.floor(exp / req * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
@@ -160,14 +165,14 @@ class FarmCommand extends Command {
           let fertilizerBonus
           let loot = await getLoot(interaction.customID)
           if (items['fertilizer']) {
-            if (eco.get(`${msg.author.id}.items.fertilizer`) === 0) eco.delete(`${msg.author.id}.items.fertilizer`) 
-            else eco.subtract(`${msg.author.id}.items.fertilizer`, 1)
+            if (user.items.fertilizer === 0) delete user.items.fertilizer
+            else user.items.fertilizer -= 1
             bonus = bonus + getRandomInt(3, 10)
             fertilizerBonus = true
           }
           const goldEggBonus = getRandomInt(45, 175)
           let amount = getRandomInt(2, 8)
-          let lvl = eco.get(`${msg.author.id}.skills.farming.level`) || 0
+          let lvl = level || 1
           let cropsGained = Math.floor(amount + amount * (lvl * 0.1))
           amount = addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           const embed = new MessageEmbed()
@@ -175,12 +180,12 @@ class FarmCommand extends Command {
           let lootDisplay = []
           loot.forEach(item => {
             let i = getItem(allItems(), item)
-            if (eco.get(`${msg.author.id}.items.${i.id}`)) eco.add(`${msg.author.id}.items.${i.id}`, 1)
-            else eco.set(`${msg.author.id}.items.${i.id}`, 1)
+            if (user.items[i.id]) user.items[i.id] += 1
+            else user.items[i.id] = 1
             lootDisplay.push(`${i.emoji} **${i.display}**`)
           })
-          if (eco.get(`${msg.author.id}.items.${interaction.customID}`)) eco.add(`${msg.author.id}.items.${interaction.customID}`, cropsGained)
-          else eco.set(`${msg.author.id}.items.${interaction.customID}`, cropsGained)
+          if (user.items[interaction.customID]) user.items[interaction.customID] += cropsGained
+          else user.items[interaction.customID] = cropsGained
           if (!goldEggBonus) {
             embed.addField(':seedling: Farming', `You farmed for **${getRandomInt(1, 10)} hours**, here's what you harvested!`)
             lootDisplay.push(`${cropsGained} ${correctDisplay} **(+${bonus})**`)
@@ -194,7 +199,7 @@ class FarmCommand extends Command {
             addMoney(msg.author.id, goldEggBonus)
             embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldEggBonus}** as a bonus.`)
           }
-          addExp(msg.author, 'farming', msg)
+          await addExp(msg.author, 'farming', msg)
           embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`))}**`)
           const filter2 = i => i.customID === 'farm' && i.user.id === msg.author.id
           const row2 = new MessageActionRow()

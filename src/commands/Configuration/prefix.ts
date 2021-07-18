@@ -22,7 +22,7 @@ class PrefixCommand extends Command {
     checkGuild(bot, msg.guild.id)
     const guild = await Guild.findOne({
       id: msg.guild.id
-    }).exec()
+    }).exec() // @ts-ignore
     const admins = guild.admins || []
 
 
