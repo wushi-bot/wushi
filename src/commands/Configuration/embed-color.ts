@@ -20,19 +20,19 @@ class EmbedColorCommand extends Command {
     let color
     if (args[0]) color = col(args[0])
     else color = col.random()
-    let users = await User.find({ 
+    let user = await User.findOne({ 
       id: msg.author.id
     }).exec()
-    if (users.length > 0) {
-      users[0].embedColor = color.toHex()
-      await users[0].save()
+    if (!user > 0) {
+      user.embedColor = color.toHex()
+      await user.save()
     } else {
       checkUser(bot, msg.author.id)
-      users = await User.find({ 
+      user = await User.findOne({ 
         id: msg.author.id
       }).exec()
-      users[0].embedColor = color.toHex()
-      await users[0].save()
+      user.embedColor = color.toHex()
+      await user.save()
     }
     const embed = new MessageEmbed()
       .setColor(color.toHex())

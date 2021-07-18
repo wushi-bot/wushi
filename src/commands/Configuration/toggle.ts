@@ -4,11 +4,11 @@ import {
   removeA, 
   getCategories, 
   getPrefix,
-  toTitleCase
+  toTitleCase,
+  getColor
  } from '../../utils/utils'
-import db from 'quick.db'
-
-const cfg = new db.table('config')
+import Guild from '../../models/Guild'
+import { checkGuild } from '../../utils/database'
 
 class ToggleCommand extends Command {
   constructor (client) {
@@ -24,8 +24,13 @@ class ToggleCommand extends Command {
 
   async run (bot, msg, args) {
     if (!args[0]) return this.client.emit('customError', 'You need to provide arguments.', msg)
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    const admins = cfg.get(`${msg.guild.id}.admins`) || []
+    const color = await getColor(bot, msg.member)
+    checkGuild(bot, msg.guild.id)
+    const guild = await Guild.findOne({
+      id: msg.guild.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    const admins = guild.admins || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
       this.client.emit('customError', 'You do not have permission to execute this command.', msg)
       return false
@@ -37,19 +42,21 @@ class ToggleCommand extends Command {
         this.client.emit('customError', 'You cannot disable this module.', msg)
         return false 
       }
-      const disabledModules = cfg.get(`${msg.guild.id}.disabledModules`) || []
+      const disabledModules = guild.disabledModules || []
       const embed = new MessageEmbed()
         .setColor(color)
       if (!disabledModules.includes(module)) {
-        cfg.push(`${msg.guild.id}.disabledModules`, module)
+        guild.disabledModules.push(module)
+        guild.save()
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully disabled **${module}**.`)
-        msg.reply(embed)
+        msg.reply({ embeds: [embed] })
         return true
       } else { // @ts-ignore
         const newList = removeA(disabledModules, module)
-        cfg.set(`${msg.guild.id}.disabledModules`, newList)
+        guild.disabledModules = newList
+        guild.save()
         embed.addField(`<:check:820704989282172960> Success!`, `Successfully enabled **${module}**.`)
-        msg.reply(embed)
+        msg.reply({ embeds: [embed] })
         return true
       }
     } else if (this.client.commands.has(args[0]) || this.client.aliases.has(args[0])) {
@@ -66,19 +73,21 @@ class ToggleCommand extends Command {
           this.client.emit('customError', 'You cannot disable this command.', msg)
           return false
         }
-      const disabledCommands = cfg.get(`${msg.guild.id}.disabledCommands`) || []
+      const disabledCommands = guild.disabledCommands || []
       const embed = new MessageEmbed()
         .setColor(color)
       if (disabledCommands.includes(command.conf.name)) { // @ts-ignore
         const newList = removeA(disabledCommands, command.conf.name)
-        cfg.set(`${msg.guild.id}.disabledCommands`, newList)
-        embed.addField(`<:check:820704989282172960> Success!`, `Successfully enabled **${getPrefix(msg.guild.id)}${command.conf.name}**.`)
-        msg.reply(embed)
+        guild.disabledCommands = newList
+        guild.save()
+        embed.addField(`<:check:820704989282172960> Success!`, `Successfully enabled **${prefix}${command.conf.name}**.`)
+        msg.reply({ embeds: [embed] })
         return true
       } else {
-        cfg.push(`${msg.guild.id}.disabledCommands`, command.conf.name)
-        embed.addField(`<:check:820704989282172960> Success!`, `Successfully disabled **${getPrefix(msg.guild.id)}${command.conf.name}**.`)
-        msg.reply(embed)
+        guild.disabledCommands.push(command.conf.name)
+        guild.save()
+        embed.addField(`<:check:820704989282172960> Success!`, `Successfully disabled **${prefix}${command.conf.name}**.`)
+        msg.reply({ embeds: [embed] })
         return true
       }
     } else {

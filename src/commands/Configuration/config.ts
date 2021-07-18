@@ -21,18 +21,18 @@ class ConfigCommand extends Command {
 
     const color = await getColor(bot, msg.member)
     checkGuild(bot, msg.guild.id)
-    const guilds = await Guild.find({
+    const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()
 
-    const admins = guilds[0].admins || []
-    const disabledCommands = guilds[0].disabledCommands || []
-    const disabledModules = guilds[0].disabledModules || []
+    const admins = guild.admins || []
+    const disabledCommands = guild.disabledCommands || []
+    const disabledModules = guild.disabledModules || []
 
     const embed = new MessageEmbed()
       .setColor(color)
       .setTitle(`<:info:820704940682510449> ${msg.guild.name}'s Configuration`)
-      .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${guilds[0].prefix}\``)
+      .addField('<:slash:820751995824504913> Prefix', `The prefix for this server is \`${guild.prefix}\``)
 
     if (disabledModules.length === 0) {
       embed.addField(':newspaper: Disabled Modules', `\`\`\`None\`\`\``)

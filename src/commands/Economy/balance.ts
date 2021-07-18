@@ -1,11 +1,9 @@
 import Command from '../../classes/Command'
-import { addCommas } from '../../utils/utils'
+import { addCommas, getColor, getPrefix } from '../../utils/utils'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
 import romanizeNumber from 'romanize-number'
-
-const eco = new db.table('economy') 
-const cfg = new db.table('config') 
+import User from '../../models/User'
+import { checkUser } from '../../utils/database'
 
 class BalanceCommand extends Command {
   constructor (client) {
@@ -20,14 +18,19 @@ class BalanceCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    const bank = eco.get(`${user.user.id}.bank`) || 0
-    const wallet = eco.get(`${user.user.id}.balance`) || 0
-    const prestige = romanizeNumber(eco.get(`${user.user.id}.prestige`) || 1)
+    checkUser(bot, msg.author.id)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    if (!user || !user.started) return this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
+    const color = await getColor(bot, msg.member)
+    const member = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
+    const bank = user.bank || 0
+    const wallet = user.balance || 0
+    const prestige = romanizeNumber(user.prestige) || 1)
     const embed = new MessageEmbed()
-      .setAuthor(`${user.user.username}'s Balance`, user.user.avatarURL()) 
+      .setAuthor(`${member.user.username}'s Balance`, member.user.avatarURL()) 
       .addField(':bank: Bank', `:coin: **${addCommas(bank)}**`, true)
       .addField(':purse: Wallet', `:coin: **${addCommas(wallet)}**`, true)
       .addField(':moneybag: Total', `:coin: **${addCommas(wallet + bank)}**`, true)

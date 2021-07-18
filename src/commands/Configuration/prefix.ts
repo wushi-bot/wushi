@@ -20,10 +20,10 @@ class PrefixCommand extends Command {
     //TODO: Create admin permissions setup via wushi.
     const color = await getColor(bot, msg.member)
     checkGuild(bot, msg.guild.id)
-    const guilds = await Guild.find({
+    const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()
-    const admins = guilds[0].admins || []
+    const admins = guild.admins || []
 
 
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_GUILD')) {
@@ -34,8 +34,8 @@ class PrefixCommand extends Command {
       this.client.emit('customError', 'You need to assign a new prefix!', msg)
       return false
     } else {
-      guilds[0].prefix = args[0]
-      guilds[0].save()
+      guild.prefix = args[0]
+      guild.save()
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `The prefix for the server has successfully been changed to \`${args[0]}\`.`)
         .setColor(color)

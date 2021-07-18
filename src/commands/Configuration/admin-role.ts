@@ -25,11 +25,12 @@ class AdminRoleCommand extends Command {
     }
     const color = await getColor(bot, msg.member)
     checkGuild(bot, msg.guild.id)
-    const guilds = await Guild.find({
+    const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()
+    const prefix = await getPrefix(msg.guild.id)
     if (!args[0]) {
-      const admins = guilds[0].admins || []
+      const admins = guild.admins || []
       const roles = []
       if (admins.length !== 0) {
         admins.forEach(admin => {
@@ -44,7 +45,7 @@ class AdminRoleCommand extends Command {
       } else {
         embed.addField('<:info:820704940682510449> Admins', `\`\`\`${roles}\`\`\``)
       }
-      embed.addField('<:role:821012711403683841> How to?', `Add an Admin via \`${getPrefix(msg.guild.id)}adminrole @Admin\`.`)
+      embed.addField('<:role:821012711403683841> How to?', `Add an Admin via \`${prefix}adminrole @Admin\`.`)
       msg.reply({ embeds: [embed] })
       return true
     } else {
@@ -56,10 +57,10 @@ class AdminRoleCommand extends Command {
         return false
       } else {
         const role = msg.mentions.roles.first()
-        const admins = guilds[0].admins || []
+        const admins = guild.admins || []
         if (!admins.includes(role.id)) {
-          guilds[0].admins.push(role.id)
-          guilds[0].save()
+          guild.admins.push(role.id)
+          guild.save()
           const embed = new MessageEmbed()
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully added <@&${role.id}> to the Admin Roles.`)
@@ -67,8 +68,8 @@ class AdminRoleCommand extends Command {
           return true
         } else { // @ts-ignore
           let i = removeA(admins, role.id) 
-          guilds[0].admins = i
-          guilds[0].save()
+          guild.admins = i
+          guild.save()
           const embed = new MessageEmbed()
             .setColor(color)
             .addField(`<:check:820704989282172960> Success!`, `Successfully removed <@&${role.id}> from the Admin Roles.`)

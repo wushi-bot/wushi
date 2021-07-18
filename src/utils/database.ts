@@ -4,11 +4,11 @@ import Member from '../models/Member'
 
 import chalk from 'chalk'
 
-export const checkUser = async function (bot, user) {
-  let users = await User.find({
+export const checkUser = async function (user, bot = null) {
+  let userResult = await User.findOne({
     id: user,
   }).exec()
-  if (!users[0]) {
+  if (!userResult) {
     let profile = new User({
       id: user
     })
@@ -18,7 +18,7 @@ export const checkUser = async function (bot, user) {
   }
 }
 
-export const checkGuild = async function (bot, guild) {
+export const checkGuild = async function (guild, bot = null) {
   let guilds = await Guild.find({
     id: guild
   }).exec()

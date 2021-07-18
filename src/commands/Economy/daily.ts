@@ -1,12 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 import  { addMoney } from '../../utils/economy'
-import { addCommas } from '../../utils/utils'
+import { addCommas, getColor, getPrefix } from '../../utils/utils'
 import ms from 'ms'
-import db from 'quick.db'
- 
-const eco = new db.table('economy') 
-const cfg = new db.table('config') 
+import User from '../../models/User'
 
 class DailyCommand extends Command {
   constructor (client) {
@@ -21,30 +18,36 @@ class DailyCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
       return false
     }
-    if (eco.get(`${msg.author.id}.daily`)) {
-      let time = new Date().getTime()
-      if (eco.get(`${msg.author.id}.daily`) >= time) {
-        this.client.emit('customError', `You're still on cooldown for this command! Please wait **${ms(eco.get(`${msg.author.id}.daily`) - time, { long: true })}**.`, msg)
+    let time = new Date().getTime()
+    if (user.daily) {
+      if (user.daily >= time) {
+        this.client.emit('customError', `You're still on cooldown for this command! Please wait **${ms(user.daily - time, { long: true })}**.`, msg)
         return false
       }
-      const amount = addMoney(msg.author.id, 500)
-      eco.set(`${msg.author.id}.daily`, new Date().getTime() + 86400000)
+      const amount = await addMoney(msg.author.id, 500)
+      user.daily = new Date().getTime() + 86400000
+      user.save()
       const embed = new MessageEmbed()
         .setColor(color)
-        .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${addCommas(amount)}** for today, you can claim this again in **24 hours**.`)
+        .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${addCommas(amount)}** for today, you can claim this again in **${ms(user.daily - time, { long: true })}**.`)
       msg.reply({ embeds: [embed] })
       return true
     } else {
-      const amount = addMoney(msg.author.id, 500)
-      eco.set(`${msg.author.id}.daily`, new Date().getTime() + 86400000)
+      const amount = await addMoney(msg.author.id, 500)
+      user.daily = new Date().getTime() + 86400000
+      user.save()
       const embed = new MessageEmbed()
         .setColor(color)
-        .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${addCommas(amount)}** for today, you can claim this again in **24 hours**.`)
+        .addField('<:check:820704989282172960> Success!', `Successfully claimed :coin: **${addCommas(amount)}** for today, you can claim this again in **${ms(user.daily - time, { long: true })}**.`)
       msg.reply({ embeds: [embed] })
       return true
     }

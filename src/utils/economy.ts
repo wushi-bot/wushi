@@ -1,24 +1,32 @@
 import { MessageEmbed } from 'discord.js'
 import romanizeNumber from 'romanize-number'
 import db from 'quick.db'
-import { getRandomInt } from './utils'
-const eco = new db.table('economy')
-const pets = new db.table('pets')
-const cfg = new db.table('config')
+import { getColor, getRandomInt } from './utils'
+import User from '../models/User'
 
-export const addMoney = function (user, amount) {
-  let multiplier = eco.get(`${user}.multiplier`) || 1
+const pets = new db.table('pets')
+
+export const addMoney = async function (user, amount) {
+  const result = await User.findOne({
+    id: user
+  }).exec()
+  let multiplier = result.multiplier || 1
   if (multiplier === 0) multiplier = 1
   let multiplied = amount * (multiplier * 0.01)
-  let final = amount + multiplied 
-  eco.add(`${user}.balance`, Math.floor(final))
+  let final: Number = amount + multiplied 
+  if (!result.balance) result.balance = 0
+  result.balance += final 
+  result.save()
   return final
 }
 
-export const addExp = function (user, skill, msg) {
+export const addExp = async function (bot, user, skill, msg) {
   let amount = getRandomInt(2, 8)
-  if (!eco.get(`${user.id}.skills`)) {
-    eco.set(`${user.id}.skills`, {
+  const users = await User.find({
+    id: user.id
+  }).exec()
+  if (!users[0].skills) {
+    users[0].skills = {
       fishing: {
         exp: 0,
         level: 1,
@@ -41,30 +49,31 @@ export const addExp = function (user, skill, msg) {
       }                
     })
   }
-  eco.add(`${user.id}.skills.${skill}.exp`, amount)
-  if (eco.get(`${user.id}.skills.${skill}.exp`) > eco.get(`${user.id}.skills.${skill}.req`)) {
-    eco.subtract(`${user.id}.skills.${skill}.exp`, eco.get(`${user.id}.skills.${skill}.req`))
-    eco.add(`${user.id}.skills.${skill}.req`, eco.get(`${user.id}.skills.${skill}.req`) * 0.1)
-    eco.add(`${user.id}.skills.${skill}.level`, 1)
-    const color = cfg.get(`${user.id}.color`) || '#ff4747'
+  users[0].skills[skill].exp += amount
+  if (users[0].skills[skill].exp > users[0].skills[skill].req) {
+    users[0].skills[skill].exp -= users[0].skills[skill].req
+    users[0].skills[skill].req += users[0].skills[skill].req * 0.1
+    users[0].skills[skill].level += 1
+    const color = await getColor(bot, user) || '#ff4747'
     const embed = new MessageEmbed()
       .setColor(color)
     switch (skill) {
       case 'fishing': 
-        embed.addField(`:up: Level up!`, `Successfully leveled up in :fishing_pole_and_fish: **Fishing**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :fishing_pole_and_fish: **Fishing**! (Level **${romanizeNumber(users[0].skills[skill].level - 1)}** → Level **${romanizeNumber(users[0].skills[skill].level)}**)`)
         break
       case 'hunting':
-        embed.addField(`:up: Level up!`, `Successfully leveled up in :rabbit: **Hunting**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :rabbit: **Hunting**! (Level **${romanizeNumber(users[0].skills[skill].level - 1)}** → Level **${romanizeNumber(users[0].skills[skill].level)}**)`)
         break
       case 'farming':
-        embed.addField(`:up: Level up!`, `Successfully leveled up in :seedling: **Farming**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :seedling: **Farming**! (Level **${romanizeNumber(users[0].skills[skill].level - 1)}** → Level **${romanizeNumber(users[0].skills[skill].level)}**)`)
         break 
       case 'mining':
-        embed.addField(`:up: Level up!`, `Successfully leveled up in :pick: **Mining**! (Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`) - 1)}** → Level **${romanizeNumber(eco.get(`${user.id}.skills.${skill}.level`))}**)`)
+        embed.addField(`:up: Level up!`, `Successfully leveled up in :pick: **Mining**! (Level **${romanizeNumber(users[0].skills[skill].level - 1)}** → Level **${romanizeNumber(users[0].skills[skill].level)}**)`)
         break
     }
     msg.reply({ embeds: [embed] })
   }
+  users[0].save()
   return amount
 }
 
@@ -94,13 +103,16 @@ export const runPetChecks = async function (bot) {
       }
     })
     bot.logger.log('info', 'Updated pets. (Next one in 30 minutes.)')
-  }, 1800000)
+  }, 3600000)
 }
 
-export const runUnvoteChecks = function (bot) {
-  setInterval(() => {
+export const runUnvoteChecks = async function (bot) {
+  setInterval(async () => {
     const date = new Date().getTime()
-    const unvotes = eco.get('unvotes') || []
+    const unvotes = await User.find({
+      votes
+    }).exec() || []
+    console.log(unvotes)
     if (unvotes.length > 0) {
       for (let unvote of unvotes) {
         if (unvote.unvoteAt !== false) {

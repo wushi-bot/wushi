@@ -12,8 +12,10 @@ const self = new Client({
 
 new Database()
 
-runPetChecks(self)
-runUnvoteChecks(self)
+async () => {
+  await runPetChecks(self)
+  await runUnvoteChecks(self)
+}
 
 self.load()
 self.start(process.env.TOKEN!!)

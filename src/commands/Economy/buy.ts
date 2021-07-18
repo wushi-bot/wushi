@@ -1,11 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 
-import db from 'quick.db'
-import { allItems, getItem, addCommas, getPrefix } from '../../utils/utils'
-
-const eco = new db.table('economy')
-const cfg = new db.table('config') 
+import User from '../../models/User'
+import { allItems, getItem, addCommas, getPrefix, getColor } from '../../utils/utils'
+import { checkUser } from '../../utils/database'
 
 class BuyCommand extends Command {
   constructor (client) {
@@ -20,33 +18,39 @@ class BuyCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    checkUser(bot, msg.author.id)
+    const color = await getColor(bot, msg.member)
     const ai = allItems()
+    const prefix = await getPrefix(msg.guild.id)
     const item = getItem(ai, args[0])
     if (!item) {
       this.client.emit('customError', 'The item you\'ve inserted is not a valid item, please try again or try to retype it.', msg)
       return false
     }
-    if (!eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', `You have no account setup! Set one up using \`${getPrefix(msg.guild.id)}start\`.`, msg)
+    const users = await User.findOne({
+      id: msg.author.id
+    }).exec()
+
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\``, msg)
       return false
     }
-    if (eco.get(`${msg.author.id}.balance`) < item.price) {
-      this.client.emit('customError', `${item.emoji} Insufficient coins! | You are :coin: **${addCommas(item.price - eco.get(`${msg.author.id}.balance`))}** off.`, msg)
+    if (users[0].balance < item.price) {
+      this.client.emit('customError', `${item.emoji} Insufficient coins! | You are :coin: **${addCommas(item.price - user.balance)}** off.`, msg)
       return false
     }
-    const items = eco.get(`${msg.author.id}.items`) || {}
+    const items = user.items || {}
     if (item.max) {
       if (items[item.id] >= item.max) {
         this.client.emit('customError', `${item.emoji} Maximum amount of ${item.emoji} **${item.display}**! | Your inventory has too much ${item.emoji} **${item.display}** to be able to buy more.`, msg)
         return false
       }
     }
-    eco.subtract(`${msg.author.id}.balance`, item.price)
-    const c = eco.get(`${msg.author.id}.items.${item.id}`) || 0
-    eco.set(`${msg.author.id}.items.${item.id}`, c + 1)
+    user.balance -= item.price
+    const c = user.items[item.id]|| 0
+    user.items[item.id] += 1
     const embed = new MessageEmbed()
-      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** | ${item.description.replace('[PRE]', getPrefix(msg.guild.id))}`)
+      .addField(`${item.emoji} Successfully purchased **${item.display}**!`, `Balance: :coin: **${addCommas(Math.floor(user.balance))}** | ${item.description.replace('[PRE]', prefix)}`)
       .setColor(color)
     msg.reply({ embeds: [embed] })
     return true
