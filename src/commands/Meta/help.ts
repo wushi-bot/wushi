@@ -19,8 +19,8 @@ class HelpCommand extends Command {
 
   async run (bot, msg, args) {
     const color = await getColor(bot, msg.member)
-    checkGuild(bot, msg.guild.id)
-    const guilds = await Guild.find({
+    checkGuild(msg.guild.id, bot)
+    const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()
     const prefix = await getPrefix(msg.guild.id)
@@ -34,7 +34,7 @@ class HelpCommand extends Command {
       commandsList.forEach(command => {
         const category = command.conf.category
         if (!categories.includes(category)) {
-          const disabledModules = guilds[0].disabledModules || []
+          const disabledModules = guild.disabledModules || []
           let check
           if (category === 'Admin' && msg.author.id !== '488786712206770196') check = false
           else check = true
@@ -45,7 +45,7 @@ class HelpCommand extends Command {
         if (commandsInCategory[command.conf.category] === undefined) {
           commandsInCategory[command.conf.category] = []
         }
-        const disabledCommands = guilds[0].disabledCommands || []
+        const disabledCommands = guild.disabledCommands || []
         if (command.conf.enabled === true && !disabledCommands.includes(command.conf.name)) {
           if (command.conf.subcommands) {
             command.conf.subcommands.forEach(subcommand => {

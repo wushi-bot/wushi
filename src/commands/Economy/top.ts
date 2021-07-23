@@ -1,10 +1,8 @@
 import Command from '../../classes/Command'
-import { addCommas } from '../../utils/utils'
+import { addCommas, getColor, getPrefix } from '../../utils/utils'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
 
-const eco = new db.table('economy')
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 class TopCommand extends Command {
   constructor (client) {
@@ -19,8 +17,12 @@ class TopCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
     let list = []
+    const users = await User.find({
+      id: member.user.id
+    }).exec()
     eco.all().forEach(entry => { // @ts-ignore
       const user = this.client.users.cache.get(entry.ID)
       if (msg.guild.members.resolveID(user)) {

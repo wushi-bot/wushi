@@ -1,10 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 import romanizeNumber from 'romanize-number'
-import db from 'quick.db'
+import { getPrefix, getColor } from '../../utils/utils'
 
-const eco = new db.table('economy') 
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 class SkillsCommand extends Command {
   constructor (client) {
@@ -19,20 +18,24 @@ class SkillsCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    if (!eco.get(`${user.user.id}.started`)) {
-      this.client.emit('customError', `**${user.user.username}** doesn't have a bank account!`, msg)
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
+    const member = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    const user = await User.findOne({
+      id: member.user.id
+    }).exec()
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
     let embed
     let message
-    if (!eco.get(`${user.user.id}.skills`) && user.user.id === msg.member.user.id) {
+    if (!user.skills && user.user.id === msg.member.user.id) {
       embed = new MessageEmbed()
         .setTitle('No skills found, creating them now...')
         .setColor(color)
       message = await msg.reply({ embeds: [embed] })
-      eco.set(`${user.user.id}.skills`, {
+      user.skills = {
         fishing: {
           exp: 0,
           level: 1,
@@ -53,7 +56,8 @@ class SkillsCommand extends Command {
           level: 1,
           req: 100
         }                
-      })
+      }
+      user.save()
       embed = new MessageEmbed()
         .setTitle('<:check:820704989282172960> Done! Now loading profile...')
         .setColor(color)
@@ -62,10 +66,10 @@ class SkillsCommand extends Command {
     const list = ['fishing', 'hunting', 'mining', 'farming']
     const finalList = []
     list.forEach(item => {
-      const exp = eco.get(`${user.user.id}.skills.${item}.exp`)
+      const exp = user.skills[item].exp
       let bar 
       let barItem
-      if (eco.get(`${user.user.id}.skills.${item}.exp`) !== 0) {
+      if (user.skills[item].exp !== 0) {
         bar = Math.ceil(exp / 10)
         barItem = '▇'
       } else {
@@ -73,14 +77,14 @@ class SkillsCommand extends Command {
         barItem = '**🗙**'
       }
       let finishedBar
-      if (item === 'fishing') finishedBar = `:fishing_pole_and_fish: Fishing [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${user.user.id}.skills.${item}.level`))}**) (**${Math.floor(eco.get(`${user.user.id}.skills.${item}.exp`) / eco.get(`${user.user.id}.skills.${item}.req`) * 100)}**%)`
-      else if (item === 'mining') finishedBar = `:pick: Mining [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${user.user.id}.skills.${item}.level`))}**) (**${Math.floor(eco.get(`${user.user.id}.skills.${item}.exp`) / eco.get(`${user.user.id}.skills.${item}.req`) * 100)}**%)`
-      else if (item === 'hunting') finishedBar = `:rabbit: Hunting [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${user.user.id}.skills.${item}.level`))}**) (**${Math.floor(eco.get(`${user.user.id}.skills.${item}.exp`) / eco.get(`${user.user.id}.skills.${item}.req`) * 100)}**%)`
-      else if (item === 'farming') finishedBar = `:seedling: Farming [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${user.user.id}.skills.${item}.level`))}**) (**${Math.floor(eco.get(`${user.user.id}.skills.${item}.exp`) / eco.get(`${user.user.id}.skills.${item}.req`) * 100)}**%)`
+      if (item === 'fishing') finishedBar = `:fishing_pole_and_fish: Fishing [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills[item].level)}**) (**${Math.floor(user.skills[item].exp / user.skills[item].req * 100)}**%)`
+      else if (item === 'mining') finishedBar = `:pick: Mining [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills[item].level)}**) (**${Math.floor(user.skills[item].exp / user.skills[item].req * 100)}**%)`
+      else if (item === 'hunting') finishedBar = `:rabbit: Hunting [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills[item].level)}**) (**${Math.floor(user.skills[item].exp / user.skills[item].req * 100)}**%)`
+      else if (item === 'farming') finishedBar = `:seedling: Farming [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills[item].level)}**) (**${Math.floor(user.skills[item].exp / user.skills[item].req * 100)}**%)`
       finalList.push(finishedBar)
     })
     embed = new MessageEmbed()
-      .setTitle(`${user.user.username}'s Skills`)
+      .setTitle(`${member.user.username}'s Skills`)
       .setDescription(finalList.join('\n'))
       .setColor(color)
     if (message) message.edit({ embeds: [embed] })

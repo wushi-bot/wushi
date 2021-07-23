@@ -1,9 +1,8 @@
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageButton, MessageActionRow } from 'discord.js'
-import db from 'quick.db'
-import { getPrefix } from '../../utils/utils'
-const eco = new db.table('economy') 
-const cfg = new db.table('config')
+import { getPrefix, getColor } from '../../utils/utils'
+
+import User from '../../models/User'
 
 class StartCommand extends Command {
   constructor (client) {
@@ -18,9 +17,13 @@ class StartCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', 'You already have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
     const row = new MessageActionRow()
@@ -31,12 +34,42 @@ class StartCommand extends Command {
           .setEmoji('🎣')
           .setStyle('SECONDARY'),   
     )
-    eco.set(`${msg.author.id}.started`, true)
-    eco.set(`${msg.author.id}.balance`, 100)
-    eco.set(`${msg.author.id}.bank`, 0)
-    eco.set(`${msg.author.id}.prestige`, 1)
-    eco.set(`${msg.author.id}.multiplier`, 1)
-    eco.set(`${msg.author.id}.items.flimsy_fishing_rod`, 1)
+    user.started = true
+    user.balance = 100
+    user.bank = 0
+    user.prestige = 1
+    user.multiplier = 1
+    user.items.flimsy_fishing_rod = 1
+    user.pets = {
+      active: null,
+      list: [],
+      energy: 0,
+      food: 0,
+      income: 0
+    }
+    user.skills = {
+      fishing: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }, 
+      hunting: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }, 
+      mining: {
+        exp: 0,
+        level: 1,
+        req: 100
+      },
+      farming: {
+        exp: 0,
+        level: 1,
+        req: 100
+      }                
+    }
+    user.save()
     const e = new MessageEmbed()
       .setColor(color)
       .addField('<:check:820704989282172960> Success!', `Successfully created your bank account. You've also received a :fishing_pole_and_fish: **Flimsy Fishing Rod**, you may fish using \`${getPrefix(msg.guild.id)}fish\`.`)

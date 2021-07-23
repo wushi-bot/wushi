@@ -20,11 +20,12 @@ export const updateStats = function (guildCount) {
 }
 
 export const getPrefix = async function (guildId) {
-  const guilds = await Guild.find({
+  const guild = await Guild.findOne({
     id: guildId
   }).exec()
-  if (guilds.length > 0) {
-    return guilds[0].prefix
+  if (guild) {
+    const prefix = guild.prefix || '.'
+    return prefix
   } else {
     return '.'
   }

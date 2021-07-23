@@ -1,10 +1,8 @@
 import Command from '../../classes/Command'
-import { addCommas, allItems, getItem } from '../../utils/utils'
+import { addCommas, allItems, getItem, getColor, getPrefix } from '../../utils/utils'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
 
-const eco = new db.table('economy') 
-const cfg = new db.table('config') 
+import User from '../../models/User'
 
 class SellCommand extends Command {
   constructor (client) {
@@ -19,8 +17,15 @@ class SellCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
+      return false
+    }
     if (!args[0] || !args[1]) {
       this.client.emit('customError', 'Invalid arguments, you need to provide a valid item and the amount you wish to sell.', msg)
       return false
@@ -30,7 +35,7 @@ class SellCommand extends Command {
       this.client.emit('customError', 'Invalid item, you need to insert a valid item.', msg)
       return false 
     }
-    const amount = eco.get(`${msg.author.id}.items.${item.id}`)
+    const amount = user.items[item.id]
     if (!amount) {
       this.client.emit('customError', 'You don\'t have that item.', msg)
       return false 
@@ -52,9 +57,9 @@ class SellCommand extends Command {
       return false
     }
     const profit = Math.floor(desiredAmount * item.sell_price)
-    eco.add(`${msg.author.id}.balance`, profit)
-    eco.subtract(`${msg.author.id}.items.${item.id}`, desiredAmount)
-    if (eco.get(`${msg.author.id}.items.${item.id}`) === 0) eco.delete(`${msg.author.id}.items.${item.id}`)
+    user.balance += profit
+    user.items[item.id] -= desiredAmount
+    if (user.items[item.id] === 0) delete user.items[item.id]
     const embed = new MessageEmbed()
       .addField('<:check:820704989282172960> Success!', `Successfully sold ${desiredAmount} **${item.emoji} ${item.display}** and made :coin: **${addCommas(profit)}** as profit.`)
       .setColor(color)

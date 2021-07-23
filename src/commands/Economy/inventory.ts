@@ -1,10 +1,7 @@
 import Command from '../../classes/Command'
-import { addCommas, getItem, allItems, getPrefix } from '../../utils/utils'
+import { addCommas, getItem, allItems, getPrefix, getColor } from '../../utils/utils'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
-import db from 'quick.db'
-
-const eco = new db.table('economy') 
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 function truncate( str, n, useWordBoundary ){
     if (str.length <= n) { return str; }
@@ -27,8 +24,12 @@ class InventoryCommand extends Command {
   }
 
   async awaitControl(message, embed, filter, page, maxPages, user, guild) {
-    const color = cfg.get(`${user.user.id}.color`) || user.roles.highest.color
-    const items = eco.get(`${user.user.id}.items`) || {}
+    const color = await getColor(message.client, message.member)
+    const userResult = await User.findOne({
+      id: user.user.id
+    })
+    const items = userResult.items || {}
+    const prefix = await getPrefix(guild.id)
     const keys = Object.keys(items)
     const row = new MessageActionRow()
       .addComponents(
@@ -52,7 +53,7 @@ class InventoryCommand extends Command {
               .setFooter(`Page ${page} of ${maxPages}`)
             for (let n = 0; n < 9; n++) {
               const i = getItem(allItems(), keys[n + (9 * (page - 1))])
-              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
+              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', prefix), 50, '...')}`, true)
             }
             i.update({ embeds: [embed], components: [row] })
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
@@ -68,7 +69,7 @@ class InventoryCommand extends Command {
               .setFooter(`Page ${page} of ${maxPages}`)
             for (let n = 0; n < 9; n++) {
               const i = getItem(allItems(), keys[n + (9 * (page - 1))])
-              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(guild.id)), 50, '...')}`, true)
+              if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', prefix), 50, '...')}`, true)
             }
             i.update({ embeds: [embed], components: [row] })
             this.awaitControl(message, embed, filter, page, maxPages, user, guild)
@@ -83,14 +84,21 @@ class InventoryCommand extends Command {
   }  
   
   async run (bot, msg, args) {
-    if (!eco.get(`${msg.author.id}.started`)) return this.client.emit('customError', 'You don\'t have a bank account!', msg)
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
     const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
+    const userResult = await User.findOne({
+      id: user.user.id
+    }).exec()
+    if (!userResult || !userResult.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
+      return false
+    }
     let embed = new MessageEmbed()
         .setColor(color)
         .setAuthor(`${user.user.username}'s Inventory`, user.user.avatarURL())
     let page = 1
-    const items = eco.get(`${msg.author.id}.items`) || {}
+    const items = user.items || {}
     const keys = Object.keys(items)
     let maxPages = Math.ceil(keys.length / 9)
     embed.setFooter(`Page 1 of ${Math.ceil(keys.length / 9)}`)
@@ -98,7 +106,7 @@ class InventoryCommand extends Command {
     keys.forEach(item => {
         if (n !== 9) {
           const i = getItem(allItems(), item)
-          embed.addField(`${i.emoji} ${i.display} — ${items[item]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', getPrefix(msg.guild.id)), 50, '...')}`, true)
+          embed.addField(`${i.emoji} ${i.display} — ${items[item]}`, `ID: \`${i.id}\` | Sell price: :coin: **${addCommas(Math.floor(i.sell_price))}** | ${truncate(i.description.replace('[PRE]', prefix), 50, '...')}`, true)
           n++
         }
     })

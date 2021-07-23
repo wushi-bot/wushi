@@ -1,12 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 import romanizeNumber from 'romanize-number'
-import { getPrefix, addCommas } from '../../utils/utils'
-import db from 'quick.db'
-import ms from 'ms'
+import { getPrefix, addCommas, getColor } from '../../utils/utils'
 
-const eco = new db.table('economy')
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 class ProfileCommand extends Command {
   constructor (client) {
@@ -21,30 +18,34 @@ class ProfileCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    const user = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
-    if (!eco.get(`${user.user.id}.started`)) {
-      this.client.emit('customError', 'That user does not have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
+    const member = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member
+    const user = await User.findOne({
+      id: member.user.id
+    }).exec()
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
-    const bank = eco.get(`${user.user.id}.bank`) || 0
-    const balance = eco.get(`${user.user.id}.balance`) || 0
-    let prestige = eco.get(`${user.user.id}.prestige`) || 1
-    let multiplier = eco.get(`${user.user.id}.multiplier`) || 1
-    let inventory = Object.keys(eco.get(`${user.user.id}.items`)).length
+    const bank = user.bank || 0
+    const balance = user.balance || 0
+    let prestige = user.prestige || 1
+    let multiplier = user.multiplier || 1
+    let inventory = Object.keys(user.items).length
     if (prestige === 0) prestige = 1
     if (multiplier === 0) multiplier = 1
 
     const embed = new MessageEmbed()
-      .setAuthor(user.user.tag, user.user.avatarURL())
+      .setAuthor(member.user.tag, member.user.avatarURL())
       .setColor(color)
       .addField(':bank: Banking', `Bank: :coin: **${addCommas(bank)}**\nWallet: :coin: **${addCommas(balance)}**`)
       .addField(':medal: Prestige', `Prestige Level: **${romanizeNumber(prestige)}**`)
       .addField(':crown: Multiplier', `Multiplier: **${multiplier}%**`)
       .addField(':handbag: Inventory', `**${inventory} items** in Inventory`)
     let time = new Date().getTime()
-    const d = eco.get(`${user.user.id}.daily`) || 0
-    const w = eco.get(`${user.user.id}.weekly`) || 0
+    const d = user.daily || 0
+    const w = user.weekly|| 0
     let daily = d >= new Date().getTime()
     let weekly = w >= new Date().getTime()
 
@@ -53,10 +54,10 @@ class ProfileCommand extends Command {
     else if (weekly && !daily) embed.addField(':date: Cooldowns', `<:check:820704989282172960> Daily\n<:cross:821028198330138644> Weekly`)
     else if (!weekly && !daily) embed.addField(':date: Cooldowns', `<:check:820704989282172960> Daily\n<:check:820704989282172960> Weekly`)
 
-    if (eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
-    else if (eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
-    else if (!eco.get(`${msg.author.id}.votedDBL`) && eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
-    else if (!eco.get(`${msg.author.id}.votedDBL`) && !eco.get(`${msg.author.id}.votedTop`)) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
+    if (user.votedDBL && user.votedTop) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
+    else if (user.votedDBL && !user.votedTop) embed.addField(':up: Voted?', `<:check:820704989282172960> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
+    else if (!user.votedDBL && user.votedTop) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:check:820704989282172960> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
+    else if (!user.votedDBL && !user.votedTop) embed.addField(':up: Voted?', `<:cross:821028198330138644> [discordbotlist.com](https://discordbotlist.com/bots/wushi/upvote)\n<:cross:821028198330138644> [top.gg](https://top.gg/bot/755526238466080830/vote)`)
 
     msg.reply({ embeds: [embed] })
     return true

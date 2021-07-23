@@ -18,7 +18,7 @@ class BalanceCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    checkUser(bot, msg.author.id)
+    checkUser(msg.author.id, bot)
     const user = await User.findOne({
       id: msg.author.id
     }).exec()

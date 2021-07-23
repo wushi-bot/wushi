@@ -1,15 +1,12 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 
-import { getPet, getPrefix, addCommas, getRandomInt } from '../../utils/utils'
+import { getPet, getPrefix, addCommas, getRandomInt, getColor } from '../../utils/utils'
 import { addMoney } from '../../utils/economy'
-import db from 'quick.db'
+import User from '../../models/User'
 
 import petsList from '../../resources/items/pets.json'
-
-const eco = new db.table('economy')
-const cfg = new db.table('config')
-const pets = new db.table('pets')
+import { isPrefixUnaryExpression } from 'typescript'
 
 class PetsCommand extends Command {
   constructor (client) {
@@ -25,23 +22,31 @@ class PetsCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
+    const prefix = await getPrefix(msg.guild.id)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
+      return false
+    }
     if (!args[0]) {
       const embed = new MessageEmbed()
         .setColor(color)
         .setTitle(':bone: Pets - Main Menu')
-      if (!pets.get(`${msg.author.id}.active`)) {
+      if (!user.pets.active) {
         embed.addField(':knot: Active pet', 'You don\'t have a pet active.')
-        embed.addField(':question: Want to buy a pet?', `Use \`${getPrefix(msg.guild.id)}pets shop\` to see pets to buy!`)
+        embed.addField(':question: Want to buy a pet?', `Use \`${prefix}pets shop\` to see pets to buy!`)
       } else {
-        const pet = pets.get(`${msg.author.id}.pets`).filter(value => value.id === pets.get(`${msg.author.id}.active`))[0]
-        const food = pets.get(`${msg.author.id}.food`) || 0
-        if (!pets.get(`${msg.author.id}.energy`)) pets.set(`${msg.author.id}.energy`, 10)
-        const energy = pets.get(`${msg.author.id}.energy`) || 0
+        const pet = user.pets.list.filter(value => value.id === user.pets.active)[0]
+        const food = user.pets.food || 0
+        if (!user.pets.energy) user.pets.energy = 10
+        const energy = user.pets.energy || 0
         const happiness = pet.happiness || 0
         const display = getPet(petsList, pet.pet)
         const health = Math.floor(((pet.happiness + pet.hunger) / 200) * 100)
-        const income = pets.get(`${msg.author.id}.income`) || 0
+        const income = user.pets.income || 0
         const exp = pet.exp
         let emoji = ':smile:'
         if (happiness < 20) emoji = ':rage:'
@@ -52,9 +57,9 @@ class PetsCommand extends Command {
         else if (happiness === 100) emoji = ':smiley:'
         embed.addField(`${display.emoji} **${display.display}** (Level ${pet.level})`, `EXP: :sparkles: **${exp}/100**\nHealth: :heart: **${health}%**\nHappiness: ${emoji} **${pet.happiness}%**\nHunger: :meat_on_bone: **${pet.hunger}%**\nIncome: :coin: **${pet.income}**`)
         embed.addField(':bust_in_silhouette: You', `Food: :meat_on_bone: **${addCommas(food)}**\nEnergy: :cloud_lightning: **${energy}/10**`)
-        if (income !== 0) embed.addField(`:money_with_wings: Income`, `You have earned :coin: **${addCommas(pets.get(`${msg.author.id}.income`))}** from your pet, collect it using \`${getPrefix(msg.guild.id)}pet collect\`.`)
+        if (income !== 0) embed.addField(`:money_with_wings: Income`, `You have earned :coin: **${addCommas(user.pets.income)}** from your pet, collect it using \`${prefix}pet collect\`.`)
       if (health < 50) {
-        embed.addField(':broken_heart: Health Alert!', `Your pet is doing poor in health! Please feed your pet (\`${getPrefix(msg.guild.id)}pet feed\`) and play (\`${getPrefix(msg.guild.id)}pet play\`) with it!`)
+        embed.addField(':broken_heart: Health Alert!', `Your pet is doing poor in health! Please feed your pet (\`${prefix}pet feed\`) and play (\`${prefix}pet play\`) with it!`)
       }
       }
       await msg.reply({ embeds: [embed] })
@@ -74,19 +79,19 @@ class PetsCommand extends Command {
         this.client.emit('customError', 'The item you\'ve inserted is not a valid item, please try again or try to retype it.', msg)
         return false
       }
-      if (!eco.get(`${msg.author.id}.started`)) {
-        this.client.emit('customError', `You have no account setup! Set one up using \`${getPrefix(msg.guild.id)}start\`.`, msg)
+      if (!user.started) {
+        this.client.emit('customError', `You have no account setup! Set one up using \`${prefix}start\`.`, msg)
         return false
       }
-      if (eco.get(`${msg.author.id}.balance`) < item.price) {
-        this.client.emit('customError', `${item.emoji} Insufficient coins! | You are :coin: **${addCommas(item.price - eco.get(`${msg.author.id}.balance`))}** off.`, msg)
+      if (user.balance < item.price) {
+        this.client.emit('customError', `${item.emoji} Insufficient coins! | You are :coin: **${addCommas(item.price - user.balance)}** off.`, msg)
         return false
       }
-      eco.subtract(`${msg.author.id}.balance`, item.price)
-      pets.add(`${msg.author.id}.count`, 1)
-      pets.push(`${msg.author.id}.pets`, { pet: item.id, id: `${pets.get(`${msg.author.id}.count`)}`, level: 0, exp: 0, happiness: 100, ailments: [], hunger: 100, income: item.income })
+      user.balance -= item.price
+      user.pets.count += 1
+      user.pets.list.push({ pet: item.id, id: user.pets.count, level: 0, exp: 0, happiness: 100, ailments: [], hunger: 100, income: item.income })
       const embed = new MessageEmbed()
-        .addField(`${item.emoji} Successfully purchased your very own **${item.display}**!`, `Balance: :coin: **${addCommas(Math.floor(eco.get(`${msg.author.id}.balance`)))}** | Set the pet as your active pet using \`${getPrefix(msg.guild.id)}pets set ${pets.get(`${msg.author.id}.count`)}\`. | ${item.description.replace('[PRE]', getPrefix(msg.guild.id))}`)
+        .addField(`${item.emoji} Successfully purchased your very own **${item.display}**!`, `Balance: :coin: **${addCommas(Math.floor(user.balance))}** | Set the pet as your active pet using \`${prefix}pets set ${user.pets.count}\`. | ${item.description.replace('[PRE]', prefix)}`)
         .setColor(color)
       msg.reply({ embeds: [embed] })
       return true
@@ -95,12 +100,12 @@ class PetsCommand extends Command {
         this.client.emit('customError', 'You didn\'t input an ID as your pet.', msg) 
         return false
       }
-      const result = pets.get(`${msg.author.id}.pets`).filter(pet => pet.id === args[1])[0]
+      const result = user.pets.list.filter(pet => pet.id === args[1])[0]
       if (!result) {
         this.client.emit('customError', 'Invalid pet ID', msg)
         return false
       }
-      pets.set(`${msg.author.id}.active`, result.id)
+      user.pets.active = result.id
       const pet = getPet(petsList, result.pet)
       const embed = new MessageEmbed()
         .setColor(color)
@@ -108,36 +113,36 @@ class PetsCommand extends Command {
       msg.reply({ embeds: [embed] })
       return true
     } else if (args[0] === 'redeem') {
-      const items = eco.get(`${msg.author.id}.items`) || {}
+      const items = user.items || {}
       if (!items['food_bundle'] && !items['energy_drink']) {
         this.client.emit('customError', 'You do not have any food bundles or energy drink.', msg)
         return false
       }
       if (items['food_bundle'] && !items['energy_drink']) {
-        if (eco.get(`${msg.author.id}.items.food_bundle`) === 0) eco.delete(`${msg.author.id}.items.food_bundle`) 
-        else eco.subtract(`${msg.author.id}.items.food_bundle`, 1)
-        pets.add(`${msg.author.id}.food`, 10)
+        if (user.items.food_bundle === 1) delete user.items.food_bundle 
+        else user.items.food_bundle
+        user.pets.food += 10
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully redeemed :meat_on_bone: **10** from your food bundle.')
         msg.reply({ embeds: [embed] })
       }
       if (!items['food_bundle'] && items['energy_drink']) {
-        if (eco.get(`${msg.author.id}.items.energy_drink`) === 0) eco.delete(`${msg.author.id}.items.energy_drink`) 
-        else eco.subtract(`${msg.author.id}.items.energy_drink`, 1)
-        pets.set(`${msg.author.id}.energy`, 10)
+        if (user.items.energy_drink === 1) delete user.items.energy_drink 
+        else user.items.energy_drink -= 1
+        user.pets.energy = 10
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully replenished :cloud_lightning: **10** from drinking energy drink.')
         msg.reply({ embeds: [embed] })
       } 
       if (items['food_bundle'] && items['energy_drink']) {
-        if (eco.get(`${msg.author.id}.items.energy_drink`) === 0) eco.delete(`${msg.author.id}.items.energy_drink`) 
-        else eco.subtract(`${msg.author.id}.items.energy_drink`, 1)
-        if (eco.get(`${msg.author.id}.items.food_bundle`) === 0) eco.delete(`${msg.author.id}.items.food_bundle`) 
-        else eco.subtract(`${msg.author.id}.items.food_bundle`, 1)
-        pets.set(`${msg.author.id}.energy`, 10)
-        pets.add(`${msg.author.id}.food`, 10)
+        if (user.items.energy_drink === 1) delete user.items.energy_drink 
+        else user.items.energy_drink -= 1
+        if (user.items.food_bundle === 1) delete user.items.food_bundle
+        else user.items.food_bundle -= 1
+        user.pets.energy = 10
+        user.pets.food = 10
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', 'Successfully replenished :cloud_lightning: **10** & redeemed :meat_on_bone: **10** from drinking energy drink & your food bundle.')
@@ -145,21 +150,21 @@ class PetsCommand extends Command {
       }
       return false
     } else if (args[0] === 'feed') {
-      if (!pets.get(`${msg.author.id}.active`)) {
+      if (!user.pets.active) {
         this.client.emit('customError', 'You have no pet active!')
         return false
       }
-      if (!pets.get(`${msg.author.id}.food`) || pets.get(`${msg.author.id}.food`) === 0) {
-        this.client.emit('customError', `You don't have any food! Buy some food on the shop via \`${getPrefix(msg.guild.id)}shop pets\`.`)
+      if (!user.pets.food || user.pets.food === 0) {
+        this.client.emit('customError', `You don't have any food! Buy some food on the shop via \`${prefix}shop pets\`.`)
         return false
       }
-      const list = pets.get(`${msg.author.id}.pets`) || []
-      const pet = list.filter(value => value.id === pets.get(`${msg.author.id}.active`))[0]
+      const list = user.pets.list || []
+      const pet = list.filter(value => value.id === user.pets.active)[0]
       if (pet.hunger === 100) {
         this.client.emit('customError', 'Your pet is already full!', msg) 
         return false 
       }
-      pets.subtract(`${msg.author.id}.food`, 1)
+      user.pets.food
       const index = list.indexOf(pet)
       let addedHunger = 20
       if (pet.hunger + 20 > 100) {
@@ -178,7 +183,7 @@ class PetsCommand extends Command {
         pet.income = pet.income + moreMoney
       }
       list[index] = pet
-      pets.set(`${msg.author.id}.pets`, list)
+      user.pets.list = list
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully fed your pet :meat_on_bone: **${addedHunger}**. (**${pet.hunger}/100**)`)
         .setColor(color)
@@ -189,17 +194,17 @@ class PetsCommand extends Command {
       msg.reply({ embeds: [embed] })
       return true
     } else if (args[0] === 'play') {
-      if (!pets.get(`${msg.author.id}.active`)) {
+      if (!user.pets.active) {
         this.client.emit('customError', 'You have no pet active!')
         return false
       }
-      if (!pets.get(`${msg.author.id}.energy`) || pets.get(`${msg.author.id}.energy`) === 0) {
+      if (!user.pets.energy || user.pets.energy  === 0) {
         this.client.emit('customError', `You don't have any energy! You must wait to get energy, or buy energy drink.`)
         return false
       }
-      pets.subtract(`${msg.author.id}.energy`, 1)
-      const list = pets.get(`${msg.author.id}.pets`) || []
-      const pet = list.filter(value => value.id === pets.get(`${msg.author.id}.active`))[0]
+      user.pets.energy -= 1
+      const list = user.pets.list || []
+      const pet = list.filter(value => value.id === user.pets.active)[0]
       if (pet.happiness === 100) {
         this.client.emit('customError', 'Your pet is already too happy!', msg) 
         return false 
@@ -222,7 +227,7 @@ class PetsCommand extends Command {
         pet.income = pet.income + moreMoney
       }
       list[index] = pet
-      pets.set(`${msg.author.id}.pets`, list)
+      user.pets.list = list
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully played with your pet :cloud_lightning: **${addedHappiness}**. (**${pet.happiness}/100**)`)
         .setColor(color)
@@ -233,16 +238,16 @@ class PetsCommand extends Command {
       msg.reply({ embeds: [embed] })
       return true
     } else if (args[0] === 'collect') {
-      let income = pets.get(`${msg.author.id}.income`)
+      let income = user.pets.income
       income = addMoney(msg.author.id, Math.floor(income))
-      pets.set(`${msg.author.id}.income`, 0)
+      user.pets.income = 0
       const embed = new MessageEmbed()
         .addField('<:check:820704989282172960> Success!', `Successfully collected :coin: **${addCommas(Math.floor(income))}** from your pet!`)
         .setColor(color)
       msg.reply({ embeds: [embed] })
       return true
     } else if (args[0] === 'list') {
-      const list = pets.get(`${msg.author.id}.pets`) || []
+      const list = user.pets.list || []
       if (list.length === 0) {
         this.client.emit('customError', 'You have no pets, buy some on the store!', msg)
         return false 
@@ -257,6 +262,7 @@ class PetsCommand extends Command {
       msg.reply({ embeds: [embed] }) 
       return true
     } 
+    user.save()
   }
 }
 

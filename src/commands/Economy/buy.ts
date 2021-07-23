@@ -18,7 +18,7 @@ class BuyCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    checkUser(bot, msg.author.id)
+    checkUser(msg.author.id, bot)
     const color = await getColor(bot, msg.member)
     const ai = allItems()
     const prefix = await getPrefix(msg.guild.id)

@@ -1,13 +1,11 @@
 
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
-import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
+import { getRandomInt, getPrefix, getColor, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
 import romanizeNumber from 'romanize-number'
-import db from 'quick.db'
 
-const eco = new db.table('economy')
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 async function getLoot(crop: string) {
   let odds = getRandomInt(1, 100)
@@ -54,18 +52,22 @@ class HuntCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
-    const items = eco.get(`${msg.author.id}.items`) || []
+    const items = user.items || {}
     if (
       !items['flimsy_rifle'] && 
       !items['decent_rifle'] && 
       !items['great_rifle']
     ) {
-      this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${getPrefix(msg.guild.id)}buy flimsy_rifle\`.`, msg)
+      this.client.emit('customError', `You need a rifle to hunt, purchase one on the store using \`${prefix}buy flimsy_rifle\`.`, msg)
       return false
     }
     const filter = i => {
@@ -85,10 +87,10 @@ class HuntCommand extends Command {
       correctDisplay = '🦌 Deer'
 
     }
-    const exp = eco.get(`${msg.author.id}.skills.hunting.exp`)
+    const exp = user.skills.hunting.exp
     let bar
     let barItem
-    if (eco.get(`${msg.author.id}.skills.hunting.exp`) !== 0) {
+    if (user.skills.hunting.exp !== 0) {
       bar = Math.ceil(exp / 10)
       barItem = '▇'
     } else {
@@ -99,7 +101,7 @@ class HuntCommand extends Command {
       .setColor(color)
       .setFooter('You have 8 seconds to pick an animal to hunt.')
       .setTitle('🐇 Hunting')
-      .setDescription(`**:map: Available animals**\n The **${correctDisplay}** is the only available animal to hunt. \n\n:question: **How to hunt**\nPlease choose a location to hunt at from the corresponding bottom animals.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:rabbit2: Hunting [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.hunting.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.hunting.exp`) / eco.get(`${msg.author.id}.skills.hunting.req`) * 100)}**%)`)
+      .setDescription(`**:map: Available animals**\n The **${correctDisplay}** is the only available animal to hunt. \n\n:question: **How to hunt**\nPlease choose a location to hunt at from the corresponding bottom animals.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:rabbit2: Hunting [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills.hunting.level)}**) (**${Math.floor(user.skills.hunting.exp / user.skills.hunting.req * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
@@ -161,14 +163,14 @@ class HuntCommand extends Command {
           let trapBonus
           let loot = await getLoot(interaction.customID)
           if (items['trap']) {
-            if (eco.get(`${msg.author.id}.items.trap`) === 0) eco.delete(`${msg.author.id}.items.trap`) 
-            else eco.subtract(`${msg.author.id}.items.trap`, 1)
+            if (user.items.trap === 0) delete user.items.trap 
+            else user.items.trap -= 1
             bonus = bonus + getRandomInt(3, 10)
             trapBonus = true
           }
           const goldEggBonus = getRandomInt(45, 175)
           let amount = getRandomInt(2, 8)
-          let lvl = eco.get(`${msg.author.id}.skills.hunting.level`) || 0
+          let lvl = user.skills.hunting.level || 1
           let animalsHunted = Math.floor(amount + amount * (lvl * 0.1))
           amount = addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           const embed = new MessageEmbed()
@@ -176,12 +178,12 @@ class HuntCommand extends Command {
           let lootDisplay = []
           loot.forEach(item => {
             let i = getItem(allItems(), item)
-            if (eco.get(`${msg.author.id}.items.${i.id}`)) eco.add(`${msg.author.id}.items.${i.id}`, 1)
-            else eco.set(`${msg.author.id}.items.${i.id}`, 1)
+            if (user.items[i.id]) user.items[i.id] + 1
+            else user.items[i.id] = 1
             lootDisplay.push(`${i.emoji} **${i.display}**`)
           })
-          if (eco.get(`${msg.author.id}.items.${interaction.customID}`)) eco.add(`${msg.author.id}.items.${interaction.customID}`, animalsHunted)
-          else eco.set(`${msg.author.id}.items.${interaction.customID}`, animalsHunted)
+          if (user.items[interaction.customID]) user.items[interaction.customID] += animalsHunted
+          else user.items[interaction.customID] = animalsHunted
           if (!goldEggBonus) {
             embed.addField(':rabbit2: Hunting', `You hunted for **${getRandomInt(1, 10)} hours**, here's what you got for game!`)
             lootDisplay.push(`${animalsHunted} ${correctDisplay} **(+${bonus})**`)
@@ -196,7 +198,8 @@ class HuntCommand extends Command {
             embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldEggBonus}** as a bonus.`)
           }
           addExp(msg.author, 'hunting', msg)
-          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.hunting.req`) - eco.get(`${msg.author.id}.skills.hunting.exp`))}**`)
+          user.save()
+          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(user.skills.hunting.req - user.skills.hunting.exp)}**`)
           const filter2 = i => i.customID === 'hunt' && i.user.id === msg.author.id
           const row2 = new MessageActionRow()
             .addComponents(

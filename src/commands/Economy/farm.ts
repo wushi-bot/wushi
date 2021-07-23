@@ -61,7 +61,7 @@ class FarmCommand extends Command {
       this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
-    const items = user.items || []
+    const items = user.items || {}
     if (
       !items['flimsy_hoe'] && 
       !items['decent_hoe'] && 
@@ -200,6 +200,7 @@ class FarmCommand extends Command {
             embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldEggBonus}** as a bonus.`)
           }
           await addExp(msg.author, 'farming', msg)
+          user.save()
           embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.farming.req`) - eco.get(`${msg.author.id}.skills.farming.exp`))}**`)
           const filter2 = i => i.customID === 'farm' && i.user.id === msg.author.id
           const row2 = new MessageActionRow()

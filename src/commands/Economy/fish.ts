@@ -1,13 +1,10 @@
 
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js'
-import { getRandomInt, getPrefix, addCommas, getItem, allItems } from '../../utils/utils'
+import { getRandomInt, getPrefix, getColor, getItem, allItems } from '../../utils/utils'
 import { addMoney, addExp } from '../../utils/economy'
 import romanizeNumber from 'romanize-number'
-import db from 'quick.db'
-
-const eco = new db.table('economy')
-const cfg = new db.table('config')
+import User from '../../models/User'
 
 async function getLoot(place: string) {
   let odds = getRandomInt(1, 100)
@@ -53,18 +50,22 @@ class FishCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    if (!eco.get(`${msg.author.id}.started`)) {
-      this.client.emit('customError', 'You don\'t have a bank account!', msg)
+    const color = await getColor(bot, msg.member)
+    const user = await User.findOne({
+      id: msg.author.id
+    }).exec()
+    const prefix = await getPrefix(msg.guild.id)
+    if (!user || !user.started) {
+      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
       return false
     }
-    const items = eco.get(`${msg.author.id}.items`) || []
+    const items = user.items || {}
     if (
       !items['flimsy_fishing_rod'] && 
       !items['decent_fishing_rod'] && 
       !items['great_fishing_rod']
     ) {
-      this.client.emit('customError', `You need a fishing rod to fish, purchase one on the store using \`${getPrefix(msg.guild.id)}buy flimsy_fishing_rod\`.`, msg)
+      this.client.emit('customError', `You need a fishing rod to fish, purchase one on the store using \`${prefix}buy flimsy_fishing_rod\`.`, msg)
       return false
     }
     const filter = i => {
@@ -84,10 +85,10 @@ class FishCommand extends Command {
       correctDisplay = '🏞️ Lake'
 
     }
-    const exp = eco.get(`${msg.author.id}.skills.fishing.exp`)
+    const exp = user.skills.fishing.exp
     let bar
     let barItem
-    if (eco.get(`${msg.author.id}.skills.fishing.exp`) !== 0) {
+    if (user.skills.fishing.exp !== 0) {
       bar = Math.ceil(exp / 10)
       barItem = '▇'
     } else {
@@ -98,7 +99,7 @@ class FishCommand extends Command {
       .setColor(color)
       .setFooter('You have 8 seconds to pick a location.')
       .setTitle(':fishing_pole_and_fish: Fishing')
-      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to fish at. \n\n:question: **How to fish**\nPlease choose a location to fish at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:fishing_pole_and_fish: Fishing [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(eco.get(`${msg.author.id}.skills.fishing.level`))}**) (**${Math.floor(eco.get(`${msg.author.id}.skills.fishing.exp`) / eco.get(`${msg.author.id}.skills.fishing.req`) * 100)}**%)`)
+      .setDescription(`**:map: Correct Location**\n The **${correctDisplay}** is the correct place to fish at. \n\n:question: **How to fish**\nPlease choose a location to fish at from the corresponding bottom locations.\n\n**:diamond_shape_with_a_dot_inside: Progress**\n:fishing_pole_and_fish: Fishing [ ${barItem.repeat(bar)} ] (Level **${romanizeNumber(user.skills.fishing.level)}**) (**${Math.floor(user.skills.fishing.exp / user.skills.fishing.req * 100)}**%)`)
       const row = new MessageActionRow()
         .addComponents(
           new MessageButton()
@@ -160,14 +161,14 @@ class FishCommand extends Command {
           let fishingBaitBonus
           let loot = await getLoot(interaction.customID)
           if (items['fishing_bait']) {
-            if (eco.get(`${msg.author.id}.items.fishing_bait`) === 0) eco.delete(`${msg.author.id}.items.fishing_bait`) 
-            else eco.subtract(`${msg.author.id}.items.fishing_bait`, 1)
+            if (user.items.fishing_bait === 0) delete user.items.fishing_bait 
+            else user.items.fishing_bait -= 1
             bonus = bonus + getRandomInt(3, 10)
             fishingBaitBonus = true
           }
           const goldenReelBonus = getRandomInt(45, 175)
           let amount = getRandomInt(2, 8)
-          let lvl = eco.get(`${msg.author.id}.skills.fishing.level`) || 0
+          let lvl = user.skills.fishing.level || 1
           let fishGained = Math.floor(amount + amount * (lvl * 0.1))
           amount = addMoney(msg.author.id, Math.floor(amount + amount * (lvl * 0.1)))
           const embed = new MessageEmbed()
@@ -175,12 +176,12 @@ class FishCommand extends Command {
           let lootDisplay = []
           loot.forEach(item => {
             let i = getItem(allItems(), item)
-            if (eco.get(`${msg.author.id}.items.${i.id}`)) eco.add(`${msg.author.id}.items.${i.id}`, 1)
-            else eco.set(`${msg.author.id}.items.${i.id}`, 1)
+            if (user.items[i.id]) user.items[i.id] += 1
+            else user.items[i.id] = 1
             lootDisplay.push(`${i.emoji} **${i.display}**`)
           })
-          if (eco.get(`${msg.author.id}.items.fish`)) eco.add(`${msg.author.id}.items.fish`, fishGained)
-          else eco.set(`${msg.author.id}.items.fish`, fishGained)
+          if (user.items.fish) user.items.fish += fishGained
+          else user.items.fish = fishGained
           if (!fishingBaitBonus) {
             embed.addField(':fishing_pole_and_fish: Fishing', `You fished for **${getRandomInt(1, 10)} hours**, here's what you fished up!`)
             lootDisplay.push(`${fishGained} :fish: **Fish** **(+${bonus})**`)
@@ -195,7 +196,8 @@ class FishCommand extends Command {
             embed.addField(':sparkles: Lucky!', `You also found gold! You get :coin: **${goldenReelBonus}** as a bonus.`)
           }
           addExp(msg.author, 'fishing', msg)
-          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(eco.get(`${msg.author.id}.skills.fishing.req`) - eco.get(`${msg.author.id}.skills.fishing.exp`))}**`)
+          user.save()
+          embed.addField(':diamond_shape_with_a_dot_inside: Progress', `:trident: **EXP** needed until next level up: **${Math.floor(user.skills.fishing.req - user.skills.fishing.exp)}**`)
           const filter2 = i => i.customID === 'fish' && i.user.id === msg.author.id
           const row2 = new MessageActionRow()
             .addComponents(

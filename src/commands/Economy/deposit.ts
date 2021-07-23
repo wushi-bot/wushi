@@ -51,7 +51,7 @@ class DepositCommand extends Command {
         return false
       } 
     }
-    if (!user.balance = 0) user.balance = 0
+    if (!user.balance === 0) user.balance = 0
     user.balance -= amount
     user.bank += amount
     user.save()
