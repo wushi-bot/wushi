@@ -33,7 +33,7 @@ export const checkGuild = async function (guild, bot = null) {
   }
 }
 
-export const checkMember = async function (bot, guild, user) {
+export const checkMember = async function (guild, user, bot = null) {
   let members = await Member.find({
     guildId: guild,
     userId: user
@@ -43,7 +43,6 @@ export const checkMember = async function (bot, guild, user) {
       userId: user,
       guildId: guild
     })
-    memberProfile.save()
     bot.logger.log('info', `Created a member profile for ${chalk.green(user)} (${chalk.green(guild)}).`)
     return memberProfile
   }

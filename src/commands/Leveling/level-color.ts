@@ -1,8 +1,9 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
 import color from 'tinycolor2' 
-import db from 'quick.db'
-const leveling = new db.table('leveling')
+
+import Member from '../../models/Member'
+import { checkMember } from '../../utils/database'
 
 class LevelColorCommand extends Command {
   constructor (client) {
@@ -26,7 +27,9 @@ class LevelColorCommand extends Command {
       this.client.emit('customError', 'You need an actual valid color to insert.', msg)
       return false
     }
-    leveling.set(`${msg.author.id}.rankCardColor`, col.toHexString())
+    const member = await checkMember(msg.guild.id, msg.author.id, bot)
+    member.rankCardColor = col.toHexString()
+    member.save()
     const embed = new MessageEmbed()
       .setColor(col.toHexString())
       .addField('<:check:820704989282172960> Success!', `Successfully set the rank card color to **${col.toHexString()}**.`)

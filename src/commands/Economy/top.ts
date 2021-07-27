@@ -20,13 +20,14 @@ class TopCommand extends Command {
     const color = await getColor(bot, msg.member)
     const prefix = await getPrefix(msg.guild.id)
     let list = []
-    const users = await User.find({
-      id: member.user.id
-    }).exec()
-    eco.all().forEach(entry => { // @ts-ignore
-      const user = this.client.users.cache.get(entry.ID)
-      if (msg.guild.members.resolveID(user)) {
-        list.push({ id: entry.ID, bal: entry.data.balance, bank: entry.data.bank })
+    msg.guild.members.cache.array().forEach(async entry => { // @ts-ignore
+      const user = this.client.users.cache.get(entry.user.id)
+      const userProfile = await User.findOne({
+        id: user.id
+      })
+      if (userProfile && userProfile.started) {
+        list.push({ id: user.id, bal: userProfile.balance, bank: userProfile.bank })
+        console.log(userProfile)
       }
     })
     list.sort(function (a, b) { return (b.bal + b.bank) - (a.bal + a.bank) })
@@ -34,7 +35,8 @@ class TopCommand extends Command {
 
     const embed = new MessageEmbed()
       .setColor(color)
-      .setFooter('🏆 Richest poeple in your server.')
+      .setTitle('🏆 Richest people in your server.')
+    if (list.length === 0) embed.setDescription('There are no user profiles in this server.')
     let x = 1
     list.forEach(i => {
       const user = this.client.users.cache.get(i.id)

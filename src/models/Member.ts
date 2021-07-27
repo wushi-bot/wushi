@@ -12,7 +12,8 @@ const MemberSchema: Schema = new Schema({
     expNeeded: Number,
     exp: Number,
     level: Number,
-    totalExp: Number
+    totalExp: Number,
+    rankCardColor: String
 })
 
 export default mongoose.model('member', MemberSchema)

@@ -1,6 +1,7 @@
 import Command from '../../classes/Command'
 import { MessageEmbed, MessageButton, MessageActionRow } from 'discord.js'
 import { getPrefix, getColor } from '../../utils/utils'
+import { checkUser } from '../../utils/database'
 
 import User from '../../models/User'
 
@@ -19,6 +20,7 @@ class StartCommand extends Command {
   async run (bot, msg, args) {
     const color = await getColor(bot, msg.member)
     const prefix = await getPrefix(msg.guild.id)
+    checkUser(msg.author.id, bot)
     const user = await User.findOne({
       id: msg.author.id
     }).exec()

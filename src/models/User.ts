@@ -13,11 +13,11 @@ const UserSchema: Schema = new Schema({
     items: Object,
     skills: Object,
     embedColor: String,
-    rankCardColor: String,
     votedTop: Boolean,
     votedDBL: Boolean,
     started: Boolean,
     daily: Number,
+    weekly: Number,
     votes: Object,
     pets: Object
 })
