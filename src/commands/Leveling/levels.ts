@@ -1,8 +1,8 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
-const levels = new db.table('leveling')
-const cfg = new db.table('config')
+import { getColor } from '../../utils/utils'
+
+import Member from '../../models/Member'
 
 class LevelsCommand extends Command {
   constructor (client) {
@@ -17,36 +17,38 @@ class LevelsCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
     let list = []
-    levels.all().forEach(async entry => {
-      if (entry.ID === msg.guild.id) {
-        for (var key in entry.data) { // @ts-ignore
-          const user = this.client.users.cache.get(key)
-          if (msg.guild.members.resolveID(user)) {
-            list.push({ ID: key, totalExp: entry.data[key].totalExp })
-          }
-        }
-      }
+    msg.guild.members.cache.array().forEach(async entry => {
+      const member = await Member.findOne({
+        userId: entry.user.id,
+        guildId: msg.guild.id
+      }).exec()
+      console.log(member)
+      if (member) list.push({ ID: entry.user.id, totalExp: member.totalExp })
     })
     list.sort(function (a, b) { return (b.totalExp) - (a.totalExp) })
     list = list.slice(0, 9)
     const embed = new MessageEmbed()
       .setColor(color)
-      .setFooter(`🏆 Top 10 EXP users in your server.`)
+      .setTitle(`🏆 Top 10 EXP users in this server.`)
+    if (list.length === 0) embed.setDescription('There are no EXP profiles in this server.')
     let x = 1
-    list.forEach(i => {
+    list.forEach(async i => {
       const user = this.client.users.cache.get(i.ID)
-      let userLevel = levels.get(`${msg.guild.id}.${i.ID}.level`)
-      userLevel = userLevel || 0
+      const member = await Member.findOne({
+        userId: i.ID,
+        guildId: msg.guild.id
+      }).exec()
+      let userLevel = member.level || 0
       if (x === 1) {
-        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else {
-        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${levels.get(`${msg.guild.id}.${i.ID}.exp`)}**/**${levels.get(`${msg.guild.id}.${i.ID}.expNeeded`)}**`)
+        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       }
       x++
     })

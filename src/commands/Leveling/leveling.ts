@@ -1,8 +1,7 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
-import db from 'quick.db'
-
-const cfg = new db.table('config')
+import { getColor } from '../../utils/utils'
+import Guild from '../../models/Guild'
 
 class LevelingCommand extends Command {
   constructor (client) {
@@ -17,23 +16,29 @@ class LevelingCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
-    const admins = cfg.get(`${msg.guild.id}.admins`) || []
-    const mods = cfg.get(`${msg.guild.id}.mods`) || []
+    const color = await getColor(bot, msg.member)
+    const guild = await Guild.findOne({
+      id: msg.guild.id
+    }).exec()
+    const admins = guild.admins || []
+    const mods = guild.mods || []
     if (!msg.member.roles.cache.some(role => admins.includes(role.id)) && !msg.member.roles.cache.some(role => mods.includes(role.id)) && !msg.member.permissions.has('ADMINISTRATOR') && !msg.member.permissions.has('MANAGE_SERVER')) {
       this.client.emit('customError', 'You do not have permission to execute this command.', msg)
       return false
     }
+    let leveling = guild.leveling || false
     if (!args[0]) {
-      if (cfg.get(`${msg.guild.id}.leveling`)) {
-        cfg.set(`${msg.guild.id}.leveling`, false)
+      if (leveling) {
+        guild.leveling = false
+        guild.save()
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **disabled** leveling in **${msg.guild.name}**!`)
         msg.reply({ embeds: [embed] })
         return true
-      } else if (!cfg.get(`${msg.guild.id}.leveling`)) {
-        cfg.set(`${msg.guild.id}.leveling`, true)
+      } else if (!leveling) {
+        guild.leveling = true
+        guild.save()
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **enabled** leveling in **${msg.guild.name}**!`)
@@ -46,14 +51,16 @@ class LevelingCommand extends Command {
         return false
       }
       if (args[0] === 'on') {
-        cfg.set(`${msg.guild.id}.leveling`, true)
+        guild.leveling = true
+        guild.save()
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **enabled** leveling in **${msg.guild.name}**!`)
         msg.reply({ embeds: [embed] })
         return true
       } else if (args[0] === 'off') {
-        cfg.set(`${msg.guild.id}.leveling`, false)
+        guild.leveling = false
+        guild.save()
         const embed = new MessageEmbed()
           .setColor(color)
           .addField('<:check:820704989282172960> Success!', `Successfully **disabled** leveling in **${msg.guild.name}**!`)

@@ -41,7 +41,11 @@ export const checkMember = async function (guild, user, bot = null) {
   if (!members[0]) {
     let memberProfile = new Member({
       userId: user,
-      guildId: guild
+      guildId: guild, 
+      expNeeded: 100,
+      exp: 0,
+      level: 0,
+      totalExp: 0
     })
     bot.logger.log('info', `Created a member profile for ${chalk.green(user)} (${chalk.green(guild)}).`)
     return memberProfile

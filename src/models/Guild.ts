@@ -8,6 +8,7 @@ const GuildSchema: Schema = new Schema({
     },
     prefix: String,
     admins: Array,
+    mods: Array,
     disabledCommands: Array,
     disabledModules: Array,
     leveling: Boolean,

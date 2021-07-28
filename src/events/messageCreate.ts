@@ -22,6 +22,7 @@ exports.run = async (bot, message) => {
       if (!message.content.startsWith(prefix)) {
         if (!expCooldowns.has(message.author.id)) {
           const exp = getRandomInt(5, 15)
+          await checkMember(message.guild.id, message.author.id, bot)
           const members = await Member.find({
             guildId: message.guild.id,
             userId: message.author.id
@@ -32,10 +33,11 @@ exports.run = async (bot, message) => {
             members[0].level += 1
             members[0].exp -= members[0].expNeeded
             members[0].expNeeded = Math.floor(members[0].expNeeded + (members[0].expNeeded * 0.1))
+            members[0].save()
             if (guilds[0].levelUpMessage) { // Fallback to default thingy
               message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${members[0].level}**!`)
             } else {
-              let lvlMsg = guilds[0].levelUpmessage
+              let lvlMsg = guilds[0].levelUpMessage
               lvlMsg = lvlMsg.replace('{level}', members[0].level)
               lvlMsg = lvlMsg.replace('{user.name}', `${message.author.username}`)
               lvlMsg = lvlMsg.replace('{user.mention}', `<@!${message.author.id}>`)
