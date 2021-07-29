@@ -29,6 +29,7 @@ exports.run = async (bot, message) => {
           }).exec()
           members[0].exp += exp
           members[0].totalExp += exp
+          bot.logger.log('info', `Added ${chalk.green(Math.floor(exp))} exp to ${chalk.green(`${message.author.username}#${message.author.discriminator} (${message.author.id})`)} in ${chalk.green(message.guild.id)}.`)
           if (members[0].expNeeded <= members[0].exp) {
             members[0].level += 1
             members[0].exp -= members[0].expNeeded
@@ -46,6 +47,8 @@ exports.run = async (bot, message) => {
               lvlMsg = lvlMsg.replace('{nextExp}', members[0].expNeeded)
               message.channel.send(lvlMsg)
             }
+          } else {
+            members[0].save()
           }
           expCooldowns.set(message.author.id, new Collection())
           setTimeout(() => {

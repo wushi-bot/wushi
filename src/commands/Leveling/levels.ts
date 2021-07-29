@@ -19,13 +19,11 @@ class LevelsCommand extends Command {
   async run (bot, msg, args) {
     const color = await getColor(bot, msg.member)
     let list = []
-    msg.guild.members.cache.array().forEach(async entry => {
-      const member = await Member.findOne({
-        userId: entry.user.id,
-        guildId: msg.guild.id
-      }).exec()
-      console.log(member)
-      if (member) list.push({ ID: entry.user.id, totalExp: member.totalExp })
+    const members = await Member.find({
+      guildId: msg.guild.id
+    }).exec()
+    members.forEach(async member => {
+      list.push({ ID: member.userId, totalExp: member.totalExp})
     })
     list.sort(function (a, b) { return (b.totalExp) - (a.totalExp) })
     list = list.slice(0, 9)
@@ -42,17 +40,17 @@ class LevelsCommand extends Command {
       }).exec()
       let userLevel = member.level || 0
       if (x === 1) {
-        embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
+        await embed.addField(`:first_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else if (x === 2) {
-        embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
+        await embed.addField(`:second_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else if (x === 3) {
-        embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
+        await embed.addField(`:third_place: ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       } else {
-        embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
+        await embed.addField(`#${x} ${user.username}#${user.discriminator}`, `Level: :1234: **${userLevel}** | EXP: :sparkles: **${member.exp}**/**${member.expNeeded}**`)
       }
       x++
     })
-    msg.reply({ embeds: [embed] })
+    await msg.reply({ embeds: [embed] })
     return true
   }
 }

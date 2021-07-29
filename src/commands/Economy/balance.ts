@@ -1,3 +1,4 @@
+// @ts-ignore
 import Command from '../../classes/Command'
 import { addCommas, getColor, getPrefix } from '../../utils/utils'
 import { MessageEmbed } from 'discord.js'
@@ -28,7 +29,7 @@ class BalanceCommand extends Command {
     const member = msg.guild.members.cache.get(args[0]) || msg.mentions.members.first() || msg.member 
     const bank = user.bank || 0
     const wallet = user.balance || 0
-    const prestige = romanizeNumber(user.prestige) || 1)
+    const prestige = romanizeNumber(user.prestige || 1)
     const embed = new MessageEmbed()
       .setAuthor(`${member.user.username}'s Balance`, member.user.avatarURL()) 
       .addField(':bank: Bank', `:coin: **${addCommas(bank)}**`, true)

@@ -20,12 +20,12 @@ class StartCommand extends Command {
   async run (bot, msg, args) {
     const color = await getColor(bot, msg.member)
     const prefix = await getPrefix(msg.guild.id)
-    checkUser(msg.author.id, bot)
+    await checkUser(msg.author.id, bot)
     const user = await User.findOne({
       id: msg.author.id
     }).exec()
-    if (!user || !user.started) {
-      this.client.emit('customError', `You don't have a bank account! Create one using \`${prefix}start\`.`, msg)
+    if (user && user.started) {
+      this.client.emit('customError', `You already have a bank account!`, msg)
       return false
     }
     const row = new MessageActionRow()
@@ -41,7 +41,7 @@ class StartCommand extends Command {
     user.bank = 0
     user.prestige = 1
     user.multiplier = 1
-    user.items.flimsy_fishing_rod = 1
+    user.items = { flimsy_fishing_rod: 1}
     user.pets = {
       active: null,
       list: [],
@@ -74,10 +74,10 @@ class StartCommand extends Command {
     user.save()
     const e = new MessageEmbed()
       .setColor(color)
-      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account. You've also received a :fishing_pole_and_fish: **Flimsy Fishing Rod**, you may fish using \`${getPrefix(msg.guild.id)}fish\`.`)
+      .addField('<:check:820704989282172960> Success!', `Successfully created your bank account. You've also received a :fishing_pole_and_fish: **Flimsy Fishing Rod**, you may fish using \`${prefix}fish\`.`)
     const message = await msg.reply({ embeds: [e], components: [row] })
     const filter = i => i.customID === 'fish' && i.user.id === msg.author.id
-    message.awaitMessageComponentInteraction(filter, { time: 15000 })
+    message.awaitMessageComponent({ filter, time: 15000 })
         .then(async i => {
           const cmd = this.client.commands.get('fish')
           await i.update({ components: [] })

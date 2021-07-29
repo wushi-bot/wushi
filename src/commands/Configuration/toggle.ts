@@ -25,7 +25,7 @@ class ToggleCommand extends Command {
   async run (bot, msg, args) {
     if (!args[0]) return this.client.emit('customError', 'You need to provide arguments.', msg)
     const color = await getColor(bot, msg.member)
-    checkGuild(bot, msg.guild.id)
+    checkGuild(msg.guild.id, bot)
     const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()

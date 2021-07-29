@@ -119,7 +119,7 @@ class FishCommand extends Command {
             .setStyle('SECONDARY'),  
     )
     const message = await msg.reply({ embeds: [chooserEmbed], components: [row] })
-    await message.awaitMessageComponent({ filter, max: 1, time: 8000, errors: ['time'] })
+    await message.awaitMessageComponent({ filter, componentType: 'BUTTON', time: 8000 })
       .then(async interaction => {
         let bonus = 0
         let goldenReelingChance = 0
@@ -221,6 +221,10 @@ class FishCommand extends Command {
       })
       .catch(error => {
         console.error(error)
+        const embed = new MessageEmbed()
+          .addField(':fishing_pole_and_fish: Fishing', 'You ran out of time, you will not receive any fishing loot / EXP!')
+          .setColor(color)
+        return msg.reply({ embeds: [embed] })
       })
     return true
   }

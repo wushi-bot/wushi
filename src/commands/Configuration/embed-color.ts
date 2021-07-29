@@ -20,20 +20,12 @@ class EmbedColorCommand extends Command {
     let color
     if (args[0]) color = col(args[0])
     else color = col.random()
+    checkUser(msg.author.id, bot)
     let user = await User.findOne({ 
       id: msg.author.id
     }).exec()
-    if (!user > 0) {
-      user.embedColor = color.toHex()
-      await user.save()
-    } else {
-      checkUser(bot, msg.author.id)
-      user = await User.findOne({ 
-        id: msg.author.id
-      }).exec()
-      user.embedColor = color.toHex()
-      await user.save()
-    }
+    user.embedColor = color.toHex()
+    await user.save()
     const embed = new MessageEmbed()
       .setColor(color.toHex())
       .addField('<:check:820704989282172960> Success!', `Successfully set your embed color to **#${color.toHex()}**.`)

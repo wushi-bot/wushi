@@ -19,7 +19,7 @@ class PrefixCommand extends Command {
   async run (bot, msg, args) {
     //TODO: Create admin permissions setup via wushi.
     const color = await getColor(bot, msg.member)
-    checkGuild(bot, msg.guild.id)
+    checkGuild(msg.guild.id, bot)
     const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec() // @ts-ignore

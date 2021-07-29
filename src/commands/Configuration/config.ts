@@ -20,7 +20,7 @@ class ConfigCommand extends Command {
   async run (bot, msg, args) {
 
     const color = await getColor(bot, msg.member)
-    checkGuild(bot, msg.guild.id)
+    checkGuild(msg.guild.id, bot)
     const guild = await Guild.findOne({
       id: msg.guild.id
     }).exec()

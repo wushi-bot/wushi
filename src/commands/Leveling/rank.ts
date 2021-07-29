@@ -1,9 +1,8 @@
-import db from 'quick.db'
 import Command from '../../classes/Command'
 import { Canvas } from 'canvas-constructor'
 import req from '@aero/centra'
-const leveling = new db.table('leveling')
-const cfg = new db.table('config')
+import Member from '../../models/Member'
+import User from '../../models/User'
 
 class RankCommand extends Command {
   constructor (client) {
@@ -25,21 +24,22 @@ class RankCommand extends Command {
     }
     const avatarURL = user.user.avatarURL({ format: 'png' })
     const avatar = await req(avatarURL).raw()
-    let level = leveling.get(`${msg.guild.id}.${user.user.id}.level`)
-    if (!level) {
-      level = 0
+    let member = await Member.findOne({
+      userId: user.user.id,
+      guildId: msg.guild.id
+    }).exec()
+    if (!member) {
+      this.client.emit('customError', 'This user has not gained EXP.', msg)
+      return false
     }
-    let nextLevel = leveling.get(`${msg.guild.id}.${user.user.id}.expNeeded`)
-    if (!nextLevel) {
-      nextLevel = 100
-    }
-    let points = leveling.get(`${msg.guild.id}.${user.user.id}.exp`)
-    if (!points) {
-      points = 0
-    }
+    let userSettings = await User.findOne({
+      id: msg.author.id
+    })
+    let level = member.level || 0
+    let nextLevel = member.expNeeded || 100
+    let points = member.exp || 0
     const progBar = Math.floor(Math.max((points / nextLevel) * 450, 10))
-    let rankCardColor = leveling.get(`${msg.author.id}.rankCardColor`)
-    rankCardColor = rankCardColor || '#ff3f38'
+    let rankCardColor = userSettings.rankCardColor || '#ff3f38'
     const canvas = new Canvas(600, 300)
     const bg = await req('https://cdn.discordapp.com/attachments/777628711256064030/828002823185629264/a9620396df0e63802087054fbffabe931ab4de15.png').raw()
     canvas

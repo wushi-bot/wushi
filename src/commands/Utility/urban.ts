@@ -1,9 +1,19 @@
 import Command from '../../classes/Command'
 import { MessageEmbed } from 'discord.js'
- 
+
+import { getColor } from '../../utils/utils'
 import ud from 'urban-dictionary'
-import db from 'quick.db'
-const cfg = new db.table('config')
+import { MessageActionRow } from 'discord.js';
+import { MessageButton } from 'discord.js';
+
+
+function truncate( str, n, useWordBoundary ){
+  if (str.length <= n) { return str; }
+  const subString = str.substr(0, n-1); // the original check
+  return (useWordBoundary 
+    ? subString.substr(0, subString.lastIndexOf(" ")) 
+    : subString) + "...";
+}
 
 class UrbanCommand extends Command {
   constructor (client) {
@@ -18,18 +28,27 @@ class UrbanCommand extends Command {
   }
 
   async run (bot, msg, args) {
-    const color = cfg.get(`${msg.author.id}.color`) || msg.member.roles.highest.color
+    const color = await getColor(bot, msg.member)
     if (!args[0]) {
       this.client.emit('customError', 'You need a word to define.', msg)
       return false
     }
     const word = args.join(' ')
     ud.define(word).then((results) => {
+      const row = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setLabel('Permalink')
+            .setURL(results[0].permalink)
+            .setStyle('LINK')   
+        )
       const embed = new MessageEmbed()
-        .addField(`Defining ${results[0].word}`, `**Definition:** ${results[0].definition}\n**Example:** ${results[0].example}`)
+        .setTitle(`Defining "${results[0].word}"`)
+        .addField('Definition', `${truncate(results[0].definition, 1024, '...')}`)
+        .addField('Example', `${truncate(results[0].example, 1024, '...')}`)
         .setFooter(`👍 ${results[0].thumbs_up} / 👎 ${results[0].thumbs_down}`)
         .setColor(color)
-      msg.reply({ embeds: [embed] })
+      msg.reply({ embeds: [embed], components: [row] })
       return true
     })
     .catch(e => {
