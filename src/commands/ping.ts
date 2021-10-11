@@ -1,4 +1,6 @@
 import { CommandInteraction } from 'discord.js'
+
+import Bot from '../models/Client'
 import Command from '../models/Command'
 
 class PingCommand extends Command {
@@ -9,7 +11,7 @@ class PingCommand extends Command {
         )
     }
 
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: CommandInteraction, client: Bot) {
         await interaction.reply({ content: `My ping to Discord is estimated to be \`${Math.round(interaction.client.ws.ping)}ms\`.`, ephemeral: true })
     }
 }

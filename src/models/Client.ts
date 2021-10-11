@@ -49,9 +49,14 @@ export default class Bot extends Client {
       const commands = []
 
       for (const file of files) {
-      	const command = new (require(path.join(__dirname, '../commands', file)))
-	      commands.push(command.json)
-        this.commands.set(command.name, command)
+        try {
+          const command = new (require(path.join(__dirname, '../commands', file)))
+          commands.push(command.json)
+          this.commands.set(command.name, command)
+          this.logger.info(`Successfully registered ${file} as a command.`)
+        } catch (e) {
+          this.logger.error(`Tried to register ${file} as a command but couldn't.`)
+        }
       }
       await this.botRest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID!!, '777620712193392650'),
