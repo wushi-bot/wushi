@@ -1,21 +1,17 @@
-import Client from './classes/Client'
-import Database from './database'
+import { Intents } from 'discord.js'
+import Bot from './models/Client'
 import 'dotenv/config'
-import { runPetChecks, runUnvoteChecks } from './utils/economy'
 
-const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
+import * as Sentry from '@sentry/node'
+import * as Tracing from '@sentry/tracing'
 
-const self = new Client({
-  fetchAllMembers: true,
-  intents: intents
+const client = new Bot({ intents: [Intents.FLAGS.GUILDS] })
+
+Sentry.init({
+    dsn: 'https://8e385cbdca7840589531ee28e4058bb8@o453555.ingest.sentry.io/5519188',
+    tracesSampleRate: 1.0,
 })
 
-new Database()
-
-async () => {
-  await runPetChecks(self)
-  await runUnvoteChecks(self)
-}
-
-self.load()
-self.start(process.env.TOKEN!!)
+client.loadCommands()
+client.loadEvents()
+client.start() 
