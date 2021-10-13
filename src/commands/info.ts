@@ -1,19 +1,11 @@
 import { CommandInteraction, MessageEmbed, GuildMember } from 'discord.js'
 import moment from 'moment'
+import req from '@aero/centra'
 
 import Bot from '../models/Client'
 import Command from '../models/Command'
 
-
-function getJoinRank (ID, guild) {
-  if (!guild.members.resolveId(ID)) return
-  const arr = guild.members.cache
-  arr.sort((a, b) => a.joinedAt - b.joinedAt)
-
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].id === ID) return i
-  }
-}
+const toTitleCase = str => str.charAt(0).toUpperCase() + str.slice(1)
 
 class InfoCommand extends Command {
   constructor() {
@@ -50,15 +42,21 @@ class InfoCommand extends Command {
       }
       const joinDiscord = moment(user.user.createdAt).format('llll')
       const joinServer = moment(user.joinedTimestamp).format('llll')
+      let res = await req(`https://ravy.org/api/v1/users/${user.user.id}/pronouns`, 'GET')
+        .header('Authorization', process.env.RAVY_API)
+        .json()
       const embed = new MessageEmbed()
         .setColor(user.displayHexColor)
         .setThumbnail(user.user.avatarURL({ format: 'png' }))
-        .setAuthor(`${user.user.username}#${user.user.discriminator}`, user.user.avatarURL())
+        .setAuthor(`${user.user.username}#${user.user.discriminator} (pronouns: ${res.pronouns})`, user.user.avatarURL())
         .addField(`Roles (${user.roles.cache.size})`, user.roles.cache.map(r => `${r}`).join(', '))
         .addField('Joined Discord at', joinDiscord)
         .addField('Joined Server at', joinServer)
         .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
         .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`)
+      if (user.user.id === interaction.user.id && res.pronouns === 'unknown pronouns') {
+        embed.setDescription('Set your pronouns via [PronounDB](https://pronoundb.org/me)!')
+      }
       await interaction.reply({ embeds: [embed] })
 
     } else if (interaction.options.getSubcommand() === 'server') {

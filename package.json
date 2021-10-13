@@ -2,11 +2,16 @@
   "name": "@xminota/wushi",
   "version": "4.0.0",
   "main": "dist/bot.js",
+  "scripts": {
+    "start": "node .",
+    "build": "tsc --build"
+  },
   "repository": "https://github.com/wushi-bot/wushi.git",
   "author": "Juan <jpichardo369@gmail.com>",
   "license": "GPL-3.0",
   "private": false,
   "dependencies": {
+    "@aero/centra": "^1.0.7",
     "@aero/xkcd": "^1.0.0",
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",

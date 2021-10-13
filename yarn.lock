@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@aero/centra@^1.0.1":
+"@aero/centra@^1.0.1", "@aero/centra@^1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@aero/centra/-/centra-1.0.7.tgz#a6dea5f79c50a1140b73da75d235b87348524236"
   integrity sha512-NI6TGmbaoGsudBkEQ1wFDuG6dyy83YpLInBs7YRYnDDQvJvslkBXfb5gTcSNFCkB0oWuzvU9ASHgogiY+VpMlw==
