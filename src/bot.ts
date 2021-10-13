@@ -5,10 +5,20 @@ import 'dotenv/config'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 
-const client = new Bot({ intents: [Intents.FLAGS.GUILDS] })
+const intents = new Intents()
+    .add(
+        Intents.FLAGS.GUILDS, 
+        Intents.FLAGS.GUILD_PRESENCES, 
+        Intents.FLAGS.GUILD_MEMBERS, 
+        Intents.FLAGS.GUILD_MESSAGES 
+    )
+
+const client = new Bot({ intents: [ 
+    intents
+] })
 
 Sentry.init({
-    dsn: 'https://8e385cbdca7840589531ee28e4058bb8@o453555.ingest.sentry.io/5519188',
+    dsn: process.env.SENTRY_DSN,
     tracesSampleRate: 1.0,
 })
 

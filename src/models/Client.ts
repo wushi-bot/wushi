@@ -1,16 +1,19 @@
 import { Client, ClientOptions, Collection } from 'discord.js'
+import { SlashCommandBuilder } from '@discordjs/builders'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
 
 import fs from 'fs'
 import path from 'path'
-import { createLogger, format, transports } from 'winston';
-const { combine, timestamp, label, printf } = format;
+
+import { createLogger, format, transports } from 'winston'
+const { combine, timestamp, label, printf } = format
 
 const f = printf(({ level, message, label, timestamp }) => {
   return `[${label}] ${timestamp} ${level}: ${message}`
 })
 
+import { XKCDClient } from '@aero/xkcd'
 
 export default class Bot extends Client {
 
@@ -19,6 +22,8 @@ export default class Bot extends Client {
     botRest: REST
     commands: any
     logger: any 
+
+    xkcdClient: XKCDClient
 
     constructor(options: ClientOptions) {
       super(options)
@@ -37,6 +42,7 @@ export default class Bot extends Client {
           new transports.File({ filename: 'bot.log' })
         ]
       })
+      this.xkcdClient = new XKCDClient()
     }
 
     start() {
@@ -51,11 +57,11 @@ export default class Bot extends Client {
       for (const file of files) {
         try {
           const command = new (require(path.join(__dirname, '../commands', file)))
-          commands.push(command.json)
+          if (command instanceof SlashCommandBuilder) commands.push(command.toJSON())
           this.commands.set(command.name, command)
           this.logger.info(`Successfully registered ${file} as a command.`)
         } catch (e) {
-          this.logger.error(`Tried to register ${file} as a command but couldn't.`)
+          this.logger.error(`Tried to register ${file} as a command but couldn't: ${e}`)
         }
       }
       await this.botRest.put(
@@ -63,6 +69,10 @@ export default class Bot extends Client {
         { body: commands },
       )
     }
+
+    /*async loadContexts() {
+
+    }*/
 
     async loadEvents() {
       fs.readdir(path.join(__dirname, '..', '/events/'), (err, files) => {
