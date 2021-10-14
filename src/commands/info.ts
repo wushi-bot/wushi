@@ -45,6 +45,10 @@ class InfoCommand extends Command {
       let res = await req(`https://ravy.org/api/v1/users/${user.user.id}/pronouns`, 'GET')
         .header('Authorization', process.env.RAVY_API)
         .json()
+      let r = await req(`https://ravy.org/api/v1/users/${user.user.id}/rep`, 'GET')
+        .header('Authorization', process.env.RAVY_API)
+        .json()
+      console.log(r)
       const embed = new MessageEmbed()
         .setColor(user.displayHexColor)
         .setThumbnail(user.user.avatarURL({ format: 'png' }))
@@ -52,6 +56,7 @@ class InfoCommand extends Command {
         .addField(`Roles (${user.roles.cache.size})`, user.roles.cache.map(r => `${r}`).join(', '))
         .addField('Joined Discord at', joinDiscord)
         .addField('Joined Server at', joinServer)
+        .addField('Reputation', `[DiscordRep](https://discordrep.com/u/${user.user.id}) → **${r.rep[0].score}**\n[Riverside](https://discord.riverside.rocks/check?id=${user.user.id}) → **${r.rep[1].score}**`)
         .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
         .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`)
       if (user.user.id === interaction.user.id && res.pronouns === 'unknown pronouns') {
