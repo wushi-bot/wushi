@@ -23,7 +23,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
 })
 
-mongoose.connect(process.env.MONGODB_URI!!, {
+mongoose.connect(process.env.MONGODB_URI!!, { // @ts-ignore 
   useNewUrlParser: true,
   useUnifiedTopology: true,
   autoIndex: false,

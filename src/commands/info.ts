@@ -48,7 +48,6 @@ class InfoCommand extends Command {
       let r = await req(`https://ravy.org/api/v1/users/${user.user.id}/rep`, 'GET')
         .header('Authorization', process.env.RAVY_API)
         .json()
-      console.log(r)
       const embed = new MessageEmbed()
         .setColor(user.displayHexColor)
         .setThumbnail(user.user.avatarURL({ format: 'png' }))
