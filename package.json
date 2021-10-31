@@ -20,7 +20,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^16.10.3",
     "canvas": "^2.8.0",
-    "canvas-constructor": "^5.0.1",
+    "canvas-constructor": "^3.2.0",
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.2.0",
     "dotenv": "^10.0.0",

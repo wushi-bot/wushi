@@ -10,7 +10,8 @@ const GuildSchema: Schema = new Schema({
     disabledCommands: Array,
     disabledModules: Array,
     leveling: Boolean,
-    levelUpMessage: String
+    levelUpMessage: String,
+    rewards: Array
 })
 
 export default mongoose.model('guild', GuildSchema)

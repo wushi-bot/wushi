@@ -287,12 +287,10 @@ callsites@^3.1.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-canvas-constructor@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/canvas-constructor/-/canvas-constructor-5.0.1.tgz#3e3c1cc26853508974ce475818c94a4b8ee6b2ac"
-  integrity sha512-6dYtwB6D9/QS4oG2QaA8eu2jXOFD+V+HdbNdvJDn2gll9GrdVvnLoSNh0a/+bXsWp19DF53pYyv9bXG49Gfhtw==
-  dependencies:
-    tslib "^2.3.0"
+canvas-constructor@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/canvas-constructor/-/canvas-constructor-3.2.0.tgz#6e3f77b945b46812ef39a204fe91a1e9ad3b98dc"
+  integrity sha512-m62c2LCwctkvs1jLGS/zz74g/uIKF2agx/lJU53XYLDfDnxh37pioXoHYECdv6UeDNeyVhDgn88H8YDA6RFhEw==
 
 canvas@^2.8.0:
   version "2.8.0"
