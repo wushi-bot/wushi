@@ -13,6 +13,7 @@ A social discord bot with a unique economy system!
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U54D4O8)
 
+
 ### Support ❓
 
 Need help setting up the bot or having issues with the bot? Join the support server! 
@@ -24,15 +25,6 @@ Need help setting up the bot or having issues with the bot? Join the support ser
 
 The invite to the bot is listed here: [Click here](https://discord.com/api/oauth2/authorize?client_id=755526238466080830&permissions=3691375831&scope=bot), the permissions have been made in a way so that it only uses the permissions needs, without any administrative access. 
 
-### Inspiration ❤️
-
-May it be indirect inspiration, or using *some kind* of code, it will be listed here.
-
-- ravy's [Aero](https://get.aero.bot) ([Repository](https://git.farfrom.earth/aero))
-- [Dank Memer](http://dankmemer.lol/)
-- Unbelievable's [UnbelievaBoat](https://unb.pizza)
-- GamingGeek's [Fire](https://fire.gaminggeek.dev) ([Repository](https://github.com/FireDiscordBot/bot))
-- tekoh's [nypsi](https://nypsi.xyz) ([Repository](https://github.com/tekoh/nypsi))
 
 ### License 📜
 

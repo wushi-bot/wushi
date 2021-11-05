@@ -1,21 +1,35 @@
-import Client from './classes/Client'
-import Database from './database'
+import { Intents } from 'discord.js'
+import Bot from './models/Client'
+import mongoose from 'mongoose'
 import 'dotenv/config'
-import { runPetChecks, runUnvoteChecks } from './utils/economy'
 
-const intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES']
+import * as Sentry from '@sentry/node'
 
-const self = new Client({
-  fetchAllMembers: true,
-  intents: intents
+const intents = new Intents()
+  .add(
+    Intents.FLAGS.GUILDS, 
+    Intents.FLAGS.GUILD_PRESENCES, 
+    Intents.FLAGS.GUILD_MEMBERS, 
+    Intents.FLAGS.GUILD_MESSAGES 
+  )
+
+const client = new Bot({ intents: [ 
+    intents
+  ]
 })
 
-new Database()
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  tracesSampleRate: 1.0,
+})
 
-async () => {
-  await runPetChecks(self)
-  await runUnvoteChecks(self)
-}
+mongoose.connect(process.env.MONGODB_URI!!, { // @ts-ignore 
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  autoIndex: false,
+  family: 4 
+})
 
-self.load()
-self.start(process.env.TOKEN!!)
+client.loadCommands()
+client.loadEvents()
+client.start() 

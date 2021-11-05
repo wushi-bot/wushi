@@ -1,5 +1,5 @@
 node_modules/
-dist/
-yarn-error.log
 .env
-json.sqlite
+dist/
+*.log
+*.sqlite
