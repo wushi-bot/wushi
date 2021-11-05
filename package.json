@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "main": "dist/bot.js",
   "scripts": {
-    "start": "npx ts-node src/bot.ts",
+    "start": "node .",
     "build": "tsc --build"
   },
   "repository": "https://github.com/wushi-bot/wushi.git",
@@ -29,7 +29,6 @@
     "nodemon": "^2.0.14",
     "path": "^0.12.7",
     "tinycolor2": "^1.4.2",
-    "ts-node": "^10.4.0",
     "typescript": "^4.4.3",
     "urban-dictionary": "^3.0.2",
     "winston": "^3.3.3"
