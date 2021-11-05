@@ -88,7 +88,7 @@ class LevelingCommand extends Command {
   }
 
   async execute(interaction: CommandInteraction, client: Bot) {
-    let group = interaction.options.getSubcommandGroup(false)
+    let group = interaction.options.getSubcommandGroup(false) // @ts-ignore
     if (!interaction.member.permissions.has('ADMINISTRATOR') && interaction.member.permissions.has('MANAGE_SERVER')) return await interaction.reply({ content: `${emojis.error} You do not have permission; you lack the \`MANAGE_SERVER\` or \`ADMINISTRATOR\` permission.` })
     if (!group) {
       if (interaction.options.getSubcommand() === 'enabled') {
