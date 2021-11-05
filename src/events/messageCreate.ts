@@ -23,6 +23,20 @@ exports.run = async (bot: Bot, message: Message) => {
         member.level += 1
         member.exp -= member.expNeeded 
         member.expNeeded = Math.floor(member.expNeeded + (member.expNeeded * 0.1))
+        let rewards = guild.rewards
+        for (let reward of rewards) {
+          if (reward.requirement === member.level) {
+            let role = await message.guild.roles.fetch(reward.role) || null
+            if (role) {
+              try {
+                message.member.roles.add(role.id, `For leveling up via wushi, they gained the ${role.name} role leveling up to Level ${member.level}`)
+              } catch (e) {
+                bot.logger.error(`Couldn't add ${message.author.id}'s reward for leveling up to Level ${member.level}, I probably lack the permission to. (${e})`)
+              }
+            }
+
+          }
+        }
         if (!guild.levelUpMessage) { 
           try {
             message.channel.send(`Congratulations, **${message.author.username}**, you've leveled :up: to **Level ${member.level}**!`)
