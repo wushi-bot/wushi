@@ -27,7 +27,7 @@ export default class Bot extends Client {
 
     constructor(options: ClientOptions) {
       super(options)
-      this.version = '4.0.0'
+      this.version = '4.0.4'
       this.owners = ['488786712206770196']
       this.commands = new Collection()
       this.botRest = new REST({ version: '9' }).setToken(process.env.TOKEN!!)
@@ -64,10 +64,17 @@ export default class Bot extends Client {
           this.logger.error(`Tried to register ${file} as a command but couldn't: ${e}`)
         }
       }
-      await this.botRest.put(
-        Routes.applicationGuildCommands(process.env.CLIENT_ID!!, '777620712193392650'),
-        { body: commands },
-      )
+      if (process.env.ENVIRONMENT === 'PRODUCTION') {
+        await this.botRest.put(
+          Routes.applicationCommands(process.env.CLIENT_ID!!),
+          { body: commands },
+        );
+      } else {
+        await this.botRest.put(
+          Routes.applicationGuildCommands(process.env.CLIENT_ID!!, '777620712193392650'),
+          { body: commands },
+        )
+      }
     }
 
     /*async loadContexts() {
