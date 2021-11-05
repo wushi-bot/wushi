@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "main": "dist/bot.js",
   "scripts": {
-    "start": "node .",
+    "start": "node .", 
     "build": "tsc --build"
   },
   "repository": "https://github.com/wushi-bot/wushi.git",
