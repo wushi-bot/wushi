@@ -1,5 +1,6 @@
 import { CommandInteraction } from 'discord.js'
 
+import { addCommas } from '../utils/functions'
 import { Canvas, registerFont, resolveImage } from 'canvas-constructor/cairo'
 import { getUser } from '../utils/database'
 import { emojis } from '../utils/constants'
@@ -32,7 +33,7 @@ class ProfileCommand extends Command {
     let username = user.username
     let discrim = user.discriminator
     user = await getUser(user.id) 
-    const canvas = new Canvas(600, 300)
+    const canvas = new Canvas(600, 450)
     registerFont('./src/resources/fonts/Inter-ExtraBold.ttf', {
       family: 'Default Bold'
     })
@@ -40,7 +41,7 @@ class ProfileCommand extends Command {
       family: 'Default'
     })
     canvas
-      .printImage(bg, 0, 0, 600, 300)
+      .printImage(bg, 0, 0, 600, 450)
       .setShadowColor('#44474d')
       .setShadowBlur(10)
       .setShadowOffsetY(5)
@@ -53,7 +54,13 @@ class ProfileCommand extends Command {
       .setTextFont('18pt Default Bold')
       .setColor('#cfd1d0')
       .printText(`#${discrim}`, 140, 128)
+      .setTextFont('24pt Default Bold')
       .setColor('#ffff')
+      .printText('Economy', 40, 350)
+      .setTextFont('18pt Default')
+      .setColor('#cfd1d0') // @ts-ignore
+      .printText(`Balance: ${await addCommas(user.balance)}`, 40, 418) // @ts-ignore
+      .printText(`Bank: ${await addCommas(user.bank)}`, 40, 385)
     await interaction.reply({ files: [{ attachment: canvas.toBuffer(), name: 'card.png' }] })
   }
 }

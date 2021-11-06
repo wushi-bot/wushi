@@ -56,6 +56,10 @@ exports.run = async (bot: Bot, message: Message) => {
         }
       }
       member.save()
+      expCooldowns.set(message.author.id, new Collection())
+      setTimeout(() => {
+        expCooldowns.delete(message.author.id)
+      }, 60000)
     }
   }
 }
