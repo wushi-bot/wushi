@@ -13,4 +13,4 @@ exports.run = async (bot: Bot, interaction: Interaction) => {
         bot.logger.error(`There was was an error executing the slash command /${interaction.commandName} for ${interaction.member.user.id} in ${interaction.guild.id}, ${error}`)
         await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
     }
-}
+} 

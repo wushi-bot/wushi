@@ -12,6 +12,9 @@ export async function getGuild(guild: Guild) {
       id: guild.id
     })
     result.save()
+    result = await GuildSchema.findOne({
+      id: guild.id
+    }).exec()
   }
   return result
 }
@@ -31,6 +34,10 @@ export async function getMember(member, guildId) {
       totalExp: 0
     })
     result.save()
+    result = await MemberSchema.findOne({
+      userId: member,
+      guildId: guildId
+    }).exec()
   }
   return result
 }
@@ -41,9 +48,14 @@ export async function getUser(user) {
   }).exec()
   if (!result) {
     result = new UserSchema({
-      id: user
+      id: user,
+      balance: 0,
+      bank: 0
     })
     result.save()
+    result = await UserSchema.findOne({
+      id: user
+    }).exec()
   }
   return result
 }
