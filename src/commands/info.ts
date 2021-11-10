@@ -4,6 +4,7 @@ import req from '@aero/centra'
 
 import Bot from '../models/Client'
 import Command from '../models/Command'
+import { emojis } from '../utils/constants'
 
 const toTitleCase = str => str.charAt(0).toUpperCase() + str.slice(1)
 
@@ -48,6 +49,8 @@ class InfoCommand extends Command {
       let r = await req(`https://ravy.org/api/v1/users/${user.user.id}/rep`, 'GET')
         .header('Authorization', process.env.RAVY_API)
         .json()
+      let rSideLabel = r.rep[1].score === 1 ? `${emojis.success} This user likely to be trustworthy, according to [Riverside](https://discord.riverside.rocks/check?id=${user.user.id})` : `${emojis.error} This user likely to be not trustworthy, according to [Riverside](https://discord.riverside.rocks/check?id=${user.user.id})`
+      let disRepLabel = r.rep[0].score > 0 ? `${emojis.success} This user likely to be trustworthy, according to [DiscordRep](https://discordrep.com/u/${user.user.id})` : `${emojis.error} This user likely to be not trustworthy, according to [DiscordRep](https://discordrep.com/u/${user.user.id})`
       const embed = new MessageEmbed()
         .setColor(user.displayHexColor)
         .setThumbnail(user.user.avatarURL({ format: 'png' }))
@@ -55,7 +58,7 @@ class InfoCommand extends Command {
         .addField(`Roles (${user.roles.cache.size})`, user.roles.cache.map(r => `${r}`).join(', '))
         .addField('Joined Discord at', joinDiscord)
         .addField('Joined Server at', joinServer)
-        .addField('Reputation', `[DiscordRep](https://discordrep.com/u/${user.user.id}) → **${r.rep[0].score}**\n[Riverside](https://discord.riverside.rocks/check?id=${user.user.id}) → **${r.rep[1].score}**`)
+        .addField('Reputation', `${disRepLabel}\n${rSideLabel}`)
         .setFooter(`ID: ${user.user.id} | Avatar ID: ${user.user.avatar}`)
         .addField('Avatar', `[\`png\`](${user.user.avatarURL({ format: 'png' })}) | [\`jpg\`](${user.user.avatarURL({ format: 'jpg' })})  | [\`gif\`](${user.user.avatarURL({ format: 'gif' })}) | [\`webp\`](${user.user.avatarURL({ format: 'webp' })})`)
       if (user.user.id === interaction.user.id && res.pronouns === 'unknown pronouns') {

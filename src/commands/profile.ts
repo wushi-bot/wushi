@@ -34,6 +34,23 @@ class ProfileCommand extends Command {
     let discrim = user.discriminator
     user = await getUser(user.id) 
     const canvas = new Canvas(600, 450)
+    let reputation
+    let score = 0
+    // @ts-ignore
+    if (!user.reputation) {
+      reputation = 'No reputation yet.'
+    } else { // @ts-ignore
+      let values = Object.keys(user.reputation)
+      for (let vote of values) { // @ts-ignore
+        if (user.reputation[vote] === true) {
+          score++
+        } else {
+          score--
+        }
+      }
+      let symbol = score > 0 ? '+' : '' 
+      reputation = `${symbol}${score}`
+    }
     registerFont('./src/resources/fonts/Inter-ExtraBold.ttf', {
       family: 'Default Bold'
     })
@@ -57,8 +74,10 @@ class ProfileCommand extends Command {
       .setTextFont('24pt Default Bold')
       .setColor('#ffff')
       .printText('Economy', 40, 350)
+      .printText('Reputation', 40, 245)
       .setTextFont('18pt Default')
-      .setColor('#cfd1d0') // @ts-ignore
+      .setColor('#cfd1d0')
+      .printText(`${reputation}`, 40, 280) // @ts-ignore
       .printText(`Balance: ${await addCommas(user.balance)}`, 40, 418) // @ts-ignore
       .printText(`Bank: ${await addCommas(user.bank)}`, 40, 385)
     await interaction.reply({ files: [{ attachment: canvas.toBuffer(), name: 'card.png' }] })

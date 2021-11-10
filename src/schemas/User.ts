@@ -17,6 +17,7 @@ const UserSchema: Schema = new Schema({
     votedDBL: Boolean,
     started: Boolean,
     daily: Number,
+    reputation: Object,
     weekly: Number,
     votes: Object,
     pets: Object
