@@ -1,5 +1,9 @@
 
 
+export async function toTitleCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 export async function getRandomInt(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
