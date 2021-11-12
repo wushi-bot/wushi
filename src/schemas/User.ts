@@ -7,12 +7,10 @@ const UserSchema: Schema = new Schema({
         unique: true
     },
     balance: Number,
-    bank: Number,
     multiplier: Number,
     prestige: Number,
     items: Object,
     skills: Object,
-    embedColor: String,
     votedTop: Boolean,
     votedDBL: Boolean,
     started: Boolean,

@@ -30,7 +30,18 @@ class BuyCommand extends Command {
     item = await getItem(item) // @ts-ignore
     if (item.price > user.balance) { // @ts-ignore
       return await interaction.reply({ content: `You don't have enough for this item. You are short :coin: **${await addCommas(item.price - user.balance)}**.`})
-    }
+    } // @ts-ignore
+    user.balance -= item.price 
+    if (!user.items) user.items = {} // @ts-ignore
+    let amount = user.items[item.id] || 0
+    amount += 1 // @ts-ignore
+    user.items[item.id] = amount
+    console.log(user.items[item.id])
+    user.markModified('items')
+    user.save()
+    await interaction.reply({ // @ts-ignore
+      content: `Successfully purchased ${item.emoji} **${item.display}**! | Description: ${item.description}` 
+    })
     
   }
 }

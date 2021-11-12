@@ -50,7 +50,8 @@ export async function getUser(user) {
     result = new UserSchema({
       id: user,
       balance: 0,
-      bank: 0
+      bank: 0,
+      items: {}
     })
     result.save()
     result = await UserSchema.findOne({

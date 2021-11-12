@@ -79,7 +79,6 @@ class ProfileCommand extends Command {
       .setColor('#cfd1d0')
       .printText(`${reputation}`, 40, 280) // @ts-ignore
       .printText(`Balance: ${await addCommas(user.balance)}`, 40, 418) // @ts-ignore
-      .printText(`Bank: ${await addCommas(user.bank)}`, 40, 385)
     await interaction.reply({ files: [{ attachment: canvas.toBuffer(), name: 'card.png' }] })
   }
 }

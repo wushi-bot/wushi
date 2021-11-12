@@ -1,23 +1,23 @@
 [
   {
-    "price": "500",
+    "price": 500,
     "id": "fishing_rod",
     "description": "A regular fishing rod for fishing.",
     "display": "Fishing Rod",
     "emoji": "<:rod:908125700060499988>"
   },
   {
-    "price": "15000",
-    "id": "fiery_rod",
-    "description": "A special type of fishing rod that gives <:fiery:908130080260259991> **FIERY!** bonuses, may smolder you.",
-    "display": "Fiery Rod",
-    "emoji": "<:fiery_rod:908128650161975346>"
+    "price": 5000,
+    "id": "frozen_rod",
+    "description": "A frozen fishing rod... even the hook is frozen solid like ice.",
+    "display": "Frozen Rod",
+    "emoji": "<:frozen_rod:908516614247432202>"
   },
   {
-    "price": "30000",
-    "id": "magic_rod",
-    "description": "A special type of fishing rod that gives <:magic:908130598416154634> **MAGICAL!** bonuses, may smolder you.",
-    "display": "Magic Rod",
-    "emoji": "<:magic_rod:908127236656340992>"
+    "price": 150000,
+    "id": "ufo_rod",
+    "description": "A fishing rod covered in alien ectoplasm, aw, the hook is a UFO!",
+    "display": "UFO Rod",
+    "emoji": "<:ufo_rod:908519284353937498>"
   }
 ]

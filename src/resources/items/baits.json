@@ -1,0 +1,9 @@
+[
+  {
+    "price": "10",
+    "id": "worm",
+    "description": "The most simplest type of bait, attracts 10% more fish.",
+    "display": "Worm",
+    "emoji": "<:worm:908433663597871147>"
+  }
+]
