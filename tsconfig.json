@@ -9,10 +9,8 @@
       "strictNullChecks": false,
       "strictPropertyInitialization": false,
       "noImplicitAny": false,
-      "typeRoots": [
-        "./src/types",
-        "./node_modules/@types"
-      ],
+      "typeRoots": [],
+      "types": [],
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,

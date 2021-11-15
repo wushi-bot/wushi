@@ -46,7 +46,7 @@ class RankCommand extends Command {
     })
     const bg = await resolveImage('https://cdn.discordapp.com/attachments/777628711256064030/828002823185629264/a9620396df0e63802087054fbffabe931ab4de15.png')
     const avatar = await resolveImage(avatarURL)
-    canvas
+    canvas 
       .printImage(bg, 0, 0, 600, 300)
       .setShadowColor('#44474d')
       .setShadowBlur(10)

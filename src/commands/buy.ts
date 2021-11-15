@@ -36,7 +36,6 @@ class BuyCommand extends Command {
     let amount = user.items[item.id] || 0
     amount += 1 // @ts-ignore
     user.items[item.id] = amount
-    console.log(user.items[item.id])
     user.markModified('items')
     user.save()
     await interaction.reply({ // @ts-ignore

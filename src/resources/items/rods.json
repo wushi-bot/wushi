@@ -14,6 +14,20 @@
     "emoji": "<:frozen_rod:908516614247432202>"
   },
   {
+    "price": 35000,
+    "id": "molten_rod",
+    "description": "A fishing rod made of molten rock, hot to the touch.",
+    "display": "Molten Rod",
+    "emoji": "<:molten_rod:909480066902290482>"
+  },
+  {
+    "price": 75000,
+    "id": "tropical_rod",
+    "description": "A fishing rod made of tropical fruits, the rod made of kiwi.",
+    "display": "Tropical Rod",
+    "emoji": "<:tropical_rod:909482021087219783>"
+  },
+  {
     "price": 150000,
     "id": "ufo_rod",
     "description": "A fishing rod covered in alien ectoplasm, aw, the hook is a UFO!",

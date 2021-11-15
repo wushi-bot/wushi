@@ -83,7 +83,7 @@ class InventoryCommand extends Command {
     if (items === {}) return await interaction.reply({ content: `Your inventory is empty, come back when you have some items!`, ephemeral: true }) 
     const embed = new MessageEmbed()
       .setColor('#303136') // @ts-ignore
-      .setAuthor(`${interaction.member.user.username}'s Inventory`, interaction.member.user.avatarURL())
+      .setAuthor(`${interaction.member.user.username}'s Inventory`, interaction.user.avatarURL())
     let page = 1
     const keys = Object.keys(items)
     let maxPages = Math.ceil(keys.length / 9)
