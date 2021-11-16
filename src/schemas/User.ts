@@ -18,7 +18,8 @@ const UserSchema: Schema = new Schema({
     reputation: Object,
     weekly: Number,
     votes: Object,
-    pets: Object
+    pets: Object,
+    fishing_rod: String
 })
 
 export default mongoose.model('user', UserSchema)

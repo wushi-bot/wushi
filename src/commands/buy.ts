@@ -36,7 +36,11 @@ class BuyCommand extends Command {
     let amount = user.items[item.id] || 0
     amount += 1 // @ts-ignore
     user.items[item.id] = amount
-    user.markModified('items')
+    user.markModified('items') // @ts-ignore
+    if (item.type === 'rod') { // @ts-ignore
+      user.fishing_rod = item.id
+      user.markModified('fishing_rod')
+    }
     user.save()
     await interaction.reply({ // @ts-ignore
       content: `Successfully purchased ${item.emoji} **${item.display}**! | Description: ${item.description}` 
