@@ -4,7 +4,7 @@
   "main": "dist/bot.js",
   "scripts": {
     "start": "node .",
-    "build": "tsc --build"
+    "build": "tsc"
   },
   "repository": "https://github.com/wushi-bot/wushi.git",
   "author": "Juan <jpichardo369@gmail.com>",
