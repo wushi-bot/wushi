@@ -21,7 +21,35 @@ class RodsCommand extends Command {
         user.markModified('fishing_rod')
         user.save()
         let item = await getItem(i.values[0])
-        embed.setFooter('Active fishing rod: ' + item.display)
+        let list = []
+        let items = Object.keys(user.items)
+        for await (let item of items) {
+          let i = await getItem(item)
+          if (i.type === 'rod') {
+            if (!list.includes(i.id)) list.push(i.id)
+          }
+        }
+        let list2 = []
+        let list_display = []
+        for (let item of list) {
+          let i = await getItem(item)
+          let active
+          if (user.fishing_rod) {
+            active = await getItem(user.fishing_rod)
+          }
+          if (active && active.id === i.id) {
+            list_display.push(`<:check:820704989282172960> ${i.emoji} **${i.display}** — \`${i.id}\``)
+          } else {
+            list_display.push(`${i.emoji} **${i.display}** — \`${i.id}\``)
+          }
+          list2.push({
+            label: i.display,
+            description: i.description,
+            emoji: i.emoji,
+            value: i.id
+          })
+        }
+        embed.setDescription(`${list_display.join('\n')}`)
         await interaction.editReply({ embeds: [embed], components: [row] })
         await interaction.followUp({ content: `Successfully set ${item.emoji} **${item.display}** as your active Fishing Rod.`, ephemeral: true })
         this.interactionLoop(message, embed, filter, u, interaction, row)
@@ -32,7 +60,7 @@ class RodsCommand extends Command {
       })
   }
 
-  async execute(interaction: CommandInteraction, client: Bot) {
+  async execute(interaction: CommandInteraction, client: Bot) { 
     let user = await getUser(interaction.user.id)
     let list = []
     let items = Object.keys(user.items)
@@ -46,7 +74,15 @@ class RodsCommand extends Command {
     let list_display = []
     for (let item of list) {
       let i = await getItem(item)
-      list_display.push(`${i.emoji} **${i.display}** — \`${i.id}\``)
+      let active
+      if (user.fishing_rod) {
+        active = await getItem(user.fishing_rod)
+      }
+      if (active && active.id === i.id) {
+        list_display.push(`<:check:820704989282172960> ${i.emoji} **${i.display}** — \`${i.id}\``)
+      } else {
+        list_display.push(`${i.emoji} **${i.display}** — \`${i.id}\``)
+      }
       list2.push({
         label: i.display,
         description: i.description,
@@ -58,10 +94,6 @@ class RodsCommand extends Command {
       .setTitle(':fishing_pole_and_fish: Your Fishing Rods')
       .setDescription(`${list_display.join('\n')}`)
       .setColor('#303136')
-    if (user.fishing_rod) {
-      let active = await getItem(user.fishing_rod)
-      embed.setFooter('Active fishing rod: ' + active.display)
-    }
     
     const menu = new MessageSelectMenu()
       .setCustomId('select-fishing-rod')
