@@ -18,6 +18,12 @@ class BuyCommand extends Command {
         .setDescription('The item ID you wish to buy.')  
         .setRequired(true)
     )
+    this.addIntegerOption(option =>
+      option
+        .setName('amount')
+        .setDescription('The amount of items you want to buy.')
+        .setRequired(false)  
+    )
   }
 
   async execute(interaction: CommandInteraction, client: Bot) {
@@ -31,6 +37,12 @@ class BuyCommand extends Command {
     if (item.price > user.balance) { // @ts-ignore
       return await interaction.reply({ content: `You don't have enough for this item. You are short :coin: **${await addCommas(item.price - user.balance)}**.`})
     } // @ts-ignore
+    if (item.max) { // @ts-ignore
+      if (user.items[item.id] >= item.max) {
+        return await interaction.reply({ content: `You already have too much of that item. Try buying another item!`, ephemeral: true })
+      }
+    }
+    // @ts-ignore
     user.balance -= item.price 
     if (!user.items) user.items = {} // @ts-ignore
     let amount = user.items[item.id] || 0

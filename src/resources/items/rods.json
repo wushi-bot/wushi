@@ -8,35 +8,39 @@
     "type": "rod"
   },
   {
-    "price": 5000,
+    "price": 500000,
     "id": "frozen_rod",
     "description": "A frozen fishing rod... even the hook is frozen solid like ice.",
     "display": "Frozen Rod",
     "emoji": "<:frozen_rod:908516614247432202>",
-    "type": "rod"
+    "type": "rod",
+    "max": 1
   },
   {
-    "price": 35000,
+    "price": 3500000,
     "id": "molten_rod",
     "description": "A fishing rod made of molten rock, hot to the touch.",
     "display": "Molten Rod",
     "emoji": "<:molten_rod:909480066902290482>",
-    "type": "rod"
+    "type": "rod",
+    "max": 1
   },
   {
-    "price": 75000,
+    "price": 75000000,
     "id": "tropical_rod",
     "description": "A fishing rod made of tropical fruits, the rod made of kiwi.",
     "display": "Tropical Rod",
     "emoji": "<:tropical_rod:909482021087219783>",
-    "type": "rod"
+    "type": "rod",
+    "max": 1
   },
   {
-    "price": 150000,
+    "price": 1500000000,
     "id": "ufo_rod",
     "description": "A fishing rod covered in alien ectoplasm, aw, the hook is a UFO!",
     "display": "UFO Rod",
     "emoji": "<:ufo_rod:908519284353937498>",
-    "type": "rod"
+    "type": "rod",
+    "max": 1
   }
 ]
