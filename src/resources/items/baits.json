@@ -1,6 +1,6 @@
 [
   {
-    "price": "10",
+    "price": 10,
     "id": "worm",
     "description": "The most simplest type of bait, attracts 10% more fish.",
     "display": "Worm",
