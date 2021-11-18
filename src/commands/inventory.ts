@@ -45,8 +45,8 @@ class InventoryCommand extends Command {
               .setColor('#303136')
               .setAuthor(`${user.username}'s Inventory`, user.avatarURL())
               .setFooter(`Page ${page} of ${maxPages}`)
-            for (let n = 0; n < 9; n++) {
-              const i = await getItem(keys[n + (9 * (page - 1))])
+            for (let n = 0; n < 6; n++) {
+              const i = await getItem(keys[n + (6 * (page - 1))])
               if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | ${truncate(i.description, 50, '...')}`, true)
             }
             i.update({ embeds: [embed], components: [row] })
@@ -61,8 +61,8 @@ class InventoryCommand extends Command {
               .setColor('#303136')
               .setAuthor(`${user.username}'s Inventory`, user.avatarURL())
               .setFooter(`Page ${page} of ${maxPages}`)
-            for (let n = 0; n < 9; n++) {
-              const i = await getItem(keys[n + (9 * (page - 1))])
+            for (let n = 0; n < 6; n++) {
+              const i = await getItem(keys[n + (6 * (page - 1))])
               if (i) embed.addField(`${i.emoji} ${i.display} — ${items[i.id]}`, `ID: \`${i.id}\` | | ${truncate(i.description, 50, '...')}`, true)
             }
             i.update({ embeds: [embed], components: [row] })
@@ -72,7 +72,7 @@ class InventoryCommand extends Command {
           }
         }
       })
-      .catch(() => {
+      .catch(e => {
         message.edit({ embeds: [embed], components: [] })
       })
   }  
@@ -86,11 +86,11 @@ class InventoryCommand extends Command {
       .setAuthor(`${interaction.member.user.username}'s Inventory`, interaction.user.avatarURL())
     let page = 1
     const keys = Object.keys(items)
-    let maxPages = Math.ceil(keys.length / 9)
-    embed.setFooter(`Page 1 of ${Math.ceil(keys.length / 9)}`)
+    let maxPages = Math.ceil(keys.length / 6)
+    embed.setFooter(`Page 1 of ${Math.ceil(keys.length / 6)}`)
     let n = 0
     for await (let item of keys) {
-      if (n !== 9) {
+      if (n !== 6) {
         const i = await getItem(item)
         embed.addField(`${i.emoji} ${i.display} — ${items[item]}`, `ID: \`${i.id}\` | ${truncate(i.description, 50, '...')}`, true)
         n++
@@ -119,7 +119,7 @@ class InventoryCommand extends Command {
     const message = await interaction.fetchReply()
     const filter = i => {
       if (i.user.id !== interaction.member.user.id) return false
-      if (i.customID === 'next' || i.customID === 'previous') return true
+      if (i.customId === 'next' || i.customId === 'previous') return true
     }
     this.awaitControl(message, embed, filter, page, maxPages, interaction.user, interaction.guild)
   }

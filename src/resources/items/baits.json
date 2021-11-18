@@ -1,9 +1,16 @@
 [
   {
-    "price": 10,
+    "price": 5,
     "id": "worm",
     "description": "The most simplest type of bait, attracts 10% more fish.",
     "display": "Worm",
     "emoji": "<:worm:908433663597871147>"
+  },
+  {
+    "price": 50,
+    "id": "snail",
+    "description": "This type of bait attracts 25% more fish & more treasure.",
+    "display": "Snail",
+    "emoji": "<:snail:910680089316966460>"
   }
 ]
