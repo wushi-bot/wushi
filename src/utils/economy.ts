@@ -7,3 +7,8 @@ export async function addMoney(user, amount) {
   u.save()
   return amount
 }
+
+export async function addExp(type, user, amount, interaction) {
+  let u = await getUser(user)
+  //u.skills.fishing.exp
+}
